@@ -8,20 +8,35 @@
         <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body class="bg-light">
-        <header class="bg-primary text-white text-center py-3">
-            <h1>Fantasy League</h1>
-        </header>
-        <div class="container text-center mt-5">
-            <h2 class="mb-4">Explore Teams</h2>
-            <form class="mb-4">
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-3">
+        <h1>Fantasy League</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Explore Teams</h2>
+
+        <!-- Search Bar -->
+        <form class="row justify-content-center mb-5">
+            <div class="col-md-6 col-sm-8">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search...">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">Search</button>
-                    </div>
+                    <button class="btn btn-primary" type="button">Search</button>
                 </div>
-            </form>
-            <table class="table">
+            </div>
+        </form>
+
+                <!-- Text Field and Table -->
+        <div class="row">
+            <div class="col-12 col-md-6 text-left mb-2">
+                <div class="h4">Serie A</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -55,9 +70,21 @@
                         <td>Team E</td>
                         <td>13</td>
                     </tr>
-                    <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </div>
+
+        <!-- Navigation Arrows -->
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="btn btn-primary">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>
