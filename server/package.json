@@ -1,16 +1,14 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "description": "Server of a Fantasy League Web Application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "group 18",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "bootstrap": "^5.3.3",
     "express": "^4.21.2"
   },
   "devDependencies": {
