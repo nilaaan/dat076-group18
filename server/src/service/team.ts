@@ -15,24 +15,24 @@ export class TeamService {
         return this.team.balance; 
     }
 
-    // returns a specific player from the user's team, (if api has id, use id instead of (name, number, club))
+    // returns a specific player from the user's team
     async getPlayer(id : number) : Promise<Player | undefined> {
         const player = this.team.players.find((player) => player.id === id);
         if (! player) {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-        return player; 
+        return {... player}; 
     }
 
     // returns all players from the user's team 
     async getPlayers() : Promise <Player[]> {
-        return this.team.players; 
+        return JSON.parse(JSON.stringify(this.team.players));
     }
 
     // buys a player to the user's team, marking the player as unavailable to be picked by other users and updating the user's balance
     async buyPlayer(id: number) : Promise <Player | undefined> {
-        const player = await this.playerService.getPlayer(id);
+        const player = this.playerService.getPlayerObject(id);
         if (! player) {
             console.error(`Player not found: ${id}`);
             return undefined;
