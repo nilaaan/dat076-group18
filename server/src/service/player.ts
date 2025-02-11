@@ -56,25 +56,14 @@ export class PlayerService {
 
     // perhaps markAvailable() and markUnavailable() not needed:
 
-    // marks a player as unavailable to be picked to the user's team 
-    async markUnavailable(id : number) : Promise<Player | undefined> {
-        const player = this.players.find((player) => player.id === id);
-        if (! player) {
-            console.error(`Player not found: ${id}`);
-            return undefined;
-        }
-        player.available = false;
-        return { ...player };
-    }
-
     // marks a player as available to be picked to the user's team 
-    async markAvailable(id : number) : Promise<Player | undefined> {
+    async toggleAvailable(id : number) : Promise<Player | undefined> {
         const player = this.players.find((player) => player.id === id);
         if (! player) {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-        player.available = true;
+        player.available = !player.available;
         return { ...player };
     }
 }
