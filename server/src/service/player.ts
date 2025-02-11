@@ -21,7 +21,7 @@ export class PlayerService {
     
     // adds a player to the in-memory state
     
-    async addPlayer(apiURL : string) : Promise<Player> {
+    async addPlayerFromUrl(apiURL : string) : Promise<Player> {
         try {
             const response = await fetch(apiURL); 
             if (!response.ok) {
@@ -41,13 +41,17 @@ export class PlayerService {
                 points: 0
             };
 
-            this.players.push(player);
-            return { ...player };
+            return (this.addPlayer(player));
         }
         catch (error) {
             console.error('Error adding player:', error);
             throw error; 
         }   
+    }
+
+    async addPlayer(player: Player) : Promise<Player> {
+        this.players.push(player);
+        return { ...player };
     }
 
     // perhaps markAvailable() and markUnavailable() not needed:

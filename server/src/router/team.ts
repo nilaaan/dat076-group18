@@ -27,8 +27,8 @@ teamRouter.get("/balance", async (
     res: Response<number | String>
 ) => {
     try {
-        const number = await teamService.getBalance();
-        res.status(200).send(number);
+        const balance = await teamService.getBalance();
+        res.status(200).send(`${balance}`);
     } catch (e: any) {
         res.status(500).send(e.message);
     }

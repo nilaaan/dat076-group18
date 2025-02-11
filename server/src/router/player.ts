@@ -9,11 +9,24 @@ export const playerRouter = express.Router();
 
 playerRouter.get("/", async (
     req: Request,
-    res: Response<Array<Player> | String>
+    res: Response<{ players: Array<Player> } | String>
 ) => {
     try {
         const players = await playerService.getPlayers();
-        res.status(200).send(players);
+        res.status(200).send({ players: players });
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
+
+playerRouter.post("/player", async (
+    req: Request<{}, {}, { player: Player }>,
+    res: Response<String>
+) => {
+    try {
+        const player: Player = req.body.player;
+        await playerService.addPlayer(player);
+        res.status(201).send(`Added player ${player.name}`);
     } catch (e: any) {
         res.status(500).send(e.message);
     }

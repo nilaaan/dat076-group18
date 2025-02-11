@@ -4,7 +4,7 @@
   "description": "Server of a Fantasy League Web Application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only src/"
   },
   "author": "group 18",
