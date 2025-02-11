@@ -1,0 +1,5 @@
+.leaderboard-card {
+    margin-bottom: 1rem; 
+    height: 80px;
+    border: 3px solid var(--bs-primary); 
+}
