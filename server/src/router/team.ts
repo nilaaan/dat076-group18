@@ -9,7 +9,6 @@ const teamService = new TeamService(playerService);
 
 export const teamRouter = express.Router();
 
-
 teamRouter.get("/players", async (
     req: Request,
     res: Response<Array<Player> | String>
@@ -34,46 +33,44 @@ teamRouter.get("/balance", async (
     }
 }); 
 
-teamRouter.post("/buy", async (
-    req: Request<{}, {}, { id: number }>,
+teamRouter.post("/:id", async (
+    req: Request<{ id: string }, {}, { action: string }>,
     res: Response<Player | string>
 ) => {
     try {
-        const id = req.body.id;
-        if (typeof(id) != "number"  || id < 0 || !Number.isInteger(id)) {
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- id has type ${typeof(id)} and value ${id}`);
+        if (req.params.id == null) {
+            res.status(400).send(`Missing id param`);
             return;
         }
-
-        const player = await teamService.buyPlayer(id);
-        if (!player) {  
-            res.status(404).send(`Player not found: ${id}, or insufficient balance`);
+        if (typeof(req.body.action) !== "string") {
+            res.status(400).send(`Field 'action' has type ${typeof(req.body.action)}`);
             return;
         }
-        res.status(201).send(player);
+        const id = parseInt(req.params.id, 10);
+        if (! (id >= 0)) {
+            res.status(400).send(`id number must be a non-negative integer`);
+            return;
+        }
+        const { action } = req.body;
+        if (action === "buy") {
+            const player = await teamService.buyPlayer(id);
+            if (!player) {  
+                res.status(404).send(`Player not found: ${id}, or insufficient balance`);
+                return;
+            }
+            res.status(201).send(player);
+        } else if (action === "sell") {
+            const player = await teamService.sellPlayer(id);
+            if (!player) {  
+                res.status(404).send(`Player not found: ${id}`);
+                return;
+            }
+            res.status(201).send(player);
+        } else {
+            res.status(400).send(`Invalid action: ${action}`);
+        }
     } catch (e: any) {
         res.status(500).send(e.message);
     }
 }); 
 
-teamRouter.post("/sell", async (
-    req: Request<{}, {}, { id: number }>,
-    res: Response<Player | string>
-) => {
-    try {
-        const id = req.body.id;
-        if (typeof(id) != "number"  || id < 0 || !Number.isInteger(id)) {
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- id has type ${typeof(id)} and value ${id}`);
-            return;
-        }
-
-        const player = await teamService.sellPlayer(id);
-        if (!player) {  
-            res.status(404).send(`Player not found: ${id}`);
-            return;
-        }
-        res.status(201).send(player);
-    } catch (e: any) {
-        res.status(500).send(e.message);
-    }
-}); 
