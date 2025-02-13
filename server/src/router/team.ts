@@ -23,19 +23,20 @@ teamRouter.get("/players", async (
 
 teamRouter.get("/balance", async (
     req: Request,
-    res: Response<number | String>
+    res: Response<{ number: Number } | String>
 ) => {
     try {
         const number = await teamService.getBalance();
-        res.status(200).send(number);
+        res.status(200).send({number}); 
     } catch (e: any) {
         res.status(500).send(e.message);
+        console.error(e.message);
     }
 }); 
 
 teamRouter.post("/:id", async (
     req: Request<{ id: string }, {}, { action: string }>,
-    res: Response<Player | string>
+    res: Response<Player | String>
 ) => {
     try {
         if (req.params.id == null) {
@@ -51,6 +52,7 @@ teamRouter.post("/:id", async (
             res.status(400).send(`id number must be a non-negative integer`);
             return;
         }
+
         const { action } = req.body;
         if (action === "buy") {
             const player = await teamService.buyPlayer(id);

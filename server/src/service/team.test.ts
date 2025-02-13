@@ -3,7 +3,7 @@ import { Player } from '../model/player.interface';
 import { PlayerService } from './player';
 import e from 'express';
 
-test("if all players from a user's team are requested then all players should be returned", async () => {
+test("if all players from the user's team are requested then all players should be returned", async () => {
     const player1 = {
         id: 1, 
         name: "Test player1",
@@ -31,7 +31,7 @@ test("if all players from a user's team are requested then all players should be
     expect(players).toEqual([player1, player3]);
 });
 
-test("if a specific player from a user's team is requested then that player should be returned", async () => {
+test("if a specific player from the user's team is requested then that player should be returned", async () => {
     const player3 = {
         id: 3, 
         name: "Test player3",
@@ -49,7 +49,7 @@ test("if a specific player from a user's team is requested then that player shou
     expect(player3copy).toEqual(player3);
 });
 
-test("if the balance of a user's team is requested then the correct balance should be returned", async () => {
+test("if the balance of the user's team is requested then the correct balance should be returned", async () => {
     const teamService = new TeamService(new PlayerService());
 
     const balance = await teamService.getBalance();
@@ -216,7 +216,7 @@ test("if a player that is not in the user's team is sold then the balance should
         points: 0
     };
 
-    const player2duplicate = { ... player2};
+    const player2duplicate = { ... player2 };
 
     const teamService = new TeamService(new PlayerService());
 
