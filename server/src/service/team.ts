@@ -74,9 +74,9 @@ export class TeamService {
             return undefined; 
         }
 
-        player.available = false; 
-        this.team.players.push(player);
-        this.team.balance -= player.price; 
+        this.markPlayerUnavailable(player);
+        this.addPlayer(player);
+        this.decreaseBalance(player.price); 
         return { ...player };
     }
 
@@ -89,13 +89,36 @@ export class TeamService {
             return undefined;
         }
 
+        this.removePlayer(player.id);
+        this.increaseBalance(player.price);
+        this.markPlayerAvailable(player);
+        return { ...player };
+    }
+
+    private increaseBalance(amount: number) {
+        this.team.balance += amount; 
+    }
+
+    private decreaseBalance(amount: number) {
+        this.team.balance -= amount; 
+    }
+
+    private addPlayer(player: Player) {
+        this.team.players.push(player);
+    }
+    
+    private removePlayer(id: number) {
         const indexToRemove = this.team.players.findIndex((player) => player.id === id);
         if (indexToRemove !== -1) {
             this.team.players.splice(indexToRemove, 1);
         }
+    }
 
-        this.team.balance += player.price; 
+    private markPlayerAvailable(player: Player) {
         player.available = true; 
-        return { ...player };
+    }
+
+    private markPlayerUnavailable(player: Player) {
+        player.available = false; 
     }
 }
