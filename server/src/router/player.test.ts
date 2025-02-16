@@ -55,3 +55,22 @@ test("if all players are requested then all players should be returned", async (
             points: 0
         }]);
 });
+
+
+test("If a specific player is requested then it should be returned", async () => {
+
+    const player1 = {
+        id: 1, 
+        name: "Test player1",
+        position: "Forward",
+        number: 10,
+        club: "Test Club",
+        price: 1000000,
+        available: true,
+        points: 0
+    }; 
+    const res = await request.get(`/player/${player1.id}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toEqual( player1 );
+});

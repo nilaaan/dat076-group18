@@ -51,6 +51,7 @@ export class PlayerService {
     // returns a copy of a specific player 
     async getPlayer(id: number) : Promise<Player | undefined> {
         const player = this.players.find((player) => player.id === id);
+        console.log(player)
         if (! player) {
             return undefined;
         }
