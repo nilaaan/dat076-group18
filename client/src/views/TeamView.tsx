@@ -5,28 +5,33 @@ import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 /**
  * Data Flow:
  * Frontend sends GET request to /team/players
- * Back end responds with the list of players on the user's team
+ * Backend responds with the list of players on the user's team
  * Frontend displays the list of players on the team
 */
 
 const TeamView = () => {
     const [teamPlayers, setTeamPlayers] = useState<Player[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         getTeamPlayers().then((data) => {
             console.log(data);
             setTeamPlayers(data);
+            setLoading(false);
         });
     }, []);
 
+    if (loading) {
+        return <h1>Loading...</h1>
+    }
     if (!teamPlayers) {
-        return <h1>Error loading team</h1>;
+        return <h1>Error loading team</h1>
     }
 
     return (
         <div>
             <h1>Team</h1>
-            {teamPlayers.map((player) => (
+            {teamPlayers && teamPlayers.map((player) => (
                 <p key={player.id}>{player.name}</p>
             ))}
         </div>
@@ -34,4 +39,3 @@ const TeamView = () => {
 };
 
 export default TeamView;
-
