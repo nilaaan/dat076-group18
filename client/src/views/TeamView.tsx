@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Player } from '../Types.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
+import PlayerCard from '../components/PlayerCard.tsx';
 
 /**
  * Data Flow:
  * Frontend sends GET request to /team/players
+ * - Frontend displays loading message while
  * Backend responds with the list of players on the user's team
- * Frontend displays the list of players on the team
+ * - Error: frontend display error message
+ * - Success: frontend displays the list of players on the team
 */
 
 const TeamView = () => {
@@ -15,8 +18,9 @@ const TeamView = () => {
 
     useEffect(() => {
         getTeamPlayers().then((data) => {
-            console.log(data);
             setTeamPlayers(data);
+            setLoading(false);
+        }).catch(() => {
             setLoading(false);
         });
     }, []);
@@ -29,12 +33,12 @@ const TeamView = () => {
     }
 
     return (
-        <div>
+        <>
             <h1>Team</h1>
             {teamPlayers && teamPlayers.map((player) => (
-                <p key={player.id}>{player.name}</p>
+                <PlayerCard key={player.id} name={player.name} price={player.price}></PlayerCard>
             ))}
-        </div>
+        </>
     );
 };
 
