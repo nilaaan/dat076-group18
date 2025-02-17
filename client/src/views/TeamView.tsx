@@ -1,13 +1,6 @@
-interface Player {
-    id: number;
-    name: string;
-    position: string;
-    number: number;
-    club: string;
-    price: number;
-    available: boolean;
-    points: number;
-}
+import { useState, useEffect } from 'react';
+import { Player } from '../Types.ts';
+import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 
 /**
  * Data Flow:
@@ -17,23 +10,24 @@ interface Player {
 */
 
 const TeamView = () => {
-    const team: Player[] = [
-        {
-            name: "test1"
-        },
-        {
-            name: "test2"
-        },
-        {
-            name: "test3"
-        },
-    ];
+    const [teamPlayers, setTeamPlayers] = useState<Player[] | null>(null);
+
+    useEffect(() => {
+        getTeamPlayers().then((data) => {
+            console.log(data);
+            setTeamPlayers(data);
+        });
+    }, []);
+
+    if (!teamPlayers) {
+        return <h1>Error loading team</h1>;
+    }
 
     return (
         <div>
             <h1>Team</h1>
-            {team.map((player) => (
-                <p>{player.name}</p>
+            {teamPlayers.map((player) => (
+                <p key={player.id}>{player.name}</p>
             ))}
         </div>
     );
