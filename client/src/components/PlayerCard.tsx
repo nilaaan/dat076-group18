@@ -1,14 +1,36 @@
+import { Player } from '../Types.ts';
+
 interface PlayerCardProps {
-    name: string;
-    price: number;
+    player: Player
 }
 
-function PlayerCard({ name, price }: PlayerCardProps) {
+function PlayerCard({ player }: PlayerCardProps) {
     return (
-        <div>
-            <h2>{name}</h2>
-            <p>{price}</p>
-        </div>
+        <a
+            href="./player"
+            className="card preset-filled-surface-100-900 border-[1px] border-surface-200-800 card-hover divide-surface-200-800 block"
+        >
+            <header>
+                <h2>{player.name}</h2>
+            </header>
+            <table className="table">
+                <tr>
+                    <th>Position</th>
+                    <tr>{player.position}</tr>
+                </tr>
+                <tr>
+                    <th>Club</th>
+                    <tr>{player.club}</tr>
+                </tr>
+                <tr>
+                    <th>Price:</th>
+                    <tr>£{player.price}</tr>
+                </tr>
+            </table>
+            <footer>
+
+            </footer>
+        </a>
     );
 }
 

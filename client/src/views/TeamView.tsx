@@ -35,9 +35,11 @@ const TeamView = () => {
     return (
         <>
             <h1>Team</h1>
-            {teamPlayers && teamPlayers.map((player) => (
-                <PlayerCard key={player.id} name={player.name} price={player.price}></PlayerCard>
-            ))}
+            <div className="flex flex-row gap-4">
+                {teamPlayers && teamPlayers.map((player) => (
+                    <PlayerCard key={player.id} player={player}></PlayerCard>
+                ))}
+            </div>
         </>
     );
 };
