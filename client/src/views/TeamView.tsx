@@ -13,12 +13,12 @@ import PlayerCard from '../components/PlayerCard.tsx';
 */
 
 const TeamView = () => {
-    const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
+    const [teamPlayers, setTeamPlayers] = useState<Player[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         getTeamPlayers().then((data) => {
-            setTeamPlayers(data || []);
+            setTeamPlayers(data);
             setLoading(false);
         }).catch(() => {
             setLoading(false);
@@ -34,7 +34,7 @@ const TeamView = () => {
                 {teamPlayers && teamPlayers.map((player) => (
                     <PlayerCard key={player.id} loading={loading} player={player}></PlayerCard>
                 ))}
-                {Array.from({ length: 11 - (teamPlayers.length) }, (_, index) => 
+                {Array.from({ length: 11 - (teamPlayers ? teamPlayers.length : 0) }, (_, index) => 
                     <PlayerCard key={index} loading={loading}></PlayerCard>
                 )}
             </div>
