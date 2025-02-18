@@ -48,8 +48,8 @@ export class PlayerService {
         points: 0
     }*/
         {
-            id: 8, 
-            name: "Test player8",
+            id: 1, 
+            name: "Test player1",
             position: "Forward",
             number: 10,
             club: "Test Club",
@@ -58,8 +58,8 @@ export class PlayerService {
             points: 0
         },
         {
-            id: 9, 
-            name: "Test player9",
+            id: 2, 
+            name: "Test player2",
             position: "Forward",
             number: 9,
             club: "Test Club",
@@ -68,8 +68,8 @@ export class PlayerService {
             points: 0
         },
         {
-            id: 10, 
-            name: "Test player10",
+            id: 3, 
+            name: "Test player3",
             position: "Defender",
             number: 3,
             club: "Test Club",
@@ -78,8 +78,8 @@ export class PlayerService {
             points: 0
         },
         {
-            id: 11, 
-            name: "Test player11",
+            id: 4, 
+            name: "Test player4",
             position: "Defender",
             number: 5,
             club: "Test Club",
@@ -88,8 +88,8 @@ export class PlayerService {
             points: 0
         },
         {
-            id: 12, 
-            name: "Test player12",
+            id: 5, 
+            name: "Test player5",
             position: "Midfielder",
             number: 10,
             club: "Test Club",

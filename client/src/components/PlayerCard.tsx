@@ -6,8 +6,8 @@ interface PlayerCardProps {
 function PlayerCard({ name, price }: PlayerCardProps) {
     return (
         <div>
-            <h2>{name}</h2>
-            <p>{price}</p>
+            <h2>Name: {name}</h2>
+            <p>Price: {price}</p>
         </div>
     );
 }
