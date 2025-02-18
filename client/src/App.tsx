@@ -10,10 +10,10 @@ function App() {
   return (
     <Router>
       <nav className="">
-        <Link to="/team" className="">Team</Link>
-        <Link to="/player" className="">Player</Link>
-        <Link to="/sell" className="">Sell</Link>
-        <Link to="/buy" className="">Buy</Link>
+        <Link to="/team" className="" style={{ marginRight: '10px' }}>Team</Link>
+        <Link to="/player" className="" style={{ marginRight: '10px' }}>Player</Link>
+        <Link to="/sell" className="" style={{ marginRight: '10px' }}>Sell</Link>
+        <Link to="/buy" className="" style={{ marginRight: '10px' }}>Buy</Link>
       </nav>
 
       <Routes>
