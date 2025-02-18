@@ -13,34 +13,32 @@ import PlayerCard from '../components/PlayerCard.tsx';
 */
 
 const TeamView = () => {
-    const [teamPlayers, setTeamPlayers] = useState<Player[] | null>(null);
+    const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         getTeamPlayers().then((data) => {
-            setTeamPlayers(data);
+            setTeamPlayers(data || []);
             setLoading(false);
         }).catch(() => {
             setLoading(false);
         });
     }, []);
 
-    if (loading) {
-        return <h1>Loading...</h1>
-    }
-    if (!teamPlayers) {
-        return <h1>Error loading team</h1>
-    }
-
     return (
-        <>
-            <h1>Team</h1>
-            <div className="flex flex-row gap-4">
+        <div className="flex flex-col items-center px-10">
+            <h1 className="h1 p-5">
+                {loading ? "Loading..." : (teamPlayers ? "Team" : "Error loading team")}
+            </h1>
+            <div className="flex flex-row gap-4 flex-wrap">
                 {teamPlayers && teamPlayers.map((player) => (
-                    <PlayerCard key={player.id} player={player}></PlayerCard>
+                    <PlayerCard key={player.id} loading={loading} player={player}></PlayerCard>
                 ))}
+                {Array.from({ length: 11 - (teamPlayers.length) }, (_, index) => 
+                    <PlayerCard key={index} loading={loading}></PlayerCard>
+                )}
             </div>
-        </>
+        </div>
     );
 };
 

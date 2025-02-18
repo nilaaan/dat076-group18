@@ -1,35 +1,38 @@
 import { Player } from '../Types.ts';
+import { Avatar } from '@skeletonlabs/skeleton-react';
 
 interface PlayerCardProps {
-    player: Player
+    player?: Player;
+    loading: boolean;
 }
 
-function PlayerCard({ player }: PlayerCardProps) {
+function PlayerCard({ player, loading = false }: PlayerCardProps) {
     return (
         <a
-            href="./player"
-            className="card preset-filled-surface-100-900 border-[1px] border-surface-200-800 card-hover divide-surface-200-800 block"
+            href={`./player${player ? `/${player.id}` : ""}`}
+            className={`
+                card preset-filled-surface-100-900 ${loading && "placeholder animate-pulse"}
+                border-[2px] border-surface-300-700 ${player || "border-dashed"}
+                card-hover block w-[200px] h-100 py-4 px-2`}
         >
-            <header>
-                <h2>{player.name}</h2>
+            <header className="flex flex-col items-center p-3 gap-2">
+                <Avatar name={player ? player.name : "?"}></Avatar>
+                <h5 className="h5">{player ? player.name : "..."}</h5>
+                <p>{player ? ("£" + player.price) : "-"}</p>
             </header>
+            <hr className="hr" />
             <table className="table">
-                <tr>
-                    <th>Position</th>
-                    <tr>{player.position}</tr>
-                </tr>
-                <tr>
-                    <th>Club</th>
-                    <tr>{player.club}</tr>
-                </tr>
-                <tr>
-                    <th>Price:</th>
-                    <tr>£{player.price}</tr>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th className="opacity-50">Position:</th>
+                        <td>{player && player.position}</td>
+                    </tr>
+                    <tr>
+                        <th className="opacity-50">Club:</th>
+                        <td>{player && player.club}</td>
+                    </tr>
+                </tbody>
             </table>
-            <footer>
-
-            </footer>
         </a>
     );
 }
