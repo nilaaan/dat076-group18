@@ -49,7 +49,7 @@ const PlayerView = () => {
     return (
         <div>
             <h1>Player</h1>
-            <PlayerCard key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}></PlayerCard>
+            <PlayerCard key={currPlayer.id} name={currPlayer.name} price={currPlayer.price} ></PlayerCard>
         </div>
     );
 };

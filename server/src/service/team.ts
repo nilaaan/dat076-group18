@@ -7,7 +7,7 @@ export class TeamService {
     private team: Team; 
 
     constructor(private playerService: PlayerService) {
-        this.team = { players: [{
+        this.team = { players: /*[{
             id: 1, 
             name: "Test player1",
             position: "Forward",
@@ -25,7 +25,7 @@ export class TeamService {
             price: 500000,
             available: false,
             points: 0
-        }], 
+        }]*/[], 
         balance: 100000000 }; 
     }
 
@@ -43,6 +43,12 @@ export class TeamService {
             return undefined;
         }
         return {... player}; 
+    }
+
+    // returns a specific player by reference
+    // returns undefined if no player with that id number exists
+    getPlayerObject(id: number) : Player | undefined {
+        return this.team.players.find((player) => player.id === id);
     }
 
     // returns all players from the user's team 
@@ -73,7 +79,7 @@ export class TeamService {
             console.error(`Player already in team: ${id}`);
             return undefined; 
         }
-
+        
         this.markPlayerUnavailable(player);
         this.addPlayer(player);
         this.decreaseBalance(player.price); 
@@ -83,15 +89,15 @@ export class TeamService {
     // sells a player from the user's team, marking the player as available to be picked by other users and updating the user's balance
     // returns undefined if the player does not exist in the user's team
     async sellPlayer(id : number) : Promise <Player | undefined> {
-        const player = await this.getPlayer(id);
+        const player = await this.getPlayerObject(id);
         if (! player) {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-
+        
+        this.markPlayerAvailable(player);
         this.removePlayer(player.id);
         this.increaseBalance(player.price);
-        this.markPlayerAvailable(player);
         return { ...player };
     }
 

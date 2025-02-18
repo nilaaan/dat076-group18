@@ -36,7 +36,7 @@ const TeamView = () => {
         <>
             <h1>Team</h1>
             {teamPlayers && teamPlayers.map((player) => (
-                <PlayerCard key={player.id} name={player.name} price={player.price}></PlayerCard>
+                <PlayerCard key={player.id} name={player.name} price={player.price} ></PlayerCard>
             ))}
         </>
     );
