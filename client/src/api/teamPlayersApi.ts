@@ -29,3 +29,8 @@ export const sellPlayer = async(id: number): Promise<Player|string> => {
         throw new Error('An unexpected error occurred');
     }
 }
+
+export const getTeamBalance = async(): Promise<{ number: number }> => {
+    const res = await axios.get<{ number: number }>('http://localhost:8080/team/balance');
+    return res.data;
+};

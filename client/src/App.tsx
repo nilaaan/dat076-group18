@@ -5,23 +5,29 @@ import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
 
 import './App.css'
+import { CircleUser } from 'lucide-react';
+import BalanceView from './views/BalanceView.tsx';
 
 function App() {
   return (
     <Router>
-      <nav className="">
-        <Link to="/team" className="" style={{ marginRight: '10px' }}>Team</Link>
-        <Link to="/player" className="" style={{ marginRight: '10px' }}>Player</Link>
-        <Link to="/sell" className="" style={{ marginRight: '10px' }}>Sell</Link>
-        <Link to="/buy" className="" style={{ marginRight: '10px' }}>Buy</Link>
+      <nav className="flex h-16 w-full bg-white text-black text-xl justify-between items-center px-4 font-bold border-b-2 border-blue-500">
+        <div className="flex space-x-4">
+          <h1>Fantasy League</h1>
+          <Link to="/team" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Team</Link>
+          <Link to="/player" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Player</Link>
+          <Link to="/balance" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Balance</Link>
+        </div>
+        <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
       </nav>
 
-      <Routes>
-        <Route path="/team" element={<TeamView />}></Route>
-        <Route path="/player" element={<PlayerView />}></Route>
-        <Route path="/sell" element={<SellView />}></Route>
-        <Route path="/buy" element={<BuyView />}></Route>
-      </Routes>
+      <main className="px-4">
+        <Routes>
+            <Route path="/team" element={<TeamView />}></Route>
+            <Route path="/player" element={<PlayerView />}></Route>
+            <Route path="/balance" element={<BalanceView />}></Route>
+        </Routes>
+      </main>
     </Router>
   )
 }

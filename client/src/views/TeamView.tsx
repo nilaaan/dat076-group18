@@ -25,20 +25,20 @@ const TeamView = () => {
         });
     }, []);
 
-    if (loading) {
-        return <h1>Loading...</h1>
-    }
-    if (!teamPlayers) {
-        return <h1>Error loading team</h1>
-    }
-
     return (
-        <>
-            <h1>Team</h1>
-            {teamPlayers && teamPlayers.map((player) => (
-                <PlayerCard key={player.id} name={player.name} price={player.price} ></PlayerCard>
-            ))}
-        </>
+        <div className="flex flex-col items-center px-10">
+            <h1 className="h1 p-5">
+                {loading ? "Loading..." : (teamPlayers ? "Team" : "Error loading team")}
+            </h1>
+            <div className="flex flex-row gap-4 flex-wrap">
+                {teamPlayers && teamPlayers.map((player) => (
+                    <PlayerCard key={player.id} loading={loading} player={player}></PlayerCard>
+                ))}
+                {Array.from({ length: 11 - (teamPlayers ? teamPlayers.length : 0) }, (_, index) => 
+                    <PlayerCard key={index} loading={loading}></PlayerCard>
+                )}
+            </div>
+        </div>
     );
 };
 
