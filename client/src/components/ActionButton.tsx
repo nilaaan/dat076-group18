@@ -6,9 +6,10 @@ interface ActionButtonProps {
     onAction: (playerId: number) => Promise<Player | string>;
     buttonText: string;
     successText: string;
+    completed: boolean;
 }
 
-function ActionButton({playerId, onAction, buttonText, successText}: ActionButtonProps) {
+function ActionButton({playerId, onAction, buttonText, successText, completed}: ActionButtonProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -16,23 +17,25 @@ function ActionButton({playerId, onAction, buttonText, successText}: ActionButto
     const handleClick = async () => {
         setLoading(true);
         setError(null);
-        try {
-            const res = await onAction(playerId);
-            if (typeof res === 'string') {
-                setError(res);
-            } else {
-                setSuccess(true);
+        if (!completed) {
+            try {
+                const res = await onAction(playerId);
+                if (typeof res === 'string') {
+                    setError(res);
+                } else {
+                    setSuccess(true);
+                }
+            } catch (error) {
+                setError('An unexpected error occurred');
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            setError('An unexpected error occurred');
-        } finally {
-            setLoading(false);
         }
     }
 
     return (
-        <button onClick={handleClick} disabled={loading || success}>
-            {loading ? 'Loading...' : success ? successText : buttonText}
+        <button onClick={handleClick} disabled={loading || success || completed}>
+            {loading ? 'Loading...' : (success || completed) ? successText : buttonText}
             {error && <p>{error}</p>}
         </button>
     );

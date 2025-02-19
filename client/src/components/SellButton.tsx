@@ -7,6 +7,7 @@ function SellButton({playerId}: {playerId: number}) {
         onAction={sellPlayer} 
         buttonText="Sell" 
         successText="Sold"
+        completed={false}
         />
     );
 }
