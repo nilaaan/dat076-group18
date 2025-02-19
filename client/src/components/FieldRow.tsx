@@ -1,4 +1,4 @@
-import PlayerSlot from '../components/PlayerSlot';
+import PlayerSlot from './PlayerSlot';
 
 interface FieldRowProps {
     numPlayers: number;
@@ -6,7 +6,7 @@ interface FieldRowProps {
 
 function FieldRow({ numPlayers }: FieldRowProps) {
     return (
-        <div className="flex">
+        <div className="flex justify-evenly">
             {Array.from({ length: numPlayers }, (_, index) => 
                 <PlayerSlot key={index}></PlayerSlot>
             )}
