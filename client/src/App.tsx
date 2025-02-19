@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import './App.css'
+import BalanceView from './views/BalanceView.tsx';
 
 function App() {
   return (
@@ -9,11 +10,13 @@ function App() {
       <nav className="">
         <Link to="/team" className="">Team</Link>
         <Link to="/player" className="">Player</Link>
+        <Link to="/balance" className="">Balance</Link>
       </nav>
 
       <Routes>
         <Route path="/team" element={<TeamView />}></Route>
         <Route path="/player" element={<PlayerView />}></Route>
+        <Route path="/balance" element={<BalanceView />}></Route>
       </Routes>
     </Router>
   )
