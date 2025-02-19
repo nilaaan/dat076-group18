@@ -13,7 +13,7 @@ import { getTeamBalance } from '../api/teamPlayersApi.ts';
 */
 
 const BalanceView = () => {
-    const [teamBalance, setTeamBalance] = useState<number>(0);
+    const [teamBalance, setTeamBalance] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -29,7 +29,9 @@ const BalanceView = () => {
     if (loading) {
         return <h1>Loading...</h1>
     }
-    
+    if (!teamBalance){
+        return <h1>Error displaying balance.</h1>
+    }
 
     return (
         <>
