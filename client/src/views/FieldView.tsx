@@ -1,5 +1,5 @@
 import Field from '../components/Field.tsx';
-import PlayerList from '../components/PlayerList.tsx';
+import PlayerGrid from '../components/PlayerGrid.tsx';
 import { Player } from '../Types.ts';
 
 const FieldView = () => {
@@ -24,11 +24,11 @@ const FieldView = () => {
 
     return (
         <div className="flex flex-row w-full">
-            <div className="flex-grow">
+            <div className="basis-[50%]">
                 <Field numDefenders={3} numMidfielders={4} numAttackers={3}></Field>
             </div>
-            <div>
-                <PlayerList players={testPlayers}></PlayerList>
+            <div className="basis-[50%]">
+                <PlayerGrid players={testPlayers}></PlayerGrid>
             </div>
         </div>
     );
