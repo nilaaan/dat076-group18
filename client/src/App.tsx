@@ -3,6 +3,7 @@ import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import './App.css'
 import { CircleUser } from 'lucide-react';
+import BalanceView from './views/BalanceView.tsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <h1>Fantasy League</h1>
           <Link to="/team" className="hover:text-blue-500">Team</Link>
           <Link to="/player" className="hover:text-blue-500">Player</Link>
+          <Link to="/balance" className="hover:text-blue-500">Balance</Link>
         </div>
         <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
       </nav>
@@ -20,6 +22,7 @@ function App() {
         <Routes>
             <Route path="/team" element={<TeamView />}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
+            <Route path="/balance" element={<BalanceView />}></Route>
         </Routes>
       </main>
     </Router>

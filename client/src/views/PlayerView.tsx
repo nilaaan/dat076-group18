@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Player } from '../Types.ts';
 import { getPlayer } from '../api/playerApi.ts';
-import PlayerCard from '../components/PlayerCard.tsx';
+import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
+import ChoiceBox from '../components/DemoChoiceBox.tsx';
 
 /**
  * Data Flow:
- * Frontend sends GET request to /team/players
- * - Frontend displays loading message while
- * Backend responds with the list of players on the user's team
+ * Frontend sends GET request to /players
+ * - Frontend displays id selection while loading.
+ * Backend responds with the player with selected id.
  * - Error: frontend display error message
- * - Success: frontend displays the list of players on the team
+ * - Success: frontend displays the player with selected id.
 */
 
 const PlayerView = () => {
@@ -18,7 +19,7 @@ const PlayerView = () => {
     const [currId, setId] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!currId) return; // Prevents calling getPlayer with null
+        if (!currId) return; 
 
         setLoading(false);
         getPlayer(currId)
@@ -32,24 +33,24 @@ const PlayerView = () => {
                 setLoading(false);
             });
 
-    }, [currId]); // Re-run when currId changes
+    }, [currId]); 
 
     if (loading) return (
-        <select onChange={(e) => setId(e.target.value)} defaultValue="">
-            <option value="" disabled>Select a player</option>
-            <option value="1">Player 1</option>
-            <option value="2">Player 2</option>
-            <option value="3">Player 3</option>
-            <option value="4">Player 4</option>
-        </select>
+        
+        <ChoiceBox func={setId}/>
+        
     );
 
     if (!currPlayer) return <h1>Error loading player</h1>;
 
     return (
         <div>
+            <ChoiceBox func={setId}/>
             <h1>Player</h1>
-            <PlayerCard key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}></PlayerCard>
+            <PlayerCardAdditional key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}
+            position={currPlayer.position} number={currPlayer.number} club={currPlayer.club}
+            points={currPlayer.points}
+            ></PlayerCardAdditional>
         </div>
     );
 };
