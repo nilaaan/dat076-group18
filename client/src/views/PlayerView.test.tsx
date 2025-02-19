@@ -7,6 +7,7 @@ jest.mock('axios');
 const mockAxios = axios.get as jest.Mock;
 
 test('Displays ChoiceBox initially', async () => {
+    
     const { getByText} = render(<PlayerView />);
 
     await waitFor(() => {
@@ -44,7 +45,7 @@ test('Displays player information when data is successfully loaded', async () =>
     fireEvent.change(getByRole('combobox'), { target: { value: '1' } });
 
     await waitFor(() => {
-        expect(getByText(mockPlayer.name)).toBeInTheDocument();
+        expect(getByText(/Mock Player/i)).toBeInTheDocument();
         expect(getByText(/Mock Club/i)).toBeInTheDocument();
 
     });
