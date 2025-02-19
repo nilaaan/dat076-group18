@@ -57,7 +57,7 @@ teamRouter.post("/:id", async (
         if (action === "buy") {
             const player = await teamService.buyPlayer(id);
             if (!player) {  
-                res.status(404).send(`Player not found: ${id}, or insufficient balance`);
+                res.status(404).send(`Player ${id} unavailable, too expensive, already bought, or not found:`);
                 return;
             }
             res.status(201).send(player);

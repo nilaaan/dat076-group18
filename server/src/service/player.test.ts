@@ -2,47 +2,52 @@ import { PlayerService } from './player';
 import { Player } from '../model/player.interface';
 
 test("If all players are requested then all players should be returned", async () => {
-    const player1 = {
+    const player1 =   
+    {
         id: 1, 
         name: "Test player1",
         position: "Forward",
         number: 10,
         club: "Test Club",
-        price: 1000000,
+        price: 10,
         available: true,
         points: 0
     };
-    const player2 = {
+    const player2 = 
+    {
         id: 2, 
         name: "Test player2",
         position: "Forward",
         number: 9,
         club: "Test Club",
-        price: 1000000,
+        price: 10,
         available: false,
         points: 0
     };
-    const player3 ={
+    const player3 =
+    {
         id: 3, 
         name: "Test player3",
         position: "Defender",
         number: 3,
         club: "Test Club",
-        price: 500000,
-        available: false,
+        price: 5,
+        available: true,
         points: 0
     };
-    const player4 = {
+    const player4 = 
+    {
         id: 4, 
         name: "Test player4",
         position: "Defender",
         number: 5,
         club: "Test Club",
-        price: 500000,
+        price: 5,
         available: true,
         points: 0
     };
-    const player5 = {
+    const player5 = 
+    {
         id: 5, 
         name: "Test player5",
         position: "Midfielder",
@@ -59,13 +64,14 @@ test("If all players are requested then all players should be returned", async (
 
 test("If a specific player is requested then it should be returned", async () => {
 
-    const player1 = {
+    const player1 = 
+    {
         id: 1, 
         name: "Test player1",
         position: "Forward",
         number: 10,
         club: "Test Club",
-        price: 1000000,
+        price: 10,
         available: true,
         points: 0
     }; 

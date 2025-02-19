@@ -6,25 +6,30 @@ import exp from "constants";
 const request = SuperTest.default(app);
 
 test("if all players of the user's team are requested then all players should be returned", async () => {
+    const res1 = await request.post("/team/1").send({action: "buy"});   // balance now 99999990
+    const res2 = await request.post("/team/3").send({action: "buy"});  // balance now 99999985
+
     const res = await request.get("/team/players");
+
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual([
-        {   
+        {
             id: 1, 
             name: "Test player1",
             position: "Forward",
             number: 10,
             club: "Test Club",
-            price: 1000000,
+            price: 10,
             available: false,
             points: 0
-        }, {
+        },  
+        {
             id: 3, 
             name: "Test player3",
             position: "Defender",
             number: 3,
             club: "Test Club",
-            price: 500000,
+            price: 5,
             available: false,
             points: 0
         }]);
@@ -33,37 +38,107 @@ test("if all players of the user's team are requested then all players should be
 test("if the balance of the user's team is requested then the correct balance should be returned", async () => {
     const res = await request.get("/team/balance");
     expect(res.statusCode).toEqual(200);
-    expect(res.body.number).toEqual(100000000);
+    expect(res.body.number).toEqual(99999985);
 }); 
 
-test("if a player is bought to the user's team then it should be added to the team and a copy of the player returned", async () => {
-    const res = await request.post("/team/4").send({action: "buy"});
+test("if a player is bought to the user's team then it should be added to the team, marked unavailable, and the balance updated", async () => {
+    const res = await request.post("/team/4").send({action: "buy"});    // balance now 999999980
     expect(res.statusCode).toEqual(201);
-    expect(res.body).toEqual({
+    expect(res.body).toEqual(
+    {
         id: 4, 
         name: "Test player4",
         position: "Defender",
         number: 5,
         club: "Test Club",
-        price: 500000,
+        price: 5,
         available: false,
         points: 0
     });
+    
+    const res2 = await request.get("/team/players");
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.body).toEqual([
+        {
+            id: 1, 
+            name: "Test player1",
+            position: "Forward",
+            number: 10,
+            club: "Test Club",
+            price: 10,
+            available: false,
+            points: 0
+        },  
+        {
+            id: 3, 
+            name: "Test player3",
+            position: "Defender",
+            number: 3,
+            club: "Test Club",
+            price: 5,
+            available: false,
+            points: 0
+        },
+        {   
+            id: 4, 
+            name: "Test player4",
+            position: "Defender",
+            number: 5,
+            club: "Test Club",
+            price: 5,
+            available: false,
+            points: 0
+        }]);
+
+        const res3 = await request.get("/team/balance");
+        expect(res3.statusCode).toEqual(200);
+        expect(res3.body.number).toEqual(99999980);
+
 });
 
-test("if a player is sold from the user's team then it should be removed from the team and a copy of the player returned", async () => {
-    const res = await request.post("/team/1").send({action: "sell"});
+test("if a player is sold from the user's team then it should be removed from the team, marked available, and the balance updated", async () => {
+    const res = await request.post("/team/4").send({action: "sell"});   // balance now 99999985
     expect(res.statusCode).toEqual(201);
-    expect(res.body).toEqual({
-        id: 1, 
-        name: "Test player1",
-        position: "Forward",
-        number: 10,
+    expect(res.body).toEqual(        
+    {   
+        id: 4, 
+        name: "Test player4",
+        position: "Defender",
+        number: 5,
         club: "Test Club",
-        price: 1000000,
+        price: 5,
         available: true,
         points: 0
     }); 
+
+    const res2 = await request.get("/team/players");
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.body).toEqual([
+        {
+            id: 1, 
+            name: "Test player1",
+            position: "Forward",
+            number: 10,
+            club: "Test Club",
+            price: 10,
+            available: false,
+            points: 0
+        },  
+        {
+            id: 3, 
+            name: "Test player3",
+            position: "Defender",
+            number: 3,
+            club: "Test Club",
+            price: 5,
+            available: false,
+            points: 0
+        }]);
+
+    
+    const res3 = await request.get("/team/balance");
+    expect(res3.statusCode).toEqual(200);
+    expect(res3.body.number).toEqual(99999985);
 }); 
 
 test("if a request to buy/sell a player is made with an invalid id then an error should be returned", async () => {

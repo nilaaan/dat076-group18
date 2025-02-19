@@ -32,7 +32,7 @@ const BuyView = () => {
             <h1>Players</h1>
             {players.map((player) => (
                 <div key={player.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                    <PlayerCard name={player.name} price={player.price} />
+                    <PlayerCard key={player.id} loading={loading} player={player}></PlayerCard>
                     <BuyButton playerId={player.id} />
                 </div>
             ))}

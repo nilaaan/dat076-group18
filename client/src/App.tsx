@@ -14,9 +14,11 @@ function App() {
       <nav className="flex h-16 w-full bg-white text-black text-xl justify-between items-center px-4 font-bold border-b-2 border-blue-500">
         <div className="flex space-x-4">
           <h1>Fantasy League</h1>
-          <Link to="/team" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Team</Link>
+          <Link to="/team" className="hover:text-blue-500">Team</Link>
           <Link to="/player" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Player</Link>
           <Link to="/balance" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Balance</Link>
+          <Link to= "/buy" className="hover:text-blue-500">Buy</Link>
+          <Link to= "/sell" className="hover:text-blue-500">Sell</Link>
         </div>
         <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
       </nav>
@@ -26,6 +28,8 @@ function App() {
             <Route path="/team" element={<TeamView />}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<BalanceView />}></Route>
+            <Route path="/buy" element={<BuyView />}></Route>
+            <Route path="/sell" element={<SellView />}></Route>
         </Routes>
       </main>
     </Router>

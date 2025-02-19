@@ -26,7 +26,6 @@ playerRouter.get("/:id", async (
     res: Response<Player | String>
 ) => {
     try {
-        //console.log(req.params.id);
         const player = await playerService.getPlayer(parseInt(req.params.id));
         console.log(player);
         res.status(200).send(player);

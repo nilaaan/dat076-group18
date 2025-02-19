@@ -7,25 +7,7 @@ export class TeamService {
     private team: Team; 
 
     constructor(private playerService: PlayerService) {
-        this.team = { players: /*[{
-            id: 1, 
-            name: "Test player1",
-            position: "Forward",
-            number: 10,
-            club: "Test Club",
-            price: 1000000,
-            available: false,
-            points: 0
-        }, {
-            id: 3, 
-            name: "Test player3",
-            position: "Defender",
-            number: 3,
-            club: "Test Club",
-            price: 500000,
-            available: false,
-            points: 0
-        }]*/[], 
+        this.team = { players: [], 
         balance: 100000000 }; 
     }
 
