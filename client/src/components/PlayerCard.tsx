@@ -4,29 +4,23 @@ import { User } from 'lucide-react';
 
 interface PlayerCardProps {
     player: Player;
-    onRemove: (player: Player) => void;
 }
 
-function PlayerCard({ player, onRemove }: PlayerCardProps) {
+function PlayerCard({ player }: PlayerCardProps) {
     const [isDragging, setIsDragging] = useState(false);
 
     function startDrag(e: React.DragEvent<HTMLDivElement>, player: Player) {
         setIsDragging(true);
         e.dataTransfer.setData("application/json", JSON.stringify(player));
     }
-
-    function handleDragEnd() {
-        setIsDragging(false);
-        onRemove(player);
-    }
-
+    
     return (
         <div
             className={`card card-hover preset-filled-surface-100-900 border-4 border-surface-300-700 flex flex-col cursor-grab
                 ${isDragging ? "opacity-25" : ""}`}
             draggable
             onDragStart={(e) => startDrag(e, player)}
-            onDragEnd={handleDragEnd}
+            onDragEnd={() => setIsDragging(false)}
         >
             <header className="aspect-square">
                 <User className="w-[50%] h-full m-auto opacity-50" />

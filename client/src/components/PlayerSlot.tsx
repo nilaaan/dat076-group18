@@ -4,6 +4,7 @@ import { User } from 'lucide-react';
 
 interface PlayerSlotProps {
     initialPlayer?: Player;
+    setPlayerAvailable: (id: number, available: boolean) => void;
 }
 
 
@@ -12,15 +13,21 @@ interface PlayerSlotProps {
  * hover: dropdown to show more info, shown by default (?) in playercards to the right
  * remove card after dropped in a player slot
  */
-function PlayerSlot({ initialPlayer }: PlayerSlotProps) {
+function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
     const [player, setPlayer] = useState<Player | undefined>(initialPlayer);
 
     function drop(e: React.DragEvent<HTMLDivElement>) {
         e.preventDefault();
+
+        if (player) {
+            return;
+        }
+
         const playerData = e.dataTransfer.getData("application/json");
         if (playerData) {
             const droppedPlayer: Player = JSON.parse(playerData);
             setPlayer(droppedPlayer);
+            setPlayerAvailable(droppedPlayer.id, false);
         }
     }
 
