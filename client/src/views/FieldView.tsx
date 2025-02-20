@@ -19,16 +19,18 @@ const FieldView = () => {
         return testPlayer;
     }
 
-    const numTestPlayers = 5;
+    const numTestPlayers = 10;
     const testPlayers: Player[] = Array.from({ length: numTestPlayers }, getTestPlayer);
 
     return (
-        <div className="flex flex-row w-full">
-            <div className="basis-[50%]">
-                <Field numDefenders={3} numMidfielders={4} numAttackers={3}></Field>
-            </div>
-            <div className="basis-[50%]">
-                <PlayerGrid players={testPlayers}></PlayerGrid>
+        <div className="flex justify-center">
+            <div className="flex flex-row xl:w-[75%] lg:w-full">
+                <div className="basis-[50%]">
+                    <Field numDefenders={3} numMidfielders={4} numAttackers={3}></Field>
+                </div>
+                <div className="basis-[50%]">
+                    <PlayerGrid initialPlayers={testPlayers}></PlayerGrid>
+                </div>
             </div>
         </div>
     );

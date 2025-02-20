@@ -3,7 +3,7 @@ import { Player } from '../Types.ts';
 import { User } from 'lucide-react';
 
 interface PlayerSlotProps {
-    currentPlayer?: Player;
+    initialPlayer?: Player;
 }
 
 
@@ -12,8 +12,8 @@ interface PlayerSlotProps {
  * hover: dropdown to show more info, shown by default (?) in playercards to the right
  * remove card after dropped in a player slot
  */
-function PlayerSlot({ currentPlayer }: PlayerSlotProps) {
-    const [player, setPlayer] = useState<Player | undefined>(currentPlayer);
+function PlayerSlot({ initialPlayer }: PlayerSlotProps) {
+    const [player, setPlayer] = useState<Player | undefined>(initialPlayer);
 
     function drop(e: React.DragEvent<HTMLDivElement>) {
         e.preventDefault();
@@ -25,7 +25,9 @@ function PlayerSlot({ currentPlayer }: PlayerSlotProps) {
     }
 
     function dragOver(e: React.DragEvent<HTMLDivElement>) {
-        e.preventDefault();
+        if (!player) {
+            e.preventDefault();
+        }
     }
 
     return (
