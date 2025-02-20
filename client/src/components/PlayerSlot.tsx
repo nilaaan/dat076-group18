@@ -54,7 +54,12 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
         >
             <header className="aspect-square relative">
                 <User className="w-[50%] h-full m-auto opacity-50" />
-                <button type="button" className="btn absolute top-0 right-0 p-0 px-1 m-0 rounded-none rounded-bl-lg preset-filled-surface-300-700" onMouseDown={removePlayer}><X></X></button>
+
+                {player && (
+                    <button type="button" className="btn absolute top-0 right-0 p-0 px-1 m-0 rounded-none rounded-bl-lg preset-filled-surface-300-700" onMouseDown={removePlayer}>
+                        <X></X>
+                    </button>
+                )}
             </header>
             <hr className="hr border-t-2 border-surface-300-700"></hr>
             <footer>
