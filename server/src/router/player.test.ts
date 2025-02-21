@@ -80,3 +80,14 @@ test("If a specific player is requested then it should be returned", async () =>
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual( player1 );
 });
+
+
+test("If a specific player is requested with an invalid id then an error should be returned", async () => {
+    const res = await request.get("/player/invalid");
+    expect(res.statusCode).toEqual(400);
+});
+
+test("If a player that does not exist is requested then an error should be returned", async () => {
+    const res = await request.get("/player/100");
+    expect(res.statusCode).toEqual(404);
+}); 

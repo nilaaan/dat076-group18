@@ -80,3 +80,16 @@ test("If a specific player is requested then it should be returned", async () =>
     const player1copy = await playerService.getPlayer(player1.id);
     expect(player1copy).toEqual(player1);
 });
+
+test("If a player that does not exist is requested then undefined should be returned", async () => {
+    
+    const playerService = new PlayerService();
+
+    let error;
+    try {
+        await playerService.getPlayer(1006);
+    } catch (e) {
+        error = e;
+    }
+    expect(error).toBeUndefined();
+});
