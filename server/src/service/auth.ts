@@ -28,7 +28,7 @@ export const registerUser = async(username: string, password: string) : Promise 
    return (newUser);
 }
 
-export const loginUser = async(username: string, password: string) => {
+export const loginUser = async(username: string, password: string) : Promise <User | null> => {
 
    // maybe more secure to not tell wheter name or pass is wrong
    // users.find((user) => user.username === username && bcrypt.compare(password, user.password))
@@ -38,16 +38,16 @@ export const loginUser = async(username: string, password: string) => {
 
    if (!user) {
       console.error(`User ${username} does not exist`);
-      return false;
+      return null;
    }
 
    const isPasswordValid = await bcrypt.compare(password, user.password);
 
    if (!isPasswordValid) {
       console.error(`Wrong password`);
-      return false;
+      return null;
    }
 
    console.log(`Logged in as ${username}`);
-   return true;
+   return user;
 }
