@@ -4,6 +4,7 @@ import { teamRouter } from "./router/team";
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
+import { authRouter } from "./router/auth";
 
 export const app = express();
 
@@ -27,3 +28,4 @@ app.use(cors({
 
 app.use("/player", playerRouter);
 app.use("/team", teamRouter);
+app.use("/user", authRouter)

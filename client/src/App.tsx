@@ -3,6 +3,7 @@ import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
+import TempLogin from './views/TempLogin.tsx';
 
 import './App.css'
 import { CircleUser } from 'lucide-react';
@@ -25,6 +26,7 @@ function App() {
 
       <main className="px-4">
         <Routes>
+            <Route path='/' element={<TempLogin />}></Route>
             <Route path="/team" element={<TeamView />}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<BalanceView />}></Route>

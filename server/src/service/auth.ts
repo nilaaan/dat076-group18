@@ -4,32 +4,28 @@ import bcrypt from "bcrypt";
 // TODO Database 
 const users: User[] = [];
 
-const user1 = {
-   username: "Test player1",
-   password: "Forward"
-};
-
-export const registerUser = async(username: string, password: string) => {
+export const registerUser = async(username: string, password: string) : Promise <User | null> => {
    // For the hashed password
    const salt = bcrypt.genSaltSync(10);
 
    if (users.find(u => u.username === username)) {
       console.error(`User ${username} already exist`);
-      return false;
+      return null;
    }
 
-   // TODO Database
-   users.push({
-      username: username,
+   const newUser: User = {
+      username,
       password: bcrypt.hashSync(password, salt),
       team: {
          players: [],
          balance: 0
       }
-   });
+   }
+   // TODO Database
+   users.push(newUser);
 
    console.log(`Successfully registered user with name ${username}`)
-   return (true);
+   return (newUser);
 }
 
 export const loginUser = async(username: string, password: string) => {
