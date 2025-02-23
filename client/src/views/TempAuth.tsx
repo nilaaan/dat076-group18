@@ -1,4 +1,4 @@
-import { testRegister, testLogin } from '../api/tempAuthAPI.ts';
+import { testRegister, testLogin, testLogout } from '../api/tempAuthAPI.ts';
 
 const TempRegister = () => {
     const handleRegister = () => {
@@ -13,6 +13,7 @@ const TempRegister = () => {
         <div>
             <button className='p-2 bg-orange-300 hover:border' onClick={handleRegister}>test register</button>
             <button className='p-2 bg-orange-300 hover:border' onClick={handleLogin}>test login</button>
+            <button className='p-2 bg-orange-300 hover:border' onClick={testLogout}>test login</button>
         </div>
     );
 };

@@ -53,3 +53,18 @@ authRouter.post("/login", async (
         res.status(500).send(e.message);
     }
 });
+
+authRouter.post("/logout", async (
+    req: Request,
+    res: Response
+) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(`Error destroying session: ${err}`);
+            return res.status(500).send("Failed to log out.");
+        }
+
+        res.status(200).send();
+        console.log("Logged out successfully.");
+    });
+});
