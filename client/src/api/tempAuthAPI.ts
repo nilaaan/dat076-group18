@@ -16,3 +16,8 @@ export const testLogin = async(username: string, password: string) => {
 export const testLogout = async() => {
     await axios.post(`http://localhost:8080/user/logout`);
 };
+
+export const checkAuthenticated = async () => {
+    const res = await axios.get("http://localhost:8080/user/check-session");
+    return res.data; 
+};

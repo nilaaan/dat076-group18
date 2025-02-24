@@ -8,6 +8,7 @@ import './App.css'
 import { CircleUser } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
 import TempAuth from './views/TempAuth.tsx';
+import ProtectedComponent from './components/ProtectedComponent.tsx';
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
             <Route path="/team" element={<TeamView />}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<BalanceView />}></Route>
-            <Route path="/buy" element={<BuyView />}></Route>
+            <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
             <Route path="/sell" element={<SellView />}></Route>
         </Routes>
       </main>

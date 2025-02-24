@@ -28,6 +28,7 @@ authRouter.post("/register", async (
     }
 });
 
+// Login user
 authRouter.post("/login", async (
     req: Request<{}, {}, { username: string, password: string }>,
     res: Response
@@ -54,7 +55,8 @@ authRouter.post("/login", async (
     }
 });
 
-authRouter.post("/logout", async (
+// Logout user
+authRouter.post("/logout", (
     req: Request,
     res: Response
 ) => {
@@ -67,4 +69,16 @@ authRouter.post("/logout", async (
         res.status(200).send();
         console.log("Logged out successfully.");
     });
+});
+
+// Check if logged in or not
+authRouter.get("/check-session", (
+    req: Request, 
+    res: Response
+) => {
+    if (req.session.user) {
+        res.json({ loggedIn: true, user: req.session.user });
+    } else {
+        res.json({ loggedIn: false });
+    }
 });
