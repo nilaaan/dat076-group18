@@ -47,8 +47,8 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
 
     return (
         <div
-            className={`card preset-filled-surface-100-900 opacity-75 w-[20%] border-4 border-surface-300-700 flex flex-col
-                ${player ? "cursor-grab card-hover" : "border-dashed cursor-not-allowed"}`}
+            className={`card preset-filled-surface-100-900 w-[20%] border-4 border-surface-300-700 flex flex-col
+                ${player ? "cursor-grab card-hover" : "border-dashed cursor-not-allowed opacity-75"}`}
             onDrop={drop}
             onDragOver={dragOver}
         >
@@ -57,12 +57,12 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
 
                 {player && (
                     <button type="button" className="btn absolute top-0 right-0 p-0 px-1 m-0 rounded-none rounded-bl-lg preset-filled-surface-300-700" onMouseDown={removePlayer}>
-                        <X></X>
+                        <X className="opacity-50"></X>
                     </button>
                 )}
             </header>
             <hr className="hr border-t-2 border-surface-300-700"></hr>
-            <footer>
+            <footer className={`${player ? "preset-filled-surface-200-800" : ""}`}>
                 <p className="text-center py-2">{player ? player.name : <>&nbsp;</>}</p>
             </footer>
         </div>
