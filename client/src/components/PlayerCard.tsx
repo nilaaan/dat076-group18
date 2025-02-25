@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Player } from '../Types.ts';
-import { User } from 'lucide-react';
 
 interface PlayerCardProps {
     player: Player;
@@ -23,7 +22,11 @@ function PlayerCard({ player }: PlayerCardProps) {
             onDragEnd={() => setIsDragging(false)}
         >
             <header className="aspect-square">
-                <User className="w-[50%] h-full m-auto opacity-50" />
+            {/* Lucider User */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="50%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-1/2 m-auto h-full opacity-50">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
             </header>
             <hr className="hr border-t-2 border-surface-300-700"></hr>
             <section className="bg-surface-200-800">
