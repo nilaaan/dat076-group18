@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Player } from '../Types.ts';
 import { getPlayers } from '../api/playerApi';
 import { getTeamPlayers } from '../api/teamPlayersApi';
-import PlayerCard from '../components/PlayerCard';
 import BuyButton from '../components/BuyButton';
 import SellButton from '../components/SellButton.tsx';
 
@@ -19,7 +18,7 @@ const BuyView = () => {
                 setPlayers(playersdata);
                 const teamPlayersData = await getTeamPlayers();
                 setTeamPlayers(teamPlayersData);
-            } catch (error) {
+            } catch {
                 setError('Failed to fetch players');
             } finally {
                 setLoading(false);
