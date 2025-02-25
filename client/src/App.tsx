@@ -24,7 +24,7 @@ function App() {
           <Link to= "/buy" className="hover:text-blue-500">Buy</Link>
           <Link to= "/sell" className="hover:text-blue-500">Sell</Link>
         </div>
-        <Link to="/user"><CircleUser className="hover:text-blue-500" size={32} /></Link>
+        <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
       </nav>
 
       <main className="px-4">

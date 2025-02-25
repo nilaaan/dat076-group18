@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { testRegister } from '../api/tempAuthAPI';
+import { useNavigate } from 'react-router-dom';
 
 
 /**
@@ -14,9 +15,9 @@ import { testRegister } from '../api/tempAuthAPI';
 const RegisterView = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
   const handleLogin = () => {
-    console.log("Logging in with", email, password);
     
     /*Hashfunc password
 
@@ -26,9 +27,9 @@ const RegisterView = () => {
     else{return <Error/>}*/
   };
 
-  const handleRegistration = () => {
-    console.log("Registering with", email, password);
+  const handleRegistration = async () => {
     testRegister(email, password);
+    navigate('/login')
 
     /*Hashfunc password
 
