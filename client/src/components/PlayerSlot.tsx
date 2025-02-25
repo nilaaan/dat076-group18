@@ -47,7 +47,7 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
 
     return (
         <div
-            className={`card preset-filled-surface-100-900 w-[20%] md:w-[10%] border-4 border-surface-300-700 flex flex-col
+            className={`card preset-filled-surface-100-900 w-[20%] sm:w-[15%] md:w-[10%] border-4 border-surface-300-700 flex flex-col
                 ${player ? "cursor-grab card-hover" : "border-dashed cursor-not-allowed opacity-75"}`}
             onDrop={drop}
             onDragOver={dragOver}

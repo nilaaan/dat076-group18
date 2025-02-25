@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
 import PlayerSlot from '../components/PlayerSlot.tsx';
-import PlayerCard from '../components/PlayerCard.tsx';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
