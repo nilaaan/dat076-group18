@@ -6,8 +6,9 @@ import SellView from './views/SellView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
 
 import './App.css'
-import { CircleUser, Github, Circle } from 'lucide-react';
+import { CircleUser, Github } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
+import ThemeToggle from './components/ThemeToggle.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -17,7 +18,7 @@ function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
       <Link
         to={to}
       >
-        <div className={`flex items-center px-4 h-full pt-2 hover:text-primary-400-600 ${isActive ? 'border-primary-400-600 border-b-4' : 'pb-1'}`}>
+        <div className={`flex items-center px-4 h-full pt-1 hover:text-primary-400-600 ${isActive ? 'border-primary-400-600 border-b-4 font-bold' : 'pb-1'}`}>
           {children}
         </div>
       </Link>
@@ -44,11 +45,12 @@ function App() {
             </div>
           </AppBar.ToolbarCenter>
           <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
+            <ThemeToggle />
             <Link to="/login" className="hover:text-primary-400-600">
-              <CircleUser size={32} />
+              <CircleUser size={28} />
             </Link>
             <Link to="https://github.com/nilaaan/dat076-group18" className="hover:text-primary-400-600">
-                <Github size={32} className="hover:text-primary-400-600" />
+                <Github size={28} className="hover:text-primary-400-600" />
             </Link>
           </AppBar.ToolbarTrail>
         </AppBar.Toolbar>
