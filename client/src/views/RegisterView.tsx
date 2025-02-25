@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { testRegister } from '../api/tempAuthAPI';
 
 
 /**
@@ -16,7 +17,7 @@ const RegisterView = () => {
 
   const handleLogin = () => {
     console.log("Logging in with", email, password);
-
+    
     /*Hashfunc password
 
     //if (getLogin(email, hashedPwd)){
@@ -27,6 +28,7 @@ const RegisterView = () => {
 
   const handleRegistration = () => {
     console.log("Registering with", email, password);
+    testRegister(email, password);
 
     /*Hashfunc password
 

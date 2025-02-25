@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { testLogin } from '../api/tempAuthAPI';
 
 /**
  * Data Flow:
@@ -17,6 +18,8 @@ const LoginView: React.FC = () => {
 
   const handleLogin = () => {
     console.log("Logging in with", email, password);
+
+    testLogin(email, password);
 
     /*Hashfunc password
 
