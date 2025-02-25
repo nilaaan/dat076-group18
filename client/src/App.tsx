@@ -4,6 +4,7 @@ import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
+import FieldView from './views/FieldView.tsx';
 
 import './App.css'
 import { CircleUser, Github } from 'lucide-react';
