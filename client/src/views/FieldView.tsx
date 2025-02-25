@@ -36,34 +36,42 @@ const FieldView = () => {
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center pb-20 overflow-hidden">
             <div className="relative w-full">
-                <svg viewBox="0 0 200 100" className="stroke-1 stroke-white fill-none absolute">
+                <svg xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 1000" className="absolute">
                     <defs>
-                        <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="1" height="36">
-                            <rect width="10" height="18" className="fill-green-700 stroke-none"/>
-                            <rect y="18" width="10" height="18" className="fill-green-800 stroke-none"/>
+                        <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="200" height="50">
+                            <rect width="200" height="25" className="fill-green-700 stroke-none"/>
+                            <rect y="25" width="200" height="25" className="fill-green-800 stroke-none"/>
                         </pattern>
                     </defs>
-
-                    // Grass
-                    <polygon points="0,100 40,0 160,0 200,100" fill="url(#grassPattern)" className="stroke-none"></polygon>
-                    
-                    // Sidelines, endline, halfway line
-                    <polygon points="3,100 42,2 158,2 197,100"></polygon>
-
-                    // Center circle
-                    <ellipse cx="100" cy="110" rx="36" ry="28"></ellipse>
-
-                    // Penalty arc
-                    <ellipse cx="100" cy="17" rx="10" ry="7"></ellipse>
-
-                    // Penalty area
-                    <polygon points="70,18 74,2 126,2 130,18" fill="url(#grassPattern)"></polygon>
-                    // Goal area
-                    <polygon points="86,10 87,2 113,2 114,10"></polygon>
+                    {/* Grass */}
+                    <polygon points="0,1000 0,45 37,0 163,0 200,45 200,1000" fill="url(#grassPattern)"></polygon>
                 </svg>
-                <div className="w-full flex flex-col gap-2 top-0">
+                <div className="flex flex-row absolute w-full">
+                    <svg viewBox="0 0 40 50" className="stroke-1 stroke-white w-[20%] fill-none">
+                        {/* Left sideline */}
+                        <polygon points="-5,55 38,2 45,2 45,55"></polygon>
+                    </svg>
+
+                    <svg viewBox="0 0 120 50" className="stroke-1 stroke-white w-[60%] fill-none">
+                        {/* Goal line */}
+                        <polygon points="-5,55 -5,2 125,2 125,55"></polygon>
+
+                        {/* Penalty arc */}
+                        <ellipse cx="60" cy="15" rx="10" ry="7"></ellipse>
+                        {/* Penalty area */}
+                        <polygon points="30,15 35,2 85,2 90,15" fill="url(#grassPattern)"></polygon>
+                        {/* Goal area */}
+                        <polygon points="46,8 47,2 73,2 74,8"></polygon>
+                    </svg>
+
+                    <svg viewBox="0 0 40 50" className="stroke-1 stroke-white w-[20%] fill-none">
+                        {/* Right sideline */}
+                        <polygon points="45,55 2,2 -5,2 -5,55"></polygon>
+                    </svg>
+                </div>
+                <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
                         <PlayerSlot setPlayerAvailable={setPlayerAvailable}></PlayerSlot>
                     </div>
@@ -84,34 +92,8 @@ const FieldView = () => {
                     </div>
                 </div>
             </div>
-                {/*}
-                <div
-                    className="basis-[50%] grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 p-4 gap-2"
-                >
-                    {players.filter((player) => player.available).map((player) => (
-                        <PlayerCard key={player.id} player={player}></PlayerCard>
-                    ))}
-                </div>
-                {*/}
         </div>
     );
-
-    /*return (
-        <svg viewBox="0 0 200 100" preserveAspectRatio="none" className="stroke-1 stroke-white fill-none">
-            <defs>
-                <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="1" height="36">
-                    <rect width="10" height="18" className="fill-green-700 stroke-none"/>
-                    <rect y="18" width="10" height="18" className="fill-green-800 stroke-none"/>
-                </pattern>
-            </defs>
-            <polygon points="0,100 40,0 160,0 200,100" fill="url(#grassPattern)" className="stroke-none"></polygon>
-            <polygon points="2,102 42,2 158,2 198,102"></polygon>
-            <ellipse cx="100" cy="110" rx="36" ry="28"></ellipse>
-            <ellipse cx="100" cy="17" rx="10" ry="8"></ellipse>
-            <polygon points="70,18 74,2 126,2 130,18"  fill="url(#grassPattern)"></polygon>
-            <polygon points="86,10 87,2 113,2 114,10"></polygon>
-        </svg>
-    );*/
 };
 
 export default FieldView;
