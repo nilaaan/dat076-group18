@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
 import PlayerSlot from '../components/PlayerSlot.tsx';
+import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -10,6 +11,15 @@ const FieldView = () => {
     const numAttackers = 3;
 
     useEffect(() => {
+        getTeamPlayers().then((data) => {
+            setPlayers(data);
+            //setLoading(false);
+        }).catch(() => {
+            //setLoading(false);
+        });
+    }, []);
+
+    /*useEffect(() => {
         const testPlayers: Player[] = [];
         for (let i = 0; i < 20; i++) {
             testPlayers.push({
@@ -24,7 +34,11 @@ const FieldView = () => {
             });
         }
         setPlayers(testPlayers);
-    }, []);
+    }, []);*/
+
+    function getPlayer(index: number): Player | undefined {
+        return players[index] || undefined;
+    }
 
     function setPlayerAvailable(playerId: number, available: boolean) {
         setPlayers((ps: Player[]) =>
@@ -72,21 +86,21 @@ const FieldView = () => {
                 </div>
                 <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
-                        <PlayerSlot setPlayerAvailable={setPlayerAvailable}></PlayerSlot>
+                        <PlayerSlot setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)}></PlayerSlot>
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numAttackers }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable}></PlayerSlot>
+                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + index)}></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numMidfielders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable}></PlayerSlot>
+                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers +  + index)}></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numDefenders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable}></PlayerSlot>
+                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)}></PlayerSlot>
                         )}
                     </div>
                 </div>
