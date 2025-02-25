@@ -3,6 +3,8 @@ import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
+import LoginView from './views/LoginView.tsx';
+import RegisterView from './views/RegisterView.tsx';
 
 import './App.css'
 import { CircleUser } from 'lucide-react';
@@ -30,6 +32,8 @@ function App() {
             <Route path="/balance" element={<BalanceView />}></Route>
             <Route path="/buy" element={<BuyView />}></Route>
             <Route path="/sell" element={<SellView />}></Route>
+            <Route path="/login" element={<LoginView />}></Route>
+            <Route path="/register" element={<RegisterView />}></Route>
         </Routes>
       </main>
     </Router>
