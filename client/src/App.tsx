@@ -17,8 +17,8 @@ function App() {
         <div className="flex space-x-4">
           <h1>Fantasy League</h1>
           <Link to="/team" className="hover:text-blue-500">Team</Link>
-          <Link to="/player" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Player</Link>
-          <Link to="/balance" className="hover:text-blue-500" style={{ marginRight: '10px' }}>Balance</Link>
+          <Link to="/player" className="hover:text-blue-500">Player</Link>
+          <Link to="/balance" className="hover:text-blue-500">Balance</Link>
           <Link to= "/buy" className="hover:text-blue-500">Buy</Link>
           <Link to= "/sell" className="hover:text-blue-500">Sell</Link>
         </div>
