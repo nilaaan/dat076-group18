@@ -41,8 +41,8 @@ const BuyView = () => {
     const goalkeepers = players.filter(player => player.position === "Goalkeeper");
 
     return (
-        <div className="p-10">
-            <table className="table table-fixed">
+        <div className="p-10 flex justify-center">
+            <table className="table lg:w-3/4">
                 <thead className="preset-filled-surface-300-700 sticky top-0 !text-white">
                     <tr>
                         <th className="preset-filled-tertiary-200-800 !font-bold !p-4">Forwards</th>
