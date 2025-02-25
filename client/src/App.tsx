@@ -1,35 +1,69 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
+import { AppBar } from '@skeletonlabs/skeleton-react';
 
 import './App.css'
-import { CircleUser } from 'lucide-react';
+import { CircleUser, Github } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
+import ThemeToggle from './components/ThemeToggle.tsx';
+
+function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+      <Link
+        to={to}
+      >
+        <div className={`flex items-center px-4 h-full pt-1 hover:text-primary-400-600 ${isActive ? 'border-primary-400-600 border-b-4 font-bold' : 'pb-1'}`}>
+          {children}
+        </div>
+      </Link>
+  )
+}
 
 function App() {
   return (
     <Router>
-      <nav className="flex h-16 w-full bg-white text-black text-xl justify-between items-center px-4 font-bold border-b-2 border-blue-500">
-        <div className="flex space-x-4">
-          <h1>Fantasy League</h1>
-          <Link to="/team" className="hover:text-blue-500">Team</Link>
-          <Link to="/player" className="hover:text-blue-500">Player</Link>
-          <Link to="/balance" className="hover:text-blue-500">Balance</Link>
-          <Link to= "/buy" className="hover:text-blue-500">Buy</Link>
-          <Link to= "/sell" className="hover:text-blue-500">Sell</Link>
-        </div>
-        <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
-      </nav>
-
-      <main className="px-4">
+      <AppBar classes="!p-0">
+        <AppBar.Toolbar classes="flex justify-between h-16 md:h-auto">
+          <AppBar.ToolbarLead>
+            <Link to="/" className="py-4 pl-10 hidden md:block">
+              <h1 className="h4 hover:text-primary-400-600 whitespace-nowrap">Fantasy League</h1>
+            </Link>
+          </AppBar.ToolbarLead>
+          <AppBar.ToolbarCenter classes="!grow-0">
+            <div className="flex gap-4 h-full">
+              <NavLink to="/team">Team</NavLink>
+              <NavLink to="/player">Player</NavLink>
+              <NavLink to="/balance">Balance</NavLink>
+              <NavLink to="/buy">Buy</NavLink>
+              <NavLink to="/sell">Sell</NavLink>
+            </div>
+          </AppBar.ToolbarCenter>
+          <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
+            <Link to="/login" className="hover:text-primary-400-600">
+              <CircleUser size={28} />
+            </Link>
+            <span className="vr border-l-2 border-surface-900-100 h-2/3"></span>
+            <ThemeToggle />
+            <Link to="https://github.com/nilaaan/dat076-group18" className="hover:text-primary-400-600">
+                <Github size={28} className="hover:text-primary-400-600" />
+            </Link>
+          </AppBar.ToolbarTrail>
+        </AppBar.Toolbar>
+      </AppBar>
+      <main>
         <Routes>
-            <Route path="/team" element={<TeamView />}></Route>
-            <Route path="/player" element={<PlayerView />}></Route>
-            <Route path="/balance" element={<BalanceView />}></Route>
-            <Route path="/buy" element={<BuyView />}></Route>
-            <Route path="/sell" element={<SellView />}></Route>
+          <Route path="/" element={<div />}></Route>
+          <Route path="/team" element={<TeamView />}></Route>
+          <Route path="/player" element={<PlayerView />}></Route>
+          <Route path="/balance" element={<BalanceView />}></Route>
+          <Route path="/buy" element={<BuyView />}></Route>
+          <Route path="/sell" element={<SellView />}></Route>
         </Routes>
       </main>
     </Router>
