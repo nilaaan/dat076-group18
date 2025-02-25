@@ -9,6 +9,8 @@ import RegisterView from './views/RegisterView.tsx';
 import './App.css'
 import { CircleUser } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
+import TempAuth from './views/TempAuth.tsx';
+import ProtectedComponent from './components/ProtectedComponent.tsx';
 
 function App() {
   return (
@@ -22,15 +24,17 @@ function App() {
           <Link to= "/buy" className="hover:text-blue-500">Buy</Link>
           <Link to= "/sell" className="hover:text-blue-500">Sell</Link>
         </div>
-        <Link to="/login"><CircleUser className="hover:text-blue-500" size={32} /></Link>
+        <Link to="/user"><CircleUser className="hover:text-blue-500" size={32} /></Link>
       </nav>
 
       <main className="px-4">
         <Routes>
+
+            <Route path='/user' element={<TempAuth />}></Route>
             <Route path="/team" element={<TeamView />}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<BalanceView />}></Route>
-            <Route path="/buy" element={<BuyView />}></Route>
+            <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
             <Route path="/sell" element={<SellView />}></Route>
             <Route path="/login" element={<LoginView />}></Route>
             <Route path="/register" element={<RegisterView />}></Route>

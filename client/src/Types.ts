@@ -13,3 +13,9 @@ export interface Team {
     players: Player[];
     balance: number;
 }
+
+export interface User {
+    username : string;
+    password : string;
+    team : Team;
+}
