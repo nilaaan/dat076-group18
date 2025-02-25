@@ -45,10 +45,11 @@ function App() {
             </div>
           </AppBar.ToolbarCenter>
           <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
-            <ThemeToggle />
             <Link to="/login" className="hover:text-primary-400-600">
               <CircleUser size={28} />
             </Link>
+            <span className="vr border-l-2 border-surface-900-100 h-2/3"></span>
+            <ThemeToggle />
             <Link to="https://github.com/nilaaan/dat076-group18" className="hover:text-primary-400-600">
                 <Github size={28} className="hover:text-primary-400-600" />
             </Link>
