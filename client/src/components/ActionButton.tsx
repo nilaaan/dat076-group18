@@ -34,7 +34,7 @@ function ActionButton({playerId, onAction, buttonText, successText, completed}: 
     }
 
     return (
-        <button onClick={handleClick} disabled={loading || success || completed}>
+        <button onClick={handleClick} disabled={loading || success || completed} className="w-full h-full">
             {loading ? 'Loading...' : (success || completed) ? successText : buttonText}
             {error && <p>{error}</p>}
         </button>
