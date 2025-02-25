@@ -36,7 +36,7 @@ teamRouter.get("/balance", async (
 
 teamRouter.post("/:id", async (
     req: Request<{ id: string }, {}, { action: string }>,
-    res: Response<Player | String>
+    res: Response<Player | {error: string} | String>
 ) => {
     try {
         if (req.params.id == null) {
@@ -55,12 +55,13 @@ teamRouter.post("/:id", async (
 
         const { action } = req.body;
         if (action === "buy") {
-            const player = await teamService.buyPlayer(id);
-            if (!player) {  
-                res.status(404).send(`Player not found: ${id}, or insufficient balance`);
+            const result = await teamService.buyPlayer(id);
+            if ("error" in result) {  
+                res.status(404).send(result.error);
                 return;
             }
-            res.status(201).send(player);
+            console.log(result);
+            res.status(201).send(result);
         } else if (action === "sell") {
             const player = await teamService.sellPlayer(id);
             if (!player) {  

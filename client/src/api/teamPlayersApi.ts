@@ -6,6 +6,29 @@ export const getTeamPlayers = async(): Promise<Player[]> => {
     return res.data;
 };
 
+export const buyPlayer = async(id: number): Promise<Player|string> => {
+    try {
+        const res = await axios.post<Player|string>(`http://localhost:8080/team/${id}`, ({action: "buy"}));
+        return res.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return error.response.data; // Return the error message from the server
+        }
+        throw new Error('An unexpected error occurred');
+    }
+}
+
+export const sellPlayer = async(id: number): Promise<Player|string> => {
+    try {
+        const res = await axios.post<Player|string>(`http://localhost:8080/team/${id}`, ({action: "sell"}));
+        return res.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return error.response.data; // Return the error message from the server
+        }
+        throw new Error('An unexpected error occurred');
+    }
+}
 
 export const getTeamBalance = async(): Promise<{ number: number }> => {
     const res = await axios.get<{ number: number }>('http://localhost:8080/team/balance');
