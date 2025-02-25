@@ -64,6 +64,7 @@ function App() {
           <Route path="/balance" element={<BalanceView />}></Route>
           <Route path="/buy" element={<BuyView />}></Route>
           <Route path="/sell" element={<SellView />}></Route>
+          <Route path="/field" element={<FieldView />}></Route>
         </Routes>
       </main>
     </Router>
