@@ -32,11 +32,8 @@ const TeamView = () => {
             </h1>
             <div className="flex flex-row gap-4 flex-wrap">
                 {teamPlayers && teamPlayers.map((player) => (
-                    <PlayerCard key={player.id} loading={loading} player={player}></PlayerCard>
+                    <PlayerCard key={player.id} player={player}></PlayerCard>
                 ))}
-                {Array.from({ length: 11 - (teamPlayers ? teamPlayers.length : 0) }, (_, index) => 
-                    <PlayerCard key={index} loading={loading}></PlayerCard>
-                )}
             </div>
         </div>
     );

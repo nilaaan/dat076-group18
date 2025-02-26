@@ -3,6 +3,7 @@ import * as themes from "@skeletonlabs/skeleton/themes";
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",

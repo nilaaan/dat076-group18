@@ -1,53 +1,59 @@
 import { User } from "../model/user.interface";
 import bcrypt from "bcrypt";
 
+export class AuthService {
 // TODO Database 
-const users: User[] = [];
+   users: User[] = [];
 
-export const registerUser = async(username: string, password: string) : Promise <User | null> => {
-   // For the hashed password
-   const salt = bcrypt.genSaltSync(10);
+   async registerUser(username: string, password: string) : Promise <User | null> {
+      // For the hashed password
+      const salt = bcrypt.genSaltSync(10);
 
-   if (users.find(u => u.username === username)) {
-      console.error(`User ${username} already exist`);
-      return null;
-   }
-
-   const newUser: User = {
-      username,
-      password: bcrypt.hashSync(password, salt),
-      team: {
-         players: [],
-         balance: 0
+      if (this.users.find(u => u.username === username)) {
+         console.error(`User ${username} already exist`);
+         return null;
       }
-   }
-   // TODO Database
-   users.push(newUser);
 
-   console.log(`Successfully registered user with name ${username}`)
-   return (newUser);
-}
+      const newUser: User = {
+         username,
+         password: bcrypt.hashSync(password, salt),
+         team: {
+            players: [],
+            balance: 100000000
+         }
+      }
+      // TODO Database
+      this.users.push(newUser);
 
-export const loginUser = async(username: string, password: string) : Promise <User | null> => {
-
-   // maybe more secure to not tell wheter name or pass is wrong
-   // users.find((user) => user.username === username && bcrypt.compare(password, user.password))
-
-   // TODO Database
-   const user = users.find(u => u.username === username);
-
-   if (!user) {
-      console.error(`User ${username} does not exist`);
-      return null;
+      console.log(`Successfully registered user with name ${username}`)
+      return (newUser);
    }
 
-   const isPasswordValid = await bcrypt.compare(password, user.password);
+   async findUser(username: string, password ?: string) : Promise <User | null> {
 
-   if (!isPasswordValid) {
-      console.error(`Wrong password`);
-      return null;
-   }
+      // maybe more secure to not tell wheter name or pass is wrong
+      // users.find((user) => user.username === username && bcrypt.compare(password, user.password))
 
-   console.log(`Logged in as ${username}`);
-   return user;
-}
+      // TODO Database
+      const user = this.users.find(u => u.username === username);
+
+      if (!user) {
+         console.error(`User ${username} does not exist`);
+         return null;
+      }
+
+      if (!password) {
+         return user;
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+         console.error(`Wrong password`);
+         return null;
+      }
+
+      console.log(`Logged in as ${username}`);
+      return user;
+      };
+};
