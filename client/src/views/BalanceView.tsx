@@ -17,9 +17,9 @@ const BalanceView = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        getTeamBalance().then((data: { number: number }) => {
+        getTeamBalance().then((data: { balance: number }) => {
             console.log('API data: ', data)
-            setTeamBalance(data.number);
+            setTeamBalance(data.balance);
             setLoading(false);
         }).catch(() => {
             setLoading(false);
