@@ -34,12 +34,7 @@ const BalanceView = () => {
     }
 
     return (
-        <>
-            <h1>Team Balance</h1>
-        
-            <h2>Balance: {teamBalance}</h2>
-
-        </>
+        <h2>Balance: {teamBalance}</h2>
     );
 };
 
