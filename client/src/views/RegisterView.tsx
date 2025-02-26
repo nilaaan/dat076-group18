@@ -45,9 +45,9 @@ const RegisterView = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
-        <h2 className="text-center text-2xl font-semibold">Login</h2>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
+        <h2 className="text-center text-2xl font-semibold">Register</h2>
         <div className="mt-4 space-y-4">
           <input
             type="email"

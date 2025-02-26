@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { checkAuthenticated, testLogin } from '../api/tempAuthAPI';
+import { checkAuthenticated, getUsername, testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
 
 /**
@@ -24,9 +24,12 @@ const LoginView: React.FC = () => {
     const fetchAuthStatus = async () => {
         const resAuth = await checkAuthenticated();
         setIsAuthenticated(resAuth);
+
+        const username = await getUsername();
+        setEmail(username);
     };
     fetchAuthStatus();
-},);
+}, []);
 
 
 const handleLogin = async () => {
@@ -51,6 +54,7 @@ const handleLogout = async () => {
 
           const resAuth = await checkAuthenticated();
           setIsAuthenticated(resAuth);
+          setEmail("");
       }
   } catch (error) {
       console.log("Error logging out:", error);
@@ -60,9 +64,9 @@ const handleLogout = async () => {
 
   if(isAuthenticated){
     return(
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
-            <h2 className="text-center text-2xl font-semibold">Login</h2>
+      <div className="flex items-center justify-center min-h-screen">
+          <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
+            <h2 className="text-center text-2xl font-semibold">{email}</h2>
             <div className="mt-4 space-y-4">
               
               <button
@@ -81,8 +85,8 @@ const handleLogout = async () => {
   if(!isAuthenticated){
 
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
           <h2 className="text-center text-2xl font-semibold">Login</h2>
           <div className="mt-4 space-y-4">
             <input
