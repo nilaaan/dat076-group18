@@ -57,7 +57,7 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
                                 <Info />
                             </button>
                         </a>
-                        <a href="/sell">
+                        <a href="/buy">
                             <button type="button" className="btn absolute rounded-none top-0 right-0 px-2 preset-filled-surface-400-600">
                                 <X />
                             </button>

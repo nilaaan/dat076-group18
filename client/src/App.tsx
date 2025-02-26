@@ -11,6 +11,7 @@ import './App.css'
 import { CircleUser, Github } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
 import ThemeToggle from './components/ThemeToggle.tsx';
+import ProtectedComponent from './components/ProtectedComponent.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -42,8 +43,7 @@ function App() {
               <NavLink to="/team">Team</NavLink>
               <NavLink to="/player">Player</NavLink>
               <NavLink to="/balance">Balance</NavLink>
-              <NavLink to="/buy">Buy</NavLink>
-              <NavLink to="/sell">Sell</NavLink>
+              <NavLink to="/buy">Buy/Sell</NavLink>
             </div>
           </AppBar.ToolbarCenter>
           <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
@@ -61,12 +61,10 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<div />}></Route>
-          <Route path="/team" element={<TeamView />}></Route>
+          <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
           <Route path="/player" element={<PlayerView />}></Route>
-          <Route path="/balance" element={<BalanceView />}></Route>
-          <Route path="/buy" element={<BuyView />}></Route>
-          <Route path="/sell" element={<SellView />}></Route>
-          <Route path="/field" element={<FieldView />}></Route>
+          <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
+          <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
           <Route path="/login" element={<TempAuth />}></Route>
         </Routes>
       </main>

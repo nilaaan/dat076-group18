@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     if (isAuthenticated === null) return <p>Loading...</p>;
 
     if (!isAuthenticated) {
-        return <Navigate to="/user" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return children;
