@@ -5,6 +5,7 @@ import BuyView from './views/BuyView.tsx';
 import SellView from './views/SellView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
 import FieldView from './views/FieldView.tsx';
+import TempAuth from './views/TempAuth.tsx';
 
 import './App.css'
 import { CircleUser, Github } from 'lucide-react';
@@ -66,6 +67,7 @@ function App() {
           <Route path="/buy" element={<BuyView />}></Route>
           <Route path="/sell" element={<SellView />}></Route>
           <Route path="/field" element={<FieldView />}></Route>
+          <Route path="/login" element={<TempAuth />}></Route>
         </Routes>
       </main>
     </Router>
