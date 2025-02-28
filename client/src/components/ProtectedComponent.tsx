@@ -17,8 +17,8 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/user/check-session"); // Borde använda apin
-                setIsAuthenticated(res.data.loggedIn); // Is either true or false based on result of previous get
+                const res = await checkAuthenticated();// axios.get("http://localhost:8080/user/check-session"); // Borde använda apin
+                setIsAuthenticated(res); // Is either true or false based on result of previous get
             } catch (error) {
                 setIsAuthenticated(false); // Assume not authenticated on error
             }
@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     if (isAuthenticated === null) return <p>Loading...</p>;
 
     if (!isAuthenticated) {
-        return <Navigate to="/user" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return children;
