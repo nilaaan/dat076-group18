@@ -36,7 +36,7 @@ const BuyView = () => {
         return teamPlayers.some(player => player.id === playerId);
     };
 
-    const forwards = players.filter(player => player.position === "Forward");
+    const forwards = players.filter(player => player.position === "Attacker");
     const midfielders = players.filter(player => player.position === "Midfielder");
     const defenders = players.filter(player => player.position === "Defender");
     const goalkeepers = players.filter(player => player.position === "Goalkeeper");
