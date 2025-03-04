@@ -3,6 +3,7 @@ import { Player } from '../Types.ts';
 import { getPlayer } from '../api/playerApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import ChoiceBox from '../components/DemoChoiceBox.tsx';
+import { useParams } from 'react-router-dom';
 
 /**
  * Data Flow:
@@ -16,13 +17,13 @@ import ChoiceBox from '../components/DemoChoiceBox.tsx';
 const PlayerView = () => {
     const [currPlayer, setPlayer] = useState<Player | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [currId, setId] = useState<string | null>(null);
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        if (!currId) return; 
+        if (!id) return; 
 
         setLoading(false);
-        getPlayer(currId)
+        getPlayer(id)
             .then((data) => {
                 setPlayer(data);
             })
@@ -33,24 +34,18 @@ const PlayerView = () => {
                 setLoading(false);
             });
 
-    }, [currId]); 
+    }, [id]); 
 
-    if (loading) return (
-        
-        <ChoiceBox func={setId}/>
-        
-    );
-
-    if (!currPlayer) return <h1>Error loading player</h1>;
+    if (!id) return <h1>Error loading player</h1>;
 
     return (
         <div>
-            <ChoiceBox func={setId}/>
-            <h1>Player</h1>
-            <PlayerCardAdditional key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}
-            position={currPlayer.position} number={currPlayer.number} club={currPlayer.club}
-            points={currPlayer.points}
-            ></PlayerCardAdditional>
+
+            <div className="flex justify-center items-center">
+            <PlayerCardAdditional id={id} />
+            </div>
+
+            
         </div>
     );
 };

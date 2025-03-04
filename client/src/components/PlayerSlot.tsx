@@ -52,7 +52,7 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
                 {player ?
                     (<>
                         <UserRound className="w-3/4 h-full m-auto" />
-                        <a href="/player">
+                        <a href={`/player/${player.id}`}>
                             <button type="button" className="btn absolute rounded-none top-0 left-0 px-2 preset-filled-surface-400-600">
                                 <Info />
                             </button>

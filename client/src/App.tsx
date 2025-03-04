@@ -65,6 +65,7 @@ function App() {
           <Route path="/" element={<div />}></Route>
           <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
           <Route path="/player" element={<PlayerView />}></Route>
+          <Route path="/player/:id" element={<PlayerView />} />
           <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
           <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
           <Route path="/login" element={<LoginView />}></Route>
