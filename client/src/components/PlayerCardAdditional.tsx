@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
-import { UserRound, X, Info, Plus } from 'lucide-react';
+import { UserRound, X, Info, Plus, Minus } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { getPlayer } from '../api/playerApi.ts';
 
 
-function PlayerCardAdditional({ id }: { id: string }) {
+interface PlayerCardAdditionalProps {
+    id: string;
+    onClose: () => void;
+}
+
+
+function PlayerCardAdditional({ id, onClose }: PlayerCardAdditionalProps) {
 
   
 
@@ -15,6 +21,7 @@ function PlayerCardAdditional({ id }: { id: string }) {
 
     useEffect(() => {
             if (!id) return; 
+            console.log(id);
     
             setLoading(false);
             getPlayer(id)
@@ -32,12 +39,7 @@ function PlayerCardAdditional({ id }: { id: string }) {
 
     
 
-    function dragOver(e: React.DragEvent<HTMLDivElement>) {
-        if (!player) {
-            e.preventDefault();
-        }
-        console.log(player);
-    }
+    
 
 
     if (loading) return (
@@ -54,7 +56,9 @@ function PlayerCardAdditional({ id }: { id: string }) {
                 {player ? (
                     <>
                         <UserRound className="w-3/4 h-full m-auto" />
-                        
+                        <button type="button" className="btn absolute rounded-none top-0 left-0 px-2 preset-filled-surface-400-600" onClick={onClose}>
+                                <Minus />
+                            </button>
                         
                     </>
                 ) : (
@@ -81,8 +85,8 @@ function PlayerCardAdditional({ id }: { id: string }) {
 
     return (
         <div
-            className="card card-hover preset-filled-surface-200-800 cursor-pointer w-[20%] sm:w-[15%] md:w-[10%] border-2 border-surface-400-600 flex flex-col opacity-75"
-            onDragOver={dragOver}
+            className="card preset-filled-surface-200-800 cursor-pointer w-[20%] sm:w-[15%] md:w-[10%] border-2 border-surface-400-600 flex flex-col opacity-100"
+
         >
             {content}
         </div>
