@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
+    "sqlite3": "^5.1.7",
     "supertest-session": "^5.0.1"
   }
 }

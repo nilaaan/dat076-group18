@@ -1,10 +1,31 @@
 import * as SuperTest from "supertest";
 import { app } from "../start";
+import { PlayerService } from "../service/player";
+import { PlayerModel } from "../db/player.db";
 
 
 const request = SuperTest.default(app);
 
+export const addAllPlayers = async () => {
+    const playerService = new PlayerService();
+    const players = await playerService.getPlayers();
+
+    console.log("THE players: ", players);
+
+    // Add all players to the PlayerModel table before running the tests
+    for (const player of players) {
+        await PlayerModel.create(player);
+        console.log("Player aDded: ", player);
+    }
+
+    const players2 = await PlayerModel.findAll();
+    console.log("THE players2: ", players2);
+}
+
 test("if all players are requested then all players should be returned", async () => {
+    
+    await addAllPlayers();
+
     const res = await request.get("/player");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual( [ 

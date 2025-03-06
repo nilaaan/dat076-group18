@@ -1,11 +1,26 @@
 import * as SuperTest from "supertest";
 import { app } from "../start";
 import exp from "constants";
+import { PlayerService } from "../service/player";
+import { PlayerModel } from "../db/player.db";
 
 const session = require("supertest-session");
 const request = session(app);
 
+export const addAllPlayers = async () => {
+    const playerService = new PlayerService();
+    const players = await playerService.getPlayers();
+
+    // Add all players to the PlayerModel table before running the tests
+    for (const player of players) {
+        await PlayerModel.create(player);
+    }
+};
+
+
 test("if all players of the user's team are requested then all players should be returned", async () => {
+
+    await addAllPlayers();
 
     const registered_user = await request.post("/user").send({username: "testUser", password: "testPassword"});
     const logged_user = await request.post("/user/login").send({username: "testUser", password: "testPassword"});

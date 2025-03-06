@@ -1,9 +1,10 @@
 import express, { Request, Response, Router } from "express";
-import { PlayerService } from '../service/player';
+import { IPlayerService } from "../service/player.interface";
+
 import { Player } from '../model/player.interface';
 
 
-export function playerRouter(playerService: PlayerService): Router {
+export function playerRouter(playerService: IPlayerService): Router {
     const playerRouter = express.Router();
     playerRouter.get("/", async (
         req: Request,

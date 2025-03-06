@@ -16,7 +16,7 @@ import ChoiceBox from '../components/DemoChoiceBox.tsx';
 const PlayerView = () => {
     const [currPlayer, setPlayer] = useState<Player | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [currId, setId] = useState<string | null>(null);
+    const [currId, setId] = useState<number | null>(null);
 
     useEffect(() => {
         if (!currId) return; 

@@ -5,7 +5,7 @@ export interface Player {   // represens a football player
     number: number; 
     club: string;
     price: number; 
-    available: boolean; 
-    points: number; 
-}
+    available: boolean;     // to be removed
+    points: number;         // to be removed
+}                          
 

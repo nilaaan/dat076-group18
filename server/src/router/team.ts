@@ -4,9 +4,10 @@ import { Team } from '../model/team.interface';
 import { PlayerService } from '../service/player';
 import { Player } from '../model/player.interface';
 import { AuthService } from '../service/auth';
+import { ITeamService } from "../service/team.interface";
 
 
-export function teamRouter(teamService: TeamService): Router {
+export function teamRouter(teamService: ITeamService): Router {
     const teamRouter = express.Router();
 
     teamRouter.get("/players", async (
