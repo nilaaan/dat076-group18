@@ -15,12 +15,12 @@ ClubModel.init(
     {
         id: {
             type: DataTypes.BIGINT,        // constraint >= 0
-            primaryKey: true
+            primaryKey: true,
         },
         name: {
             type: DataTypes.STRING,         
             allowNull: false,
-            unique: true
+            unique: true,
         }
     }, {
         sequelize: conn,

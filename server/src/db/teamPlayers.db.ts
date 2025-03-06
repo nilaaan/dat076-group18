@@ -30,5 +30,5 @@ TeamPlayers.init(
         }
     }, {
         sequelize: conn,
-        modelName: 'teamPlayers'
+        modelName: 'teamPlayer'
 });

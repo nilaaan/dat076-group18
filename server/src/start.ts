@@ -14,6 +14,7 @@ import { PlayerModel } from "./db/player.db";
 import sequelize from "sequelize/types/sequelize";
 import { conn } from "./db/conn";
 import { PlayerDBService } from "./service/playerDB";
+import { ClubModel } from "./db/club.db";
 
 export const app = express();
 

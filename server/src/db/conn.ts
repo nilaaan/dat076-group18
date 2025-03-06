@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { PlayerService } from '../service/player';
-import { PlayerModel } from './player.db';
+import { ClubModel } from './club.db';
 
 export let conn: Sequelize;
 
@@ -9,7 +8,7 @@ if (process.env.NODE_ENV === "test") {
         dialect: 'sqlite',
         storage: ':memory:',
     });
-} else {
+} else { 
     conn = new Sequelize('postgres://postgres@localhost:5432');
 }
 
