@@ -13,8 +13,7 @@ test("if all players from the user's team are requested then all players should 
         number: 10,
         club: "Test Club",
         price: 10,
-        available: false,
-        points: 0
+        image: "img1",
     };
     const player3 = 
     {
@@ -24,8 +23,7 @@ test("if all players from the user's team are requested then all players should 
         number: 3,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img3",
     };
 
     const authService = new AuthService();
@@ -48,8 +46,7 @@ test("if a specific player from the user's team is requested then that player sh
         number: 3,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img3",
     };
     
     
@@ -82,8 +79,7 @@ test("if a player is bought then the player should be added to the user's team a
         number: 5,
         club: "Test Club",
         price: 5,
-        available: true,
-        points: 0
+        image:"img4"
     };
 
     const authService = new AuthService();
@@ -92,7 +88,6 @@ test("if a player is bought then the player should be added to the user's team a
 
     const player2copy = await teamService.buyPlayer("testUser", 4);    
 
-    player4.available = false; 
     expect(player2copy).toEqual(player4);
 
     const players = await teamService.getPlayers("testUser");
@@ -102,40 +97,7 @@ test("if a player is bought then the player should be added to the user's team a
     expect(balance).toEqual(99999995);
 });
 
-test("if a player that is unavailable is bought then the player should not be added to the user's team and the balance should not be updated", async () => {
-    const player2 =         // player 2 in playerService's list of players is unavailable (i.e. some other user has already bought it)
-    {
-        id: 2, 
-        name: "Test player2",
-        position: "Forward",
-        number: 9,
-        club: "Test Club",
-        price: 10,
-        available: false,
-        points: 0
-    };
-    
-    const authService = new AuthService();
-    authService.registerUser("testUser", "testPassword");
-    const teamService = new TeamService(authService, new PlayerService());
-
-    let error;
-    try {
-        await teamService.buyPlayer("testUser", 2);
-    } catch (e) {
-        error = e;
-    }
-
-    expect(error).toBeUndefined();
-
-    const players = await teamService.getPlayers("testUser");
-    expect(players).not.toContainEqual(player2);
-
-    const balance = await teamService.getBalance("testUser");
-    expect(balance).toEqual(100000000);
-});
-
-test("if a player is bought twice then the player should not be re-added to the user's team and the balance should not be updated", async () => {
+test("if a player that is already in the user's team is bought, then the player should not be added and the balance should not be updated", async () => {
     const authService = new AuthService();
     authService.registerUser("testUser", "testPassword");
     const teamService = new TeamService(authService, new PlayerService());
@@ -161,8 +123,7 @@ test("if a player is bought twice then the player should not be re-added to the 
         number: 10,
         club: "Test Club",
         price: 10,
-        available: false,
-        points: 0
+        image: "img1",
     };
     const player3 = 
     {
@@ -172,8 +133,7 @@ test("if a player is bought twice then the player should not be re-added to the 
         number: 3,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img3",
     };
     const player4 =
     {
@@ -183,8 +143,7 @@ test("if a player is bought twice then the player should not be re-added to the 
         number: 5,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img4",
     }
     expect(players).toEqual([player1, player3, player4]);
 
@@ -201,8 +160,7 @@ test("if a player is bought with insufficient balance then the player should not
         number: 10,
         club: "Test Club",
         price: 200000000,
-        available: true,
-        points: 0
+        image: "img5",
     };
 
     const authService = new AuthService();
@@ -233,8 +191,7 @@ test("if a player is sold then the player should be removed from the user's team
         number: 10,
         club: "Test Club",
         price: 10,
-        available: true,
-        points: 0
+        image: "img1",
     };
 
     const authService = new AuthService();
@@ -249,10 +206,7 @@ test("if a player is sold then the player should be removed from the user's team
 
     expect(player1copy).toEqual(player1);
 
-    if (player1copy) {
-        expect(player1copy.available).toEqual(true);
-    }
-    
+
     const players = await teamService.getPlayers("testUser");
     expect(players).not.toContainEqual(player1);
 
@@ -269,8 +223,7 @@ test("if a player that is not in the user's team is sold then the balance should
         number: 9,
         club: "Test Club",
         price: 10,
-        available: false,
-        points: 0
+        image: "img2",
     };
 
     const authService = new AuthService();

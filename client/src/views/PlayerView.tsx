@@ -49,7 +49,6 @@ const PlayerView = () => {
             <h1>Player</h1>
             <PlayerCardAdditional key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}
             position={currPlayer.position} number={currPlayer.number} club={currPlayer.club}
-            points={currPlayer.points}
             ></PlayerCardAdditional>
         </div>
     );

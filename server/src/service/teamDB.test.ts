@@ -13,7 +13,7 @@ export const addAllPlayers = async () => {
     }
 };
 
-test("if a player is bought then the player should be added to the user's team and marked unavailable, and the balance should be updated", async () => {
+test("if a player is bought then the player should be added to the user's team and the balance should be updated", async () => {
 
     await addAllPlayers();
 
@@ -25,8 +25,7 @@ test("if a player is bought then the player should be added to the user's team a
         number: 5,
         club: "Test Club",
         price: 5,
-        available: true,
-        points: 0
+        image: "img4",
     };
     
     const userDBService = new UserDBService();
@@ -37,7 +36,6 @@ test("if a player is bought then the player should be added to the user's team a
 
     const player = await teamDBService.buyPlayer("username", 4);    
 
-    player4.available = false; 
     expect(player).toEqual(player4);
 
 });
@@ -62,8 +60,7 @@ test("if all players from a user's team are requested then all players should be
         number: 10,
         club: "Test Club",
         price: 10,
-        available: false,
-        points: 0
+        image: "img1",
     },{
         id: 4, 
         name: "Test player4",
@@ -71,10 +68,8 @@ test("if all players from a user's team are requested then all players should be
         number: 5,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img4",
     }]);
-
 }); 
 
 

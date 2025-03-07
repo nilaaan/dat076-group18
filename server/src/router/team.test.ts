@@ -39,8 +39,7 @@ test("if all players of the user's team are requested then all players should be
             number: 10,
             club: "Test Club",
             price: 10,
-            available: false,
-            points: 0
+            image: "img1",
         },  
         {
             id: 3, 
@@ -49,8 +48,7 @@ test("if all players of the user's team are requested then all players should be
             number: 3,
             club: "Test Club",
             price: 5,
-            available: false,
-            points: 0
+            image: "img3",
         }]);
 }); 
 
@@ -71,8 +69,7 @@ test("if a request to buy a player is made then the player should be added to th
         number: 5,
         club: "Test Club",
         price: 5,
-        available: false,
-        points: 0
+        image: "img4",
     });
     
     // unecessary testing ? (tests logic covered in service test)
@@ -86,8 +83,7 @@ test("if a request to buy a player is made then the player should be added to th
             number: 10,
             club: "Test Club",
             price: 10,
-            available: false,
-            points: 0
+            image: "img1",
         },  
         {
             id: 3, 
@@ -96,8 +92,7 @@ test("if a request to buy a player is made then the player should be added to th
             number: 3,
             club: "Test Club",
             price: 5,
-            available: false,
-            points: 0
+            image: "img3",
         },
         {   
             id: 4, 
@@ -106,8 +101,7 @@ test("if a request to buy a player is made then the player should be added to th
             number: 5,
             club: "Test Club",
             price: 5,
-            available: false,
-            points: 0
+            image: "img4",
         }]);
 
         const res3 = await request.get("/team/balance");
@@ -127,8 +121,7 @@ test("if a request to sell a player is made then the player  should be removed f
         number: 5,
         club: "Test Club",
         price: 5,
-        available: true,
-        points: 0
+        image: "img4",
     }); 
 
     // unecessary ?
@@ -142,8 +135,7 @@ test("if a request to sell a player is made then the player  should be removed f
             number: 10,
             club: "Test Club",
             price: 10,
-            available: false,
-            points: 0
+            image: "img1",
         },  
         {
             id: 3, 
@@ -152,8 +144,7 @@ test("if a request to sell a player is made then the player  should be removed f
             number: 3,
             club: "Test Club",
             price: 5,
-            available: false,
-            points: 0
+            image: "img3",
         }]);
 
     

@@ -10,16 +10,10 @@ export const addAllPlayers = async () => {
     const playerService = new PlayerService();
     const players = await playerService.getPlayers();
 
-    console.log("THE players: ", players);
-
     // Add all players to the PlayerModel table before running the tests
     for (const player of players) {
         await PlayerModel.create(player);
-        console.log("Player aDded: ", player);
     }
-
-    const players2 = await PlayerModel.findAll();
-    console.log("THE players2: ", players2);
 }
 
 test("if all players are requested then all players should be returned", async () => {
@@ -36,8 +30,7 @@ test("if all players are requested then all players should be returned", async (
             number: 10,
             club: "Test Club",
             price: 10,
-            available: true,
-            points: 0
+            image: "img1",
         },
         {
             id: 2, 
@@ -46,8 +39,7 @@ test("if all players are requested then all players should be returned", async (
             number: 9,
             club: "Test Club",
             price: 10,
-            available: false,
-            points: 0
+            image: "img2",
         },
         {
             id: 3, 
@@ -56,8 +48,7 @@ test("if all players are requested then all players should be returned", async (
             number: 3,
             club: "Test Club",
             price: 5,
-            available: true,
-            points: 0
+            image: "img3",
         },
         {
             id: 4, 
@@ -66,8 +57,7 @@ test("if all players are requested then all players should be returned", async (
             number: 5,
             club: "Test Club",
             price: 5,
-            available: true,
-            points: 0
+            image: "img4",
         },
         {
             id: 5, 
@@ -76,8 +66,7 @@ test("if all players are requested then all players should be returned", async (
             number: 10,
             club: "Test Club",
             price: 200000000,
-            available: true,
-            points: 0
+            image: "img5",
         }
     ]);
 });
@@ -93,8 +82,7 @@ test("If a specific player is requested then it should be returned", async () =>
         number: 10,
         club: "Test Club",
         price: 10,
-        available: true,
-        points: 0
+        image: "img1",
     }; 
     const res = await request.get(`/player/${player1.id}`);
 

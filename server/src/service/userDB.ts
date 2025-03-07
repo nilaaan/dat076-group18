@@ -99,13 +99,10 @@ export class UserDBService implements IUserService {
                     number: player.number,
                     club: player.club,
                     price: player.price,
-                    available: player.available,
-                    points: player.points
+                    image: player.image
                 })),
                 balance: team.balance
             }
         } as User;
-
     }
-    
 }

@@ -72,17 +72,12 @@ export class TeamService implements ITeamService {
             return undefined;
         }
 
-        if (! player.available) {
-            console.error(`Player not available: ${id}`);
-           return undefined;
-        }
-
         if (player.price > user.team.balance) {
             console.error(`Insufficient balance to buy player: ${id}`); 
             return undefined;
         }
 
-        if (user.team.players.find((player) => player.id === id)) {
+        if (user.team.players.find((player) => player.id === id)) {     
             console.error(`Player already in team: ${id}`);
             return undefined;
         }
@@ -91,7 +86,6 @@ export class TeamService implements ITeamService {
             console.error(`Team is full`);
             return undefined;
         }
-        this.markPlayerUnavailable(player);
         this.addPlayer(user, player);
         this.decreaseBalance(user, player.price); 
         return { ...player };
@@ -110,7 +104,6 @@ export class TeamService implements ITeamService {
             return undefined;
         }
         
-        this.markPlayerAvailable(player);
         this.removePlayer(user, player.id);
         this.increaseBalance(user, player.price);
         return { ...player };
@@ -133,13 +126,5 @@ export class TeamService implements ITeamService {
         if (indexToRemove !== -1) {
             user.team.players.splice(indexToRemove, 1);
         }
-    }
-
-    private markPlayerAvailable(player: Player) {
-        player.available = true; 
-    }
-
-    private markPlayerUnavailable(player: Player) {
-        player.available = false; 
     }
 }

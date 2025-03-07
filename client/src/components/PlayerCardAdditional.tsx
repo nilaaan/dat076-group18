@@ -4,10 +4,9 @@ interface PlayerCardPropsAdd {
     position: string;
     number: number;
     club: string;
-    points: number;
 }
 
-function PlayerCardAdditional({ name, price, position, number, club, points }: PlayerCardPropsAdd) {
+function PlayerCardAdditional({ name, price, position, number, club }: PlayerCardPropsAdd) {
     return (
         <div>
             <h2>{name}</h2>
@@ -15,8 +14,6 @@ function PlayerCardAdditional({ name, price, position, number, club, points }: P
             <p>Position: {position}</p>
             <p>Number: {number}</p>
             <p>Club: {club}</p>
-            <p>Points: {points}</p>
-
         </div>
     );
 }

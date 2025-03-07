@@ -10,8 +10,7 @@ export class PlayerModel extends Model<InferAttributes<PlayerModel>, InferCreati
     declare number: number;
     declare club: string;   // foreign key
     declare price: number;
-    declare available: boolean;
-    declare points: number;
+    declare image: string; 
 }
 
 PlayerModel.init(
@@ -26,7 +25,7 @@ PlayerModel.init(
             unique: true
         },
         position: {
-            type: DataTypes.STRING,     // constraint must be in (goalkeeper, defender, midfielder, forward)
+            type: DataTypes.STRING,         // constraint must be in (goalkeeper, defender, midfielder, forward)
             allowNull: false
         },
         number: {
@@ -38,16 +37,13 @@ PlayerModel.init(
             allowNull: false,
         },
         price: {
-            type: DataTypes.INTEGER,      // constraint >= 0
+            type: DataTypes.INTEGER,        // constraint >= 0
             allowNull: false
         },
-        available: {    
-            type: DataTypes.BOOLEAN,        
-            allowNull: false
-        },
-        points: {
-            type: DataTypes.INTEGER,        
-            allowNull: false
+        image: {
+            type: DataTypes.STRING,         // constraint must be a valid URL (if can with regex or smth)  
+            allowNull: false,
+            defaultValue: 'default_image.png'
         }
     }, {
         sequelize: conn,

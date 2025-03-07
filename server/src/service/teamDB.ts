@@ -151,8 +151,7 @@ export class TeamDBService implements ITeamService {
             number: plainPlayer.number,
             club: plainPlayer.club,
             price: plainPlayer.price,
-            available: plainPlayer.available,
-            points: plainPlayer.points
+            image: plainPlayer.image
             };
         });
     
@@ -183,16 +182,12 @@ export class TeamDBService implements ITeamService {
         }
 
         const player = await PlayerModel.findOne({
-            where: { id: id }
+            where: { id: id },
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
 
         if (!player) {
             console.error(`Player not found: ${id}`);
-            return undefined;
-        }
-        
-        if (!player.available) {
-            console.error(`Player not available: ${id}`);
             return undefined;
         }
 
@@ -221,11 +216,6 @@ export class TeamDBService implements ITeamService {
             return undefined;
         }
 
-        // Update the player's availability in the PlayerModel table
-        await PlayerModel.update({ available: false }, {
-            where: { id: player.id }
-        });
-
         // Add the player to the teamPlayers table
         await TeamPlayers.create({
             team_id: team.id,
@@ -236,19 +226,9 @@ export class TeamDBService implements ITeamService {
 
         // Update the team's balance
         await team.update({ balance: new_balance});
-        
-        const player_after = await PlayerModel.findOne({
-            where: { id: id },
-            attributes: { exclude: ['createdAt', 'updatedAt'] }
-        });
 
-        if (!player_after) {
-            console.error(`Player not found: ${id}`);
-            return undefined;
-        }
- 
-        return player_after.get({ plain: true }) as Player;
-        }
+        return player.get({ plain: true }) as Player;
+    }
 
     // sells a player from the user's team, marking the player as available to be picked by other users and updating the user's balance
     // returns undefined if the player does not exist in the user's team
@@ -283,18 +263,14 @@ export class TeamDBService implements ITeamService {
         }
         
         const player = await PlayerModel.findOne({
-            where: { id: id }
+            where: { id: id },
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
         });
 
         if (!player) {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-
-        // Update the player's availability in the PlayerModel table
-        await PlayerModel.update({ available: true }, {
-            where: { id: player.id }
-        });
 
         // Remove the player from the teamPlayers table
         await TeamPlayers.destroy({
@@ -305,44 +281,9 @@ export class TeamDBService implements ITeamService {
 
         // Update the team's balance
         await team.update({ balance: new_balance });
-
-        const player_after = await PlayerModel.findOne({
-            where: { id: id },
-            attributes: { exclude: ['createdAt', 'updatedAt'] }
-        });
-
-        if (!player_after) {
-            console.error(`Player not found: ${id}`);
-            return undefined;
-        }
  
-        return player_after.get({ plain: true }) as Player;
+        return player.get({ plain: true }) as Player;
     }
 
-    private increaseBalance(user: User, amount: number) {
-        user.team.balance += amount; 
-    }
-
-    private decreaseBalance(user: User, amount: number) {
-        user.team.balance -= amount; 
-    }
-
-    private addPlayer(user: User, player: Player) {
-        user.team.players.push(player);
-    }
-    
-    private removePlayer(user: User, id: number) {
-        const indexToRemove = user.team.players.findIndex((player) => player.id === id);
-        if (indexToRemove !== -1) {
-            user.team.players.splice(indexToRemove, 1);
-        }
-    }
-
-    private markPlayerAvailable(player: Player) {
-        player.available = true; 
-    }
-
-    private markPlayerUnavailable(player: Player) {
-        player.available = false; 
-    }
+    // add methods with common code. Perhaps a query handler too that takes care of communication with the database
 }
