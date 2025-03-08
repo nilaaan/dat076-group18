@@ -1,6 +1,7 @@
 import { Player } from "../model/player.interface";
 import { formatPlayer } from "./formatPlayer";
 import dotenv from "dotenv";
+import { PlayerModel } from "../db/player.db";
 
 dotenv.config({ path: './src/.env' });
 
@@ -72,4 +73,39 @@ export async function fetchAllLeaguePlayers(leagueId: number, season: number) {
     console.error("Error fetching players:", error);
     return [];
   }
+}
+
+async function insertPlayersIntoDB(players: Player[]) {
+  try {
+    for (const player of players) {
+
+      // Check if the player already exists by ID 
+      const existingPlayer = await PlayerModel.findOne({
+        where: { id: player.id },
+      });
+
+      if (!existingPlayer) {
+        // Insert the player into the database if it doesn't already exist
+        await PlayerModel.create({
+          id: player.id,
+          name: player.name,
+          position: player.position,
+          number: player.number,
+          club: player.club,
+          price: player.price,
+          image: player.image,
+        });
+        console.log(`Inserted player ${player.name} into the database.`);
+      } else {
+        console.log(`Player ${player.name} already exists in the database.`);
+      }
+    }
+  } catch (error) {
+    console.error('Error inserting players into the database:', error);
+  }
+}
+
+export async function fetchPlayersAndInsertToDB() {
+  let allPlayers: Player[] = await fetchAllLeaguePlayers(39, 2023);
+  insertPlayersIntoDB(allPlayers);
 }
