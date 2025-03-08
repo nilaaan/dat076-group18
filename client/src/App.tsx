@@ -10,6 +10,7 @@ import './App.css'
 import { CircleUser, Github } from 'lucide-react';
 import BalanceView from './views/BalanceView.tsx';
 import ThemeToggle from './components/ThemeToggle.tsx';
+import IndexView from './views/IndexView.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -59,7 +60,7 @@ function App() {
       </AppBar>
       <main>
         <Routes>
-          <Route path="/" element={<div />}></Route>
+          <Route path="/" element={<IndexView />}></Route>
           <Route path="/team" element={<TeamView />}></Route>
           <Route path="/player" element={<PlayerView />}></Route>
           <Route path="/balance" element={<BalanceView />}></Route>
