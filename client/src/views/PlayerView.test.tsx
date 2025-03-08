@@ -35,7 +35,6 @@ test('Displays player information when data is successfully loaded', async () =>
         position: 'Forward',
         number: 9,
         club: 'Mock Club',
-        points: 20,
     };
 
     mockAxios.mockResolvedValueOnce({ data: mockPlayer });

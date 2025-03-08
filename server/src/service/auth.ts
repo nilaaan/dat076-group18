@@ -1,8 +1,9 @@
 import { User } from "../model/user.interface";
 import bcrypt from "bcrypt";
+import { IUserService } from "./user.interface";
 
-export class AuthService {
-// TODO Database 
+export class AuthService implements IUserService {
+
    users: User[] = [];
 
    async registerUser(username: string, password: string) : Promise <User | null> {

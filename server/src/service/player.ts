@@ -17,6 +17,54 @@ export class PlayerService {
         }
     }
 
+    private playersOld: Player[] = [ 
+        {
+            id: 1, 
+            name: "Test player1",
+            position: "Forward",
+            number: 10,
+            club: "Test Club",
+            price: 10,
+            image: "img1",
+        },
+        {
+            id: 2, 
+            name: "Test player2",
+            position: "Forward",
+            number: 9,
+            club: "Test Club",
+            price: 10,
+            image: "img2",
+        },
+        {
+            id: 3, 
+            name: "Test player3",
+            position: "Defender",
+            number: 3,
+            club: "Test Club",
+            price: 5,
+            image: "img3",
+        },
+        {
+            id: 4, 
+            name: "Test player4",
+            position: "Defender",
+            number: 5,
+            club: "Test Club",
+            price: 5,
+            image: "img4",
+        },
+        {
+            id: 5, 
+            name: "Test player5",
+            position: "Midfielder",
+            number: 10,
+            club: "Test Club",
+            price: 200000000,
+            image: "img5",
+        }
+    ];
+
     // returns a copy of a specific player 
     async getPlayer(id: number): Promise<Player | undefined> {
         const player = this.players.find((player) => player.id === id);

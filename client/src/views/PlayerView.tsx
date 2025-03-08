@@ -16,7 +16,7 @@ import ChoiceBox from '../components/DemoChoiceBox.tsx';
 const PlayerView = () => {
     const [currPlayer, setPlayer] = useState<Player | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [currId, setId] = useState<string | null>(null);
+    const [currId, setId] = useState<number | null>(null);
 
     useEffect(() => {
         if (!currId) return; 
@@ -49,7 +49,6 @@ const PlayerView = () => {
             <h1>Player</h1>
             <PlayerCardAdditional key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}
             position={currPlayer.position} number={currPlayer.number} club={currPlayer.club}
-            points={currPlayer.points}
             ></PlayerCardAdditional>
         </div>
     );

@@ -1,8 +1,9 @@
 import express, { Request, Response, Router } from "express";
 import { AuthService } from "../service/auth";
+import { IUserService } from "../service/user.interface";
 
 
-export function authRouter(authService: AuthService): Router {
+export function authRouter(userService: IUserService): Router {
     const authRouter = express.Router();
     // Register user
 
@@ -23,7 +24,7 @@ export function authRouter(authService: AuthService): Router {
                 return;
             }
 
-            const newUser = await authService.registerUser(username, password);
+            const newUser = await userService.registerUser(username, password);
             if (!newUser) {
                 res.status(409).send("Username already exist");
                 return;
@@ -53,7 +54,7 @@ export function authRouter(authService: AuthService): Router {
                 return;
             }
 
-            const isValidUser = await authService.findUser(username, password);
+            const isValidUser = await userService.findUser(username, password);
             if (!isValidUser) {
                 res.status(401).send("Invalid username or password");
                 return;
