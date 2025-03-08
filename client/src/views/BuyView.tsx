@@ -4,7 +4,7 @@ import { getPlayers } from '../api/playerApi';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import BuyButton from '../components/BuyButton';
 import SellButton from '../components/SellButton.tsx';
-import BalanceView from './BalanceView.tsx';
+import BalanceView from '../components/LoginOrBalance.tsx';
 
 const BuyView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
