@@ -40,6 +40,10 @@ const handleLogin = async () => {
 
           const resAuth = await checkAuthenticated();
           setIsAuthenticated(resAuth);
+
+          if (resAuth) {
+            window.location.reload();
+          }
       }
   } catch (error) {
       console.log("Error logging in:", error);
@@ -55,6 +59,10 @@ const handleLogout = async () => {
           const resAuth = await checkAuthenticated();
           setIsAuthenticated(resAuth);
           setEmail("");
+
+          if (!resAuth) {
+            window.location.reload();
+          }
       }
   } catch (error) {
       console.log("Error logging out:", error);

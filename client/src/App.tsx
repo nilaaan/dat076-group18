@@ -1,19 +1,17 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import TeamView from './views/TeamView.tsx';
 import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
-import SellView from './views/SellView.tsx';
 import LoginView from './views/LoginView.tsx';
 import RegisterView from './views/RegisterView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
 import FieldView from './views/FieldView.tsx';
-import TempAuth from './views/TempAuth.tsx';
 
 import './App.css'
-import { CircleUser, Github } from 'lucide-react';
-import BalanceView from './views/BalanceView.tsx';
+import { Github } from 'lucide-react';
+import BalanceView from './components/LoginOrBalance.tsx';
 import ThemeToggle from './components/ThemeToggle.tsx';
 import ProtectedComponent from './components/ProtectedComponent.tsx';
+import LoginOrBalance from './components/LoginOrBalance.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -44,14 +42,11 @@ function App() {
             <div className="flex gap-4 h-full">
               <NavLink to="/team">Team</NavLink>
               <NavLink to="/player">Player</NavLink>
-              <NavLink to="/balance">Balance</NavLink>
               <NavLink to="/buy">Buy/Sell</NavLink>
             </div>
           </AppBar.ToolbarCenter>
           <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
-            <Link to="/login" className="hover:text-primary-400-600">
-              <CircleUser size={28} />
-            </Link>
+            <LoginOrBalance></LoginOrBalance>
             <span className="vr border-l-2 border-surface-900-100 h-2/3"></span>
             <ThemeToggle />
             <Link to="https://github.com/nilaaan/dat076-group18" target="_blank" className="hover:text-primary-400-600">
