@@ -13,35 +13,13 @@ import { useNavigate } from 'react-router-dom';
 */
 
 const RegisterView = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-
-  const handleLogin = () => {
-    
-    /*Hashfunc password
-
-    //if (getLogin(email, hashedPwd)){
-        //Load profile page
-    //}
-    else{return <Error/>}*/
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleRegistration = async () => {
     testRegister(email, password);
     navigate('/login')
-
-    /*Hashfunc password
-
-    //if (getRegistered(email)){
-        //Already regged error
-    //}
-    else{
-    passwordcheck
-    createRegister(email, hashedPwd)
-    handleLogin()
-    
-    }*/
   };
 
   return (
