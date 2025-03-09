@@ -4,7 +4,7 @@ interface AuthContextType {
     isAuthenticated: boolean | null;
     username: string | null;
     balance: number | null;
-    setBalance: (balance: number) => void;
+    updateBalance: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

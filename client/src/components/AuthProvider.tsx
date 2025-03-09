@@ -18,8 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setIsAuthenticated(session.loggedIn);
                 if (session.loggedIn) {
                     setUsername(session.user!.username);
-                    const res = await getTeamBalance();
-                    setBalance(res.balance);
+                    updateBalance();
                 }
             } catch {
                 setIsAuthenticated(false);
@@ -29,8 +28,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         checkAuth();
     }, []);
 
+    const updateBalance = async() => {
+        try {
+            const res = await getTeamBalance();
+            setBalance(res.balance);
+        } catch {
+            // Error updating balance
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, username, balance, setBalance }}>
+        <AuthContext.Provider value={{ isAuthenticated, username, balance, updateBalance }}>
             {children}
         </AuthContext.Provider>
     )
