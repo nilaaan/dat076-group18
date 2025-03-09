@@ -44,7 +44,10 @@ PlayerModel.init(
             type: DataTypes.STRING,         // constraint must be a valid URL (if can with regex or smth)  
             allowNull: false,
             defaultValue: 'default_image.png'
-        }
+        }           
+        // last_rating: int, allowNull: true, and references rating in ratingModel
+        // form: int, allowNull: true
+
     }, {
         sequelize: conn,
         modelName: 'player'

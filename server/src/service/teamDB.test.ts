@@ -1,5 +1,6 @@
 import { PlayerModel } from "../db/player.db";
 import { PlayerService } from "./player";
+import { PlayerDBService } from "./playerDB";
 import { TeamDBService } from "./teamDB";
 import { UserDBService } from "./userDB";
 
@@ -32,7 +33,7 @@ test("if a player is bought then the player should be added to the user's team a
 
     await userDBService.registerUser("username", "username");
     
-    const teamDBService = new TeamDBService(userDBService);
+    const teamDBService = new TeamDBService(userDBService, new PlayerDBService());
 
     const player = await teamDBService.buyPlayer("username", 4);    
 
@@ -47,7 +48,7 @@ test("if all players from a user's team are requested then all players should be
 
     //await userDBService.registerUser("username", "username");
     
-    const teamDBService = new TeamDBService(userDBService);
+    const teamDBService = new TeamDBService(userDBService, new PlayerDBService());
 
     const player = await teamDBService.buyPlayer("username", 1);    
 

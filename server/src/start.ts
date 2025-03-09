@@ -38,7 +38,7 @@ app.use(cors({
 
 const userService = new UserDBService();
 const playerService = new PlayerDBService();
-const teamService = new TeamDBService(userService);
+const teamService = new TeamDBService(userService, playerService);
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));
 app.use("/user", authRouter(userService));

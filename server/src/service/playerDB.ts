@@ -27,7 +27,12 @@ export class PlayerDBService implements IPlayerService {
         const players = await PlayerModel.findAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
-        console.log("these are the players fam: ", players);
+
         return players.map(player => player.get({ plain: true }) as Player);
     }
+
+
+    // update player stats()
+    // set player.last rating to the current round player ratings, set player.next rating to the next round player ratings,
+    // calculate recent form (other method within this class) and seasonal form and update those attributes
 }
