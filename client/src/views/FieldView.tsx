@@ -121,8 +121,9 @@ const FieldView = () => {
             {selectedPlayer && (
                 <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50 popup-enter">
                     <PlayerCardAdditional 
-                        id={String(selectedPlayer.id)} 
+                        id={selectedPlayer.id} 
                         onClose={closePopup} 
+                        fieldCase={true}
                     />
                 </div>
             )}

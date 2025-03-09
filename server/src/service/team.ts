@@ -104,7 +104,7 @@ export class TeamService implements ITeamService {
             return undefined;
         }
         if (this.checkForTeamSize(user)) {        
-        this.markPlayerAvailable(player);
+        // this.markPlayerAvailable(player);
         this.removePlayer(user, player.id);
         this.increaseBalance(user, player.price);
         }

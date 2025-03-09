@@ -12,18 +12,26 @@ import { useParams } from 'react-router-dom';
  * Backend responds with the player with selected id.
  * - Error: frontend display error message
  * - Success: frontend displays the player with selected id.
+ * 
+ * 
 */
+
+interface PlayerViewProps {
+    initialPlayer?: Player;
+    setPlayerAvailable: (id: number, available: boolean) => void;
+    onInfoClick: () => void;
+}
 
 const PlayerView = () => {
     const [currPlayer, setPlayer] = useState<Player | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const { id } = useParams<{ id: string }>();
+    const { paramId } = useParams<{ paramId: string }>();
 
     useEffect(() => {
-        if (!id) return; 
+        if (!paramId) return; 
 
         setLoading(false);
-        getPlayer(id)
+        getPlayer(Number(paramId))
             .then((data) => {
                 setPlayer(data);
             })
@@ -34,15 +42,15 @@ const PlayerView = () => {
                 setLoading(false);
             });
 
-    }, [id]); 
+    }, [paramId]); 
 
-    if (!id) return <h1>Error loading player</h1>;
+    if (!paramId) return <h1>Error loading player</h1>;
 
     return (
         <div>
 
             <div className="flex justify-center items-center">
-            <PlayerCardAdditional id={id} />
+ 
             </div>
 
             

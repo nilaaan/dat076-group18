@@ -13,6 +13,8 @@ import ThemeToggle from './components/ThemeToggle.tsx';
 import ProtectedComponent from './components/ProtectedComponent.tsx';
 import LoginOrBalance from './components/LoginOrBalance.tsx';
 import { AuthProvider } from './components/AuthProvider.tsx';
+import StartPageTest from './views/StartPageViewTest.tsx';
+import StartView from './views/StartPageViewStart.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -59,9 +61,9 @@ function App() {
         </AppBar>
         <main>
           <Routes>
-            <Route path="/" element={<div />}></Route>
+            <Route path="/" element={<StartView />}></Route>
             <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
-            <Route path="/player" element={<PlayerView />}></Route>
+            <Route path="/player" element={<StartPageTest />}></Route>
             <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
             <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
             <Route path="/login" element={<LoginView />}></Route>

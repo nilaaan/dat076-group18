@@ -66,6 +66,7 @@ export class PlayerService {
 
     // returns a deep copy of all existing players 
     async getPlayers() : Promise<Player[]> {
+        console.log("playershere:", this.players)
         return JSON.parse(JSON.stringify(this.players));
     }
 }
