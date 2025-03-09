@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import PlayerView from './views/PlayerView.tsx';
 import BuyView from './views/BuyView.tsx';
 import LoginView from './views/LoginView.tsx';
 import RegisterView from './views/RegisterView.tsx';
@@ -13,8 +12,8 @@ import ThemeToggle from './components/ThemeToggle.tsx';
 import ProtectedComponent from './components/ProtectedComponent.tsx';
 import LoginOrBalance from './components/LoginOrBalance.tsx';
 import { AuthProvider } from './components/AuthProvider.tsx';
-import StartPageTest from './views/StartPageViewTest.tsx';
-import StartView from './views/StartPageViewStart.tsx';
+import StartPageTest from './views/PlayerView.tsx';
+import StartView from './views/StartPage.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
