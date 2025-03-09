@@ -3,7 +3,8 @@ import { createContext, useContext } from "react";
 interface AuthContextType {
     isAuthenticated: boolean | null;
     username: string | null;
-    //setAuth: (auth: boolean, user?: string) => void;
+    balance: number | null;
+    setBalance: (balance: number) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
