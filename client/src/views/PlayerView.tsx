@@ -50,7 +50,7 @@ const StartPageTest = () => {
                 
                 </div>
                 <div className="w-full flex flex-col gap-5 p-5">
-                    {Array.from({ length: 4 }, (_, rowIndex) => (
+                    {Array.from({ length: Math.ceil(players.length / 6) }, (_, rowIndex) => (
                         <div className="flex justify-evenly" key={rowIndex}>
                             {Array.from({ length: 6 }, (_, index) => (
                                 <PlayerCardAdditional 

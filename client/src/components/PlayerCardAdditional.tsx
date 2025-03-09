@@ -59,7 +59,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
 
 
     if (loading) return <h1>Loading player...</h1>;
-    if (!player) return <h1>Error loading player</h1>;
+    if (!player) return <div className="card  w-[30%] sm:w-[20%] md:w-[15%] flex flex-col opacity-100 p-4"></div>
 
     const content = (
         <>
