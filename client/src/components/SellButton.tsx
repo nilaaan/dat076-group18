@@ -1,10 +1,20 @@
 import { sellPlayer } from "../api/teamPlayersApi";
+import { useAuth } from "../contexts/authContext";
+import { Player } from "../Types";
 import ActionButton from "./ActionButton";
 
 function SellButton({playerId}: {playerId: number}) {
+    const { updateBalance } = useAuth();
+
+    const handleSellPlayer = async(playerId: number): Promise<Player | string> => {
+        const player = await sellPlayer(playerId);
+        await updateBalance();
+        return player;
+    };
+
     return (
         <ActionButton playerId={playerId} 
-        onAction={sellPlayer} 
+        onAction={handleSellPlayer} 
         buttonText="Sell" 
         successText="Sold"
         completed={false}
