@@ -7,13 +7,9 @@ function SellButton({playerId}: {playerId: number}) {
     const { updateBalance } = useAuth();
 
     const handleSellPlayer = async(playerId: number): Promise<Player | string> => {
-        try {
-            const player = await sellPlayer(playerId);
-            await updateBalance();
-            return player;
-        } catch {
-            return "Error selling player";
-        }
+        const player = await sellPlayer(playerId);
+        await updateBalance();
+        return player;
     };
 
     return (

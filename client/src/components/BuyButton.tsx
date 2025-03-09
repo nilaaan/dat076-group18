@@ -7,13 +7,9 @@ function BuyButton({playerId, completed}: {playerId: number, completed: boolean}
     const { updateBalance } = useAuth();
 
     const handleBuyPlayer = async(playerId: number): Promise<Player | string> => {
-        try {
-            const player = await buyPlayer(playerId);
-            await updateBalance();
-            return player;
-        } catch {
-            return "Error buying player";
-        }
+        const player = await buyPlayer(playerId);
+        await updateBalance();
+        return player;
     };
 
     return (
