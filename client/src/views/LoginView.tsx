@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
 import { useAuth } from '../contexts/authContext';
@@ -70,7 +70,7 @@ const LoginView: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
           <h2 className="text-center text-2xl font-semibold">Login</h2>
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-4 flex flex-col items-end">
             <input
               type="email"
               placeholder="Email"
@@ -85,18 +85,12 @@ const LoginView: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             />
+            <Link to="/register" className="hover:underline text-blue-500 mx-2">Register</Link>
             <button
               className="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
               onClick={handleLogin}
             >
               Login
-            </button>
-  
-            <button
-              className="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-              onClick={() => navigate('/register')}
-            >
-              Register
             </button>
           </div>
         </div>
