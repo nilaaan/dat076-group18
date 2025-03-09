@@ -3,20 +3,22 @@ import { Player } from '../model/player.interface';
 import { PlayerService } from './player'; 
 import { AuthService } from './auth';
 import { User } from '../model/user.interface';
+import { IUserService } from './user.interface';
+import { ITeamService } from './team.interface';
 
 
-export class TeamService {
-    private authService; 
+export class TeamService implements ITeamService {
+    private userService; 
     private playerService;  
 
-    constructor(authService: AuthService, playerService: PlayerService) {
-        this.authService = authService;
+    constructor(userService: IUserService, playerService: PlayerService) {
+        this.userService = userService;
         this.playerService = playerService; 
     }
 
     // returns the current balance of the user's team 
     async getBalance(username: string) : Promise<number | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
@@ -26,7 +28,7 @@ export class TeamService {
     // returns a specific player from the user's team
     // returns undefined if no player with that id number exists in the user's team
     async getPlayer(username: string, id : number) : Promise<Player | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
@@ -41,7 +43,7 @@ export class TeamService {
     // returns a specific player by reference
     // returns undefined if no player with that id number exists
     async getPlayerObject(username: string, id: number) : Promise<Player | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
@@ -50,17 +52,17 @@ export class TeamService {
 
     // returns all players from the user's team 
     async getPlayers(username: string) : Promise <Player[] | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
         return JSON.parse(JSON.stringify(user.team.players));
     }
-
+    
     // buys a player to the user's team, marking the player as unavailable to be picked by other users and updating the user's balance
     // returns undefined if the player does not exist or if the user has insufficient balance
     async buyPlayer(username: string, id: number) : Promise <Player | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
@@ -70,22 +72,20 @@ export class TeamService {
             return undefined;
         }
 
-        if (! player.available) {
-            console.error(`Player not available: ${id}`);
-           return undefined;
-        }
-
         if (player.price > user.team.balance) {
             console.error(`Insufficient balance to buy player: ${id}`); 
             return undefined;
         }
 
-        if (user.team.players.find((player) => player.id === id)) {
+        if (user.team.players.find((player) => player.id === id)) {     
             console.error(`Player already in team: ${id}`);
             return undefined;
         }
         
-        this.markPlayerUnavailable(player);
+        if (user.team.players.length >= 11) {
+            console.error(`Team is full`);
+            return undefined;
+        }
         this.addPlayer(user, player);
         this.decreaseBalance(user, player.price); 
         return { ...player };
@@ -94,7 +94,7 @@ export class TeamService {
     // sells a player from the user's team, marking the player as available to be picked by other users and updating the user's balance
     // returns undefined if the player does not exist in the user's team
     async sellPlayer(username: string, id : number) : Promise <Player | undefined> {
-        const user : User | null = await this.authService.findUser(username);
+        const user : User | null = await this.userService.findUser(username);
         if (! user) {
             return undefined
         }
@@ -137,13 +137,5 @@ export class TeamService {
         if (indexToRemove !== -1) {
             user.team.players.splice(indexToRemove, 1);
         }
-    }
-
-    private markPlayerAvailable(player: Player) {
-        player.available = true; 
-    }
-
-    private markPlayerUnavailable(player: Player) {
-        player.available = false; 
     }
 }

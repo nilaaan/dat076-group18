@@ -1,12 +1,12 @@
 import React from "react";
 
 interface ChoiceBoxProps {
-    func: (id: string) => void; 
+    func: (id: number) => void; 
 }
 
 const ChoiceBox: React.FC<ChoiceBoxProps> = ({ func }) => {
     return (
-        <select onChange={(e) => func(e.target.value)} defaultValue="">
+        <select onChange={(e) => func(Number(e.target.value))} defaultValue="">
             <option value="" disabled>Select a player</option>
             <option value="1">Player 1</option>
             <option value="2">Player 2</option>

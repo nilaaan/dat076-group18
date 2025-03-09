@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
-import { ReactNode, useEffect, useState } from "react";
-import { checkAuthenticated } from "../api/tempAuthAPI.ts";
+import { ReactNode } from "react";
 import axios from "axios";
+import { useAuth } from "../contexts/authContext.ts";
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -11,21 +11,7 @@ axios.defaults.withCredentials = true;
 
 // Returns the children if logged in, and redirects if not.
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const res = await checkAuthenticated();// axios.get("http://localhost:8080/user/check-session"); // Borde använda apin
-                setIsAuthenticated(res); // Is either true or false based on result of previous get
-            } catch (error) {
-                setIsAuthenticated(false); // Assume not authenticated on error
-            }
-        };
-
-        checkAuth();
-    }, []);
+    const { isAuthenticated } = useAuth();
 
     if (isAuthenticated === null) return <p>Loading...</p>;
 

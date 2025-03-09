@@ -10,8 +10,7 @@ test("If all players are requested then all players should be returned", async (
         number: 10,
         club: "Test Club",
         price: 10,
-        available: true,
-        points: 0
+        image: "img1",
     };
     const player2 = 
     {
@@ -21,8 +20,7 @@ test("If all players are requested then all players should be returned", async (
         number: 9,
         club: "Test Club",
         price: 10,
-        available: false,
-        points: 0
+        image: "img2",
     };
     const player3 =
     {
@@ -32,8 +30,7 @@ test("If all players are requested then all players should be returned", async (
         number: 3,
         club: "Test Club",
         price: 5,
-        available: true,
-        points: 0
+        image: "img3",
     };
     const player4 = 
     {
@@ -43,8 +40,7 @@ test("If all players are requested then all players should be returned", async (
         number: 5,
         club: "Test Club",
         price: 5,
-        available: true,
-        points: 0
+        image: "img4",
     };
     const player5 = 
     {
@@ -54,8 +50,7 @@ test("If all players are requested then all players should be returned", async (
         number: 10,
         club: "Test Club",
         price: 200000000,
-        available: true,
-        points: 0
+        image: "img5",
     };
     const playerService = new PlayerService(); 
     const players = await playerService.getPlayers();
@@ -72,8 +67,7 @@ test("If a specific player is requested then it should be returned", async () =>
         number: 10,
         club: "Test Club",
         price: 10,
-        available: true,
-        points: 0
+        image: "img1",
     }; 
     const playerService = new PlayerService();
 
