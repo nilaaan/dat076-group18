@@ -1,17 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import footballBG from '../assets/footballBG.jpg'; // Import the image
+import { Link } from 'react-router-dom'; 
+import footballBG from '../assets/footballBG.jpg';
 
 const StartView = () => {
   return (
     <div
       className="relative h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${footballBG})` }} // Use the imported image
+      style={{ backgroundImage: `url(${footballBG})` }} 
     >
       {/* Overlay for frosted glass effect */}
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>
 
-      {/* Content on top of the background */}
       <div className="relative z-20 flex flex-col justify-center items-center h-full text-white text-center p-6">
         <div className="mb-12">
           <h1 className="text-5xl font-semibold mb-6 tracking-wider">Fantasy Football mannen</h1>
@@ -20,7 +19,7 @@ const StartView = () => {
           </p>
         </div>
 
-        {/* Sign Up Button as a Link */}
+
         <Link to="/register">
           <button className="mt-8 py-3 px-6 bg-white text-black font-semibold rounded-xl shadow-lg backdrop-blur-sm bg-opacity-40 hover:bg-opacity-60 hover:scale-105 transform transition duration-300">
             Sign Up
