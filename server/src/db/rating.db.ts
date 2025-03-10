@@ -13,7 +13,7 @@ export class Ratings extends Model<InferAttributes<Ratings>, InferCreationAttrib
 Ratings.init(
     {
         player_id: {
-            type: DataTypes.BIGINT,        // constraint >= 0 and references id in playerModel
+            type: DataTypes.INTEGER,        // constraint >= 0 and references id in playerModel
             primaryKey: true,
         },
         round: {

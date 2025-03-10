@@ -4,7 +4,7 @@ import { ClubModel } from './club.db';
 
 // change attributes and player model once database is set up
 export class PlayerModel extends Model<InferAttributes<PlayerModel>, InferCreationAttributes<PlayerModel>> {
-    declare id: number; // not optional because needs to be same as API olayer id 
+    declare id: number; // not optional because needs to be same as API player id 
     declare name: string;
     declare position: string;
     declare number: number;
@@ -16,7 +16,7 @@ export class PlayerModel extends Model<InferAttributes<PlayerModel>, InferCreati
 PlayerModel.init(
     {
         id: {
-            type: DataTypes.BIGINT,         // constraint >= 0
+            type: DataTypes.INTEGER,         // constraint >= 0
             primaryKey: true
         },
         name: {

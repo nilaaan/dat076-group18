@@ -33,6 +33,8 @@ const BuyView = () => {
     if (error) return <h1>{error}</h1>;
 
     const isPlayerBought = (playerId: number) => {
+        console.log("from client: ")
+        console.log(teamPlayers)
         return teamPlayers.some(player => player.id === playerId);
     };
 

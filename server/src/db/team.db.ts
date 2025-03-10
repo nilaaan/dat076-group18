@@ -13,12 +13,12 @@ export class TeamModel extends Model<InferAttributes<TeamModel>, InferCreationAt
 TeamModel.init(
     {
         id: {
-            type: DataTypes.BIGINT,        // constraint >= 0
+            type: DataTypes.INTEGER,        // constraint >= 0
             autoIncrement: true,
             primaryKey: true
         },
         user_id: {
-            type: DataTypes.BIGINT,         
+            type: DataTypes.INTEGER,         
             allowNull: false,
             /*references: {
                 model: UserModel,
@@ -26,11 +26,11 @@ TeamModel.init(
             }*/
         },
         balance: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         points: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     }, {

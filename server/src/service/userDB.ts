@@ -6,6 +6,7 @@ import { TeamModel } from "../db/team.db";
 import { TeamPlayers } from "../db/teamPlayers.db";
 import { PlayerModel } from "../db/player.db";
 import { get } from "http";
+import { Player } from "../model/player.interface";
 
 export class UserDBService implements IUserService {
 
@@ -87,29 +88,34 @@ export class UserDBService implements IUserService {
         });
 
         // Extract the player IDs from the teamPlayers results
-        const playerIds = teamPlayers.map(tp => tp.player_id);
+        const playerIds = teamPlayers.map(tp =>tp.player_id);
 
         // Fetch the player details using the player IDs
-        const players = await PlayerModel.findAll({
+        const team_players = await PlayerModel.findAll({
             where: { id: playerIds }
-        });
+        }); 
 
-        console.log(`User with name ${username} logged in just now`)
+        let players: Player[] = [];
+        
+        if (team_players.length > 0) {
+            players = team_players.map(player => ({
+                id: player.id,
+                name: player.name,
+                position: player.position,
+                number: player.number,
+                club: player.club,
+                price: player.price,
+                image: player.image
+            }));
+        } 
 
+        console.log(`User with name ${username} logged in just now`) 
 
         return {
             username: user.username,
             password: user.password,
             team: {
-                players: players.map(player => ({
-                    id: player.id,
-                    name: player.name,
-                    position: player.position,
-                    number: player.number,
-                    club: player.club,
-                    price: player.price,
-                    image: player.image
-                })),
+                players: players,
                 balance: team.balance
             }
         } as User;

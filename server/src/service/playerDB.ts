@@ -7,15 +7,15 @@ export class PlayerDBService implements IPlayerService {
 
     // returns a copy of a specific player with the given id number
     // returns undefined if there is no such player 
-    async getPlayer(id: number) : Promise<Player | undefined> {
+    async getPlayer(player_id: number) : Promise<Player | undefined> {
 
         const player = await PlayerModel.findOne({
-            where: {id : id},
+            where: {id : player_id},
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         }); 
 
         if (! player) {
-            console.error(`Player not found: ${id}`);
+            console.error(`Player not found: ${player_id}`);
             return undefined
         }
         return player.get({plain: true}) as Player;

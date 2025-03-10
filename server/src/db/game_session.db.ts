@@ -5,7 +5,7 @@ import { PlayerModel } from './player.db';
 
 
 export class Game_session extends Model<InferAttributes<Game_session>, InferCreationAttributes<Game_session>> {
-    declare game_id: CreationOptional<number>;
+    declare id: CreationOptional<number>;
     declare start_date: Date; 
     declare current_round: number;
 }
@@ -13,8 +13,8 @@ export class Game_session extends Model<InferAttributes<Game_session>, InferCrea
 
 Game_session.init(
     {
-        game_id: {
-            type: DataTypes.BIGINT,
+        id: {
+            type: DataTypes.INTEGER,
             autoIncrement: true,        
             primaryKey: true,
         },

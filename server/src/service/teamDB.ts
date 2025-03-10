@@ -43,18 +43,9 @@ export class TeamDBService implements ITeamService {
             return undefined
         }
 
-        return user.team.players.find((player) => player.id === id);
+        return user.team.players.find((player) => Number(player.id) === id);
     }
 
-    // returns a specific player by reference
-    // returns undefined if no player with that id number exists
-    async getPlayerObject(username: string, id: number) : Promise<Player | undefined> {
-        const user : User | null = await this.userService.findUser(username);
-        if (! user) {
-            return undefined
-        }
-        return user.team.players.find((player) => player.id === id);
-    }
 
     // returns all players from the user's team 
     async getPlayers(username: string) : Promise <Player[] | undefined> {
@@ -85,7 +76,7 @@ export class TeamDBService implements ITeamService {
         const user = await this.userService.findUser(username);
 
         if (! user) {
-            console.error(`User ${username} does not exist`);
+            console.error(`User ${username} does not exist`);       // extract to check conditions, etc. 
             return undefined
         }
 
@@ -102,7 +93,7 @@ export class TeamDBService implements ITeamService {
         }
 
         // Check if the player is already in the team
-        const isPlayerInTeam = user.team.players.find((player) => player.id === player_id);
+        const isPlayerInTeam = user.team.players.find((player) => Number(player.id) === player_id);     // needs to convert to int because database returns attribute as string, fix it 
 
         if (isPlayerInTeam) {
             console.error(`Player already in team: ${player_id}`);
@@ -153,17 +144,11 @@ export class TeamDBService implements ITeamService {
             return undefined
         }
 
-        const isPlayerInTeam = user.team.players.find((player) => player.id === player_id);
-
-        if (! isPlayerInTeam) {
-            console.error(`Player not found in team: ${player_id}`);
-            return undefined;
-        }
+        const player = user.team.players.find((player) => Number(player.id) === player_id);
         
-        const player = await this.playerService.getPlayer(player_id);
 
-        if (!player) {
-            console.error(`Player not found: ${player_id}`);
+        if (! player) {
+            console.error(`Player not found: ${player_id}`);        
             return undefined;
         }
 

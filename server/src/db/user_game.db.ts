@@ -4,23 +4,23 @@ import { TeamModel } from './team.db';
 import { PlayerModel } from './player.db';
 
 
-export class User_session extends Model<InferAttributes<User_session>, InferCreationAttributes<User_session>> { 
+export class User_game extends Model<InferAttributes<User_game>, InferCreationAttributes<User_game>> { 
     declare user_id: number; 
     declare game_id: number;
 }
 
 
-User_session.init(
+User_game.init(
     {
         user_id: {
-            type: DataTypes.BIGINT,         // constraint >= 0, references id in User Model  
+            type: DataTypes.INTEGER,         // constraint >= 0, references id in User Model  
             primaryKey: true,
         },
         game_id: {
-            type: DataTypes.BIGINT,        // constraint >= 0, references id in Game_session Model
+            type: DataTypes.INTEGER,        // constraint >= 0, references id in Game_session Model
             primaryKey: true,
         }
     }, {
         sequelize: conn,
-        modelName: 'user_session'
+        modelName: 'user_game'
 });
