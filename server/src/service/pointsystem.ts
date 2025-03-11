@@ -3,8 +3,6 @@ import { IPointSystemService } from './pointsystem.interface';
 
 export class PointSystemService implements IPointSystemService {
 
-
-
     calculatePoints(rating: number | null) : number | undefined {
         if (rating === null) {
             return 0;

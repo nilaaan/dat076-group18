@@ -3,10 +3,6 @@ import { Player } from "../model/player.interface";
 
 export interface ITeamService {
 
-    // returns a specific player from the user's team
-    // returns undefined if no player with that id number exists in the user's team
-    getPlayer(username: string, id : number) : Promise<Player | undefined>;
-
     // returns all players from the user's team 
     getPlayers(username: string) : Promise <Player[] | undefined>;
 

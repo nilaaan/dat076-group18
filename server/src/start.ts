@@ -17,6 +17,7 @@ import { PlayerDBService } from "./service/playerDB";
 import { ClubModel } from "./db/club.db";
 import { GameSessionService } from "./service/game_session";
 import { PointSystemService } from "./service/pointsystem";
+import { gamesessionRouter } from "./router/game_session";
 
 export const app = express();
 
@@ -50,5 +51,6 @@ gamesessionService.setPlayerService(playerService);
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));
 app.use("/user", authRouter(userService));
+app.use("/gamesession", gamesessionRouter(gamesessionService));
 
 

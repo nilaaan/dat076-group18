@@ -37,20 +37,6 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         return user.team.balance;
     }
 
-    // returns a specific player from the user's team
-    // returns undefined if no player with that id number exists in the user's team // possibly redundant method might be removed 
-    async getPlayer(username: string, id : number) : Promise<Player | undefined> {
-        const user = await this.userService.findUser(username);
-
-        if (! user) {
-            console.error(`User ${username} does not exist`);
-            return undefined
-        }
-
-        return user.team.players.find((player) => Number(player.id) === id);
-    }
-
-
     // returns all players from the user's team 
     async getPlayers(username: string) : Promise <Player[] | undefined> {
 
@@ -233,7 +219,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         
         const updatedPoints = Number(team.points) + roundPoints;
 
-        const isUpdateed = await team.update({ points: updatedPoints });
+        await team.update({ points: updatedPoints });
 
         return true; 
     }

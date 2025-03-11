@@ -24,12 +24,12 @@ export function playerRouter(playerService: IPlayerService): Router {
         res: Response<Player | String>
     ) => {
         try {
-            if (req.params.id == null) {
+            if (!req.params.id) {
                 res.status(400).send(`Missing id param`);
                 return;
             }
             const id = parseInt(req.params.id, 10);
-            if (!(id >= 0)) {
+            if (!Number.isInteger(id) || id < 0) {
                 res.status(400).send(`id number must be a non-negative integer`);
                 return;
             }
