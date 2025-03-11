@@ -5,6 +5,7 @@ import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const numDefenders = 3;
     const numMidfielders = 4;
@@ -13,9 +14,11 @@ const FieldView = () => {
     useEffect(() => {
         getTeamPlayers().then((data) => {
             setPlayers(data);
-            //setLoading(false);
+            //setError(false);
         }).catch(() => {
-            //setLoading(false);
+            //setError(true);
+        }).finally(() => {
+            setIsLoading(false);
         });
     }, []);
 
@@ -46,6 +49,10 @@ const FieldView = () => {
                 p.id === playerId ? { ...p, available } : p
             )
         );
+    }
+
+    if (isLoading) {
+        return <p>Loading...</p>;
     }
 
     return (
@@ -86,7 +93,7 @@ const FieldView = () => {
                 </div>
                 <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
-                        <PlayerSlot key={0} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)} data-testid={`player-slot-0`}></PlayerSlot>
+                        <PlayerSlot key={0} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)}data-testid={`player-slot-0`} />
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numAttackers }, (_, index) => {
