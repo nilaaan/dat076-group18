@@ -4,14 +4,13 @@ import { TeamModel } from './team.db';
 import { PlayerModel } from './player.db';
 
 
-export class Game_session extends Model<InferAttributes<Game_session>, InferCreationAttributes<Game_session>> {
+export class Game_sessionModel extends Model<InferAttributes<Game_sessionModel>, InferCreationAttributes<Game_sessionModel>> {
     declare id: CreationOptional<number>;
     declare start_date: Date; 
-    declare current_round: number;
 }
 
 
-Game_session.init(
+Game_sessionModel.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -20,13 +19,8 @@ Game_session.init(
         },
         start_date: {
             type: DataTypes.DATE,         
-            primaryKey: true,
-        },
-        current_round: {
-            type: DataTypes.INTEGER,        // constraint: value in (1-38)
             allowNull: false,
         }
-
     }, {
         sequelize: conn,
         modelName: 'game_session'

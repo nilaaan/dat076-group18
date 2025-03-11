@@ -7,8 +7,14 @@ import { TeamPlayers } from "../db/teamPlayers.db";
 import { PlayerModel } from "../db/player.db";
 import { get } from "http";
 import { Player } from "../model/player.interface";
+import { IGameSessionService } from "./game_session.interface";
 
 export class UserDBService implements IUserService {
+    private gamesessionService; 
+
+    constructor(gamesessionService: IGameSessionService) {
+        this.gamesessionService = gamesessionService;
+    }
 
     async registerUser(username: string, password: string): Promise<User | null> {
 
@@ -35,6 +41,7 @@ export class UserDBService implements IUserService {
         console.log(`Registered just now User with name ${username}`)
         // Convert the instance to a plain object and return it
         return {
+            id: newUser.id,
             username: newUser.username,
             password: newUser.password,
             team: {
@@ -63,15 +70,7 @@ export class UserDBService implements IUserService {
         }
 
         if (password) { 
-        // TRIGGER IF NOT GAMESESSION: DO NOTHING (JUST WAIT FOR START GAME) (TAKREN CARE OF BY GameSession CLASS), THE START GAME BUTTON CHECKS THE SAME CONDITION AND ONLY EXISTS WHILE TRUE
-        // this.gamesessionservice.isGameSession(). 
-        // IF GAMESESSION: Check the date/round etc. update all relevant data (players data and team points) (TAKREN CARE OF BY Point system CLASS)
-        // gamesession.isAfterMatches --> update all relevant data (players data and team points) (TAKEN CARE OF BY Point system CLASS)
-        // playerService.updatePlayerData() --> update all player data (TAKEN CARE OF BY PlayerService CLASS)
-        // teamService.updateTeamPoints() --> update all team points (TAKEN CARE OF BY TeamService CLASS)
-        // else do nothing (means it's before or during the matches, during matches taken care of by buy/sell methods)
-
-        // need to add if current_round is 0, i.e. the league is over 
+            this.gamesessionService.handleLogin(user.id);
         }
 
         // Find the team for the user
@@ -112,6 +111,7 @@ export class UserDBService implements IUserService {
         console.log(`User with name ${username} logged in just now`) 
 
         return {
+            id: user.id,
             username: user.username,
             password: user.password,
             team: {

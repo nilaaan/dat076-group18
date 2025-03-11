@@ -5,6 +5,7 @@ import { IUserService } from "./user.interface";
 export class AuthService implements IUserService {
 
    users: User[] = [];
+   private currentId: number = 1;
 
    async registerUser(username: string, password: string) : Promise <User | null> {
       // For the hashed password
@@ -16,6 +17,7 @@ export class AuthService implements IUserService {
       }
 
       const newUser: User = {
+         id: this.currentId++,
          username,
          password: bcrypt.hashSync(password, salt),
          team: {

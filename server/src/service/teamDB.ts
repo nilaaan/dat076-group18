@@ -10,15 +10,18 @@ import { TeamModel } from '../db/team.db';
 import { TeamPlayers } from '../db/teamPlayers.db';
 import { PlayerModel } from '../db/player.db';
 import { TEXT } from 'sequelize';
+import { IPointSystemService } from './pointsystem.interface';
 
 
 export class TeamDBService implements ITeamService {
     private userService;  
     private playerService;
+    private pointSystemService;
 
-    constructor(userService: IUserService, playerService: IPlayerService) {
+    constructor(userService: IUserService, playerService: IPlayerService, pointSystemService : IPointSystemService) {
         this.userService = userService;
         this.playerService = playerService;
+        this.pointSystemService = pointSystemService;
     }
 
     // returns the current balance of the user's team 
@@ -113,7 +116,7 @@ export class TeamDBService implements ITeamService {
             console.error(`Player is not playing next match`);
             return undefined;
         }*/
-        const team = await this.getUserTeam(username);
+        const team = await this.getUserTeam(user.id);
 
         if (!team) {
             console.error(`Team for user ${username} does not exist`);
@@ -152,7 +155,7 @@ export class TeamDBService implements ITeamService {
             return undefined;
         }
 
-        const team = await this.getUserTeam(username);
+        const team = await this.getUserTeam(user.id);
 
         if (!team) {
             console.error(`Team for user ${username} does not exist`);
@@ -177,27 +180,49 @@ export class TeamDBService implements ITeamService {
 
 
     // change this method to some other place, does not belong in this class
-    async getUserTeam(username: string): Promise<TeamModel | null> {
-        const user = await UserModel.findOne({
-            where: { username: username },
-        });
-
-        if (!user) {
-            console.error(`User ${username} does not exist`);
-            return null;
-        }
-
+    async getUserTeam(user_id: number): Promise<TeamModel | null> {
         const team = await TeamModel.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user_id }
         });
 
         return team;
     }
 
 
-
-    // update points ()
     // for all team players, get their last_ratings, pass it to pointSystem class method, get the team points, and update team points 
+    async updateTeamPoints(user_id: number): Promise<void> {
+        const team = await this.getUserTeam(user_id);
+
+        if (!team) {
+            console.error(`Team for user ${user_id} does not exist`);
+            return;
+        }
+
+        const teamPlayers = await TeamPlayers.findAll({
+            where: { team_id: team.id }
+        });
+
+        let roundPoints: number = 0;
+
+        for (const teamPlayer of teamPlayers) {
+            const player = await PlayerModel.findOne({
+                where: { id: teamPlayer.player_id }
+            })
+
+            if (!player) {
+                console.error(`Player ${teamPlayer.player_id} does not exist`);
+                return;
+            }
+
+            const playerPoints = await this.pointSystemService.calculatePoints(player.last_rating);
+
+            roundPoints += playerPoints;
+        }
+        
+        const updatedPoints = Number(team.points) + roundPoints;
+
+        await team.update({ points: updatedPoints });
+    }
 }
 
     

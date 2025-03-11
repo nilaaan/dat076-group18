@@ -1,6 +1,8 @@
 import { PlayerModel } from "../db/player.db";
+import { GameSessionService } from "./game_session";
 import { PlayerService } from "./player";
 import { PlayerDBService } from "./playerDB";
+import { PointSystemService } from "./pointsystem";
 import { TeamDBService } from "./teamDB";
 import { UserDBService } from "./userDB";
 
@@ -29,11 +31,11 @@ test("if a player is bought then the player should be added to the user's team a
         image: "img4",
     };
     
-    const userDBService = new UserDBService();
+    const userDBService = new UserDBService(new GameSessionService());
 
     await userDBService.registerUser("username", "username");
     
-    const teamDBService = new TeamDBService(userDBService, new PlayerDBService());
+    const teamDBService = new TeamDBService(userDBService, new PlayerDBService(), new PointSystemService());
 
     const player = await teamDBService.buyPlayer("username", 4);    
 
@@ -44,11 +46,11 @@ test("if a player is bought then the player should be added to the user's team a
 
 test("if all players from a user's team are requested then all players should be returned", async () => {
 
-    const userDBService = new UserDBService();
+    const userDBService = new UserDBService(new GameSessionService());
 
     //await userDBService.registerUser("username", "username");
     
-    const teamDBService = new TeamDBService(userDBService, new PlayerDBService());
+    const teamDBService = new TeamDBService(userDBService, new PlayerDBService(), new PointSystemService());
 
     const player = await teamDBService.buyPlayer("username", 1);    
 

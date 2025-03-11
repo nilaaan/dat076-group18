@@ -1,6 +1,6 @@
 export interface IGameSessionService {
 
-    // methods 
+    handleLogin(user_id: number): void;
 
 
 }
