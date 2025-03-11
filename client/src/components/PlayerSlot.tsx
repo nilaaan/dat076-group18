@@ -5,9 +5,10 @@ import { UserRound, X, Info, Plus } from 'lucide-react';
 interface PlayerSlotProps {
     initialPlayer?: Player;
     setPlayerAvailable: (id: number, available: boolean) => void;
+    'data-testid'?: string;
 }
 
-function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
+function PlayerSlot({ initialPlayer, setPlayerAvailable, 'data-testid': dataTestId }: PlayerSlotProps) {
     const [player, setPlayer] = useState<Player | undefined>();
 
     useEffect(() => {
@@ -38,16 +39,16 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
         console.log(player);
     }
 
-    function removePlayer() {
+    /*function removePlayer() {
         if (player) {
             console.log("removed");
             setPlayerAvailable(player.id, true);
             setPlayer(undefined);
         }
-    }
+    }*/
 
     const content = (
-        <>
+        <div data-testid={dataTestId}>
             <header className="aspect-square relative">
                 {player ?
                     (<>
@@ -70,7 +71,7 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
             <footer className={`${player ? "preset-filled-surface-200-800" : ""}`}>
                 <p className="text-center p-2 overflow-hidden text-ellipsis whitespace-nowrap">{player ? player.name : "Buy player"}</p>
             </footer>
-        </>
+        </div>
     )
 
     return (

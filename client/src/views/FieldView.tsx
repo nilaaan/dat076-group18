@@ -86,22 +86,25 @@ const FieldView = () => {
                 </div>
                 <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
-                        <PlayerSlot setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)}></PlayerSlot>
+                        <PlayerSlot key={0} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)} data-testid={`player-slot-0`}></PlayerSlot>
                     </div>
                     <div className="flex justify-evenly">
-                        {Array.from({ length: numAttackers }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + index)}></PlayerSlot>
-                        )}
+                        {Array.from({ length: numAttackers }, (_, index) => {
+                            const totalIndex = 1 + index;
+                            return <PlayerSlot key={totalIndex} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(totalIndex)} data-testid={`player-slot-${totalIndex}`} />
+                        })}
                     </div>
                     <div className="flex justify-evenly">
-                        {Array.from({ length: numMidfielders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers +  + index)}></PlayerSlot>
-                        )}
+                        {Array.from({ length: numMidfielders }, (_, index) => {
+                            const totalIndex = 1 + numAttackers + index;
+                            return <PlayerSlot key={totalIndex} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(totalIndex)} data-testid={`player-slot-${totalIndex}`} />
+                        })}
                     </div>
                     <div className="flex justify-evenly">
-                        {Array.from({ length: numDefenders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)}></PlayerSlot>
-                        )}
+                        {Array.from({ length: numDefenders }, (_, index) => {
+                            const totalIndex = 1 + numAttackers + numMidfielders + index;
+                            return <PlayerSlot key={totalIndex} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(totalIndex)} data-testid={`player-slot-${totalIndex}`} />
+                        })}
                     </div>
                 </div>
             </div>
