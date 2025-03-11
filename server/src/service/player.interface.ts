@@ -8,7 +8,4 @@ export interface IPlayerService {
 
     // returns a deep copy of all existing players
     getPlayers() : Promise<Player[]>;
-
-    // updates all player stats
-    updatePlayerStats(round: number) : Promise<void>;
 }

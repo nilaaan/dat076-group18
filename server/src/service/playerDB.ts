@@ -34,7 +34,7 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    async updatePlayerStats(round: number): Promise<void> {
+    async updatePlayerStats(round: number): Promise<boolean | undefined> {
         const players = await PlayerModel.findAll();
 
         for (const player of players) {
@@ -49,11 +49,14 @@ export class PlayerDBService implements IPlayerService {
                 await player.update({ next_rating: rating.rating });
             } else {
                 console.error(`Rating not found for player: ${player.id} in round: ${nextRound}`);
+                return undefined;
             }
 
             const recentForm = await this.obtainRecentForm(player.id, nextRound);
+            
             await player.update({ form: recentForm });
         }
+        return true; 
     }
     // set player.last rating to the current round player ratings, set player.next rating to the next round player ratings,
     // calculate recent form (other method within this class) and seasonal form and update those attributes
@@ -90,6 +93,7 @@ export class PlayerDBService implements IPlayerService {
             sum += rating; 
         }
         const averageRating = sum / nonNullRatings.length;
+        
         return averageRating;
     } 
 

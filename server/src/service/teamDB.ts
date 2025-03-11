@@ -190,12 +190,12 @@ export class TeamDBService implements ITeamService {
 
 
     // for all team players, get their last_ratings, pass it to pointSystem class method, get the team points, and update team points 
-    async updateTeamPoints(user_id: number): Promise<void> {
+    async updateTeamPoints(user_id: number): Promise<boolean | undefined> {
         const team = await this.getUserTeam(user_id);
 
         if (!team) {
             console.error(`Team for user ${user_id} does not exist`);
-            return;
+            return undefined;
         }
 
         const teamPlayers = await TeamPlayers.findAll({
@@ -211,18 +211,26 @@ export class TeamDBService implements ITeamService {
 
             if (!player) {
                 console.error(`Player ${teamPlayer.player_id} does not exist`);
-                return;
+                return undefined;
             }
 
-            const playerPoints = await this.pointSystemService.calculatePoints(player.last_rating);
+            const playerPoints = await this.pointSystemService.calculatePoints(player.last_rating);     // converts rating (1-10) into points 0-70
 
-            roundPoints += playerPoints;
+            if (!playerPoints) {
+                console.error(`Could not calculate points for player ${player.id}`);
+                return undefined;
+            } else {
+                roundPoints += playerPoints;
+            }
         }
         
         const updatedPoints = Number(team.points) + roundPoints;
 
-        await team.update({ points: updatedPoints });
+        const isUpdateed = await team.update({ points: updatedPoints });
+
+        return true; 
     }
 }
+
 
     

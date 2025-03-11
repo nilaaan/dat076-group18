@@ -6,13 +6,13 @@ import { ClubModel } from '../db/club.db';
 
 export class GameSessionService implements IGameSessionService {
 
-    time_frame = 38 * 2; // days for real version
+    private time_frame = 38 * 2 * 24;    // in hours for real version
 
-    test_timeframe = 10 * 38 // minutes for testing (each round is 10 minutes: the first 8 minutes is the 
-                             // window where the user can form team/change players, the 2 last minutes is when 
-                             // the matches are being played and the user can't change players)
+    private test_timeframe = 10 * 38    // in minutes for testing (each round is 10 minutes: the first 8 minutes is the 
+                                        // window where the user can form team/change players, the 2 last minutes is when 
+                                        // the matches are being played and the user can't change players)
 
-    test_round_time = 10; // in minutes 
+    private test_round_time = 10;   // in minutes 
 
     // dont even know if it should be async
     async handleLogin(user_id: number) : Promise<void> {    // might be username that has to be passed instead of user_id, but in that case, just extract user_id 
@@ -27,7 +27,8 @@ export class GameSessionService implements IGameSessionService {
         // maybe add a isGameSessionfinished(), returns, and easy for frontend know when to display appropriate text 
 
         const isAfterMatches = await this.isAfterMatches(user_id);
-        if (isAfterMatches) {
+        if (isAfterMatches) {   
+            // MOVE ALL THIS TO UPDATE STATE METHOD
             const current_round = await this.getCurrentRound(user_id);
             let user_round = await this.getUserRound(user_id);
             if (!current_round || !user_round) {
@@ -102,10 +103,25 @@ export class GameSessionService implements IGameSessionService {
         // get current date and time
         // if it's before match time return true
 
-    // isMatchesInProgress()
-        // get current date and time
-        // if it's match day and time is between start and end time of the match return true
-        // need to consider that date is one hour earlier than local time 
+    async isMatchesInProgress(user_id: number): Promise<boolean | undefined> {
+        const current_date = new Date();
+        const current_round = await this.getCurrentRound(user_id);
+        if (!current_round) {
+            console.error(`User ${user_id} does not have a game session`);
+            return undefined;
+        }
+
+        const start_date = await this.getUserGameStartDate(user_id);
+        if (!start_date) {
+            console.error(`User ${user_id} does not have a game session`);
+            return undefined;
+        }
+        
+        const current_round_start = new Date(start_date.getTime() + (current_round - 1) * this.test_round_time * 60 * 1000);
+        const current_round_match_start = new Date(current_round_start.getTime() + 8 * 60 * 1000);      // Matches start at the 8th minute
+        const current_round_match_end = new Date(current_round_start.getTime() + 10 * 60 * 1000);       // Matches end at the 10th minute
+        return current_date >= current_round_match_start && current_date <= current_round_match_end;
+    }
 
     async isAfterMatches(user_id: number): Promise<boolean | undefined> {
         const user_game_round = await this.getUserRound(user_id);
@@ -129,19 +145,11 @@ export class GameSessionService implements IGameSessionService {
     // clarify that this reflects the actual current round based on the start date of the game session, '
     // in constrast to user_round which is the last round the user logged in
     async getCurrentRound(user_id: number) : Promise <number | undefined> {
-        const user_game = await this.getUserGame(user_id);
-        if (!user_game) {
+        const start_date = await this.getUserGameStartDate(user_id);
+        if (!start_date) {
             console.error(`User ${user_id} does not have a game session`);
             return undefined;
         }
-
-        const game_session = await Game_sessionModel.findOne({ where: { id: user_game.game_id } });
-        if (!game_session) {
-            console.error(`Game session with id ${user_game.game_id} does not exist`);
-            return undefined;
-        }
-
-        const start_date = game_session.start_date;
         const time_difference = this.getTimeDifferenceFromStart(start_date);
         const current_round = Math.floor(time_difference / this.test_round_time) + 1;
         
@@ -165,6 +173,23 @@ export class GameSessionService implements IGameSessionService {
             return undefined;
         }
         return user_game.current_round;
+    }
+
+
+    async getUserGameStartDate(user_id: number) {
+        const user_game = await this.getUserGame(user_id);
+        if (!user_game) {
+            console.error(`User ${user_id} does not have a game session`);
+            return undefined;
+        }
+
+        const game_session = await Game_sessionModel.findOne({ where: { id: user_game.game_id } });
+        if (!game_session) {
+            console.error(`Game session with id ${user_game.game_id} does not exist`);
+            return undefined;
+        }
+
+        return game_session.start_date;
     }
 
 
@@ -195,14 +220,11 @@ export class GameSessionService implements IGameSessionService {
         // call teamService.updateTeamPoints() --> update all team points (TAKEN CARE OF BY TeamService CLASS)
         // call incrementRound() --> increment round in Schedule table by 1 (increment from round 5 to 6)
     }
-
         
 
     // returns the time difference between the current date and the given start date in minutes
     getTimeDifferenceFromStart(start_date: Date) {  // will probably change to hours when implementing real version
         const current_date = new Date();
-        console.log("today;; ")
-        console.log(current_date);
         const difference_in_ms =  current_date.getTime() - start_date.getTime();
         const difference_in_min = difference_in_ms / (1000 * 60);
         return difference_in_min;
