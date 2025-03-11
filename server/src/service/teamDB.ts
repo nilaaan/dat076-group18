@@ -11,9 +11,10 @@ import { TeamPlayers } from '../db/teamPlayers.db';
 import { PlayerModel } from '../db/player.db';
 import { TEXT } from 'sequelize';
 import { IPointSystemService } from './pointsystem.interface';
+import { ITeamStateService } from './team_state.interface';
 
 
-export class TeamDBService implements ITeamService {
+export class TeamDBService implements ITeamService, ITeamStateService {
     private userService;  
     private playerService;
     private pointSystemService;
@@ -83,6 +84,8 @@ export class TeamDBService implements ITeamService {
             return undefined
         }
 
+        // CHECK IF MATCHES ARE IN PROGRESS
+
         const player = await this.playerService.getPlayer(player_id);
 
         if (!player) {
@@ -116,6 +119,8 @@ export class TeamDBService implements ITeamService {
             console.error(`Player is not playing next match`);
             return undefined;
         }*/
+
+
         const team = await this.getUserTeam(user.id);
 
         if (!team) {
@@ -146,6 +151,8 @@ export class TeamDBService implements ITeamService {
             console.error(`User ${username} does not exist`);
             return undefined
         }
+
+        // CHECK IF MATCHES ARE IN PROGRESS
 
         const player = user.team.players.find((player) => Number(player.id) === player_id);
         

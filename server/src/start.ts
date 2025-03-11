@@ -43,6 +43,10 @@ const gamesessionService = new GameSessionService();
 const userService = new UserDBService(gamesessionService);
 const playerService = new PlayerDBService();
 const teamService = new TeamDBService(userService, playerService, pointSystemService);
+
+gamesessionService.setTeamService(teamService);
+gamesessionService.setPlayerService(playerService);
+
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));
 app.use("/user", authRouter(userService));

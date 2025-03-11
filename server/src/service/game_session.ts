@@ -3,19 +3,35 @@ import { Game_sessionModel } from '../db/game_session.db';
 import { User_games } from '../db/user_game.db';
 import { IGameSessionService} from './game_session.interface';
 import { ClubModel } from '../db/club.db';
+import { IPlayerService } from './player.interface';
+import { ITeamService } from './team.interface';
+import { IPlayerStateService } from './player_state.interface';
+import { ITeamStateService } from './team_state.interface';
 
 export class GameSessionService implements IGameSessionService {
-
     private time_frame = 38 * 2 * 24;    // in hours for real version
-
+    
     private test_timeframe = 10 * 38    // in minutes for testing (each round is 10 minutes: the first 8 minutes is the 
                                         // window where the user can form team/change players, the 2 last minutes is when 
                                         // the matches are being played and the user can't change players)
 
     private test_round_time = 10;   // in minutes 
 
-    // dont even know if it should be async
-    async handleLogin(user_id: number) : Promise<void> {    // might be username that has to be passed instead of user_id, but in that case, just extract user_id 
+    private playerService: IPlayerStateService | null = null;; 
+    private teamService: ITeamStateService | null = null;; 
+
+
+    setPlayerService(playerService: IPlayerStateService): void {
+        this.playerService = playerService;
+    }
+
+    setTeamService(teamService: ITeamStateService): void {
+        this.teamService = teamService;
+    }
+
+    // is called everytime user logs in or is logged in and navigates to the matches page 
+    // needs to update the tables, collect points, one round at a time, until the current round is reached
+    async updateState(user_id : number) : Promise<void> {
         const isGameSession = await this.isGameSession(user_id);
         if (!isGameSession) {
             return;
@@ -42,6 +58,13 @@ export class GameSessionService implements IGameSessionService {
                 // needs to updated the tables, collect points, one round at a time, until the current round is reached
             }   */
             while (user_round < current_round) {
+                if (this.playerService) {
+                    await this.playerService.updatePlayerStats(user_round);
+                }
+                if (this.teamService) {
+                    await this.teamService.updateTeamPoints(user_id);
+                }
+                this.incrementUserRound(user_id);
                 // updateState() --> is called everytime user logs in and the date is after matches of the round the user last logged in
                 // updateRound() --> increment round in Schedule table by 1
                 // needs to updated the tables, collect points, one round at a time, until the current round is reached
@@ -60,8 +83,14 @@ export class GameSessionService implements IGameSessionService {
         // else do nothing (means it's before or during the matches, during matches taken care of by buy/sell methods)
 
         // need to add if current_round is 0, i.e. the league is over 
+        // Let's say we are on user_round 5 loop: 
+        // call playerService.updatePlayerStats() --> update all player data (TAKEN CARE OF BY PlayerService CLASS)
+            // (Previous rating should be round 5 ratings and next rating should be round 6 ratings)
+
+        // call teamService.updateTeamPoints() --> update all team points (TAKEN CARE OF BY TeamService CLASS)
+        // call incrementRound() --> increment round in Schedule table by 1 (increment from round 5 to 6)
     }
-                                 
+                      
     
 
     // checks if there is a game session with the given user_id
@@ -123,6 +152,7 @@ export class GameSessionService implements IGameSessionService {
         return current_date >= current_round_match_start && current_date <= current_round_match_end;
     }
 
+
     async isAfterMatches(user_id: number): Promise<boolean | undefined> {
         const user_game_round = await this.getUserRound(user_id);
         const current_round = await this.getCurrentRound(user_id);
@@ -137,11 +167,25 @@ export class GameSessionService implements IGameSessionService {
         return false; 
     }
         
+
+
+    async isGameSessionFinished(user_id: number): Promise<boolean | undefined> {
+        const round = await this.getUserRound(user_id);
+        if (!round) {
+            console.error(`User ${user_id} does not have a game session`);
+            return undefined;
+        }
+        if (round > 38) {
+            return true;
+        }
+        return false;
+    }; 
+
+
+
         // if getRound is greater than current round in table then return true
         // issue: what if the user logs in after 5 matches have been played?
         // we want the same team to have collected points normally during all games 
-
-
     // clarify that this reflects the actual current round based on the start date of the game session, '
     // in constrast to user_round which is the last round the user logged in
     async getCurrentRound(user_id: number) : Promise <number | undefined> {
@@ -194,7 +238,7 @@ export class GameSessionService implements IGameSessionService {
 
 
     // increments the current round of the user gamesession by one
-    async incrementRound(user_id: number) : Promise<void> {
+    async incrementUserRound(user_id: number) : Promise<void> {
         const user_game = await this.getUserGame(user_id);
         if (!user_game) {
             console.error(`User ${user_id} does not have a game session`);
@@ -209,18 +253,6 @@ export class GameSessionService implements IGameSessionService {
         // returns the date of the match in the current round (for matches will be player the 12/3 20.45.... )
         // assumes that current round is updated to its correct value
 
-
-    // is called everytime user logs in and the date is after matches of the round the user last logged in
-    // needs to updated the tables, collect points, one round at a time, until the current round is reached
-    async updateState(user_id : number) : Promise<void> {
-        // Let's say we are on user_round 5 loop: 
-        // call playerService.updatePlayerStats() --> update all player data (TAKEN CARE OF BY PlayerService CLASS)
-            // (Previous rating should be round 5 ratings and next rating should be round 6 ratings)
-
-        // call teamService.updateTeamPoints() --> update all team points (TAKEN CARE OF BY TeamService CLASS)
-        // call incrementRound() --> increment round in Schedule table by 1 (increment from round 5 to 6)
-    }
-        
 
     // returns the time difference between the current date and the given start date in minutes
     getTimeDifferenceFromStart(start_date: Date) {  // will probably change to hours when implementing real version

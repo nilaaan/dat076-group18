@@ -69,8 +69,8 @@ export class UserDBService implements IUserService {
             return null;
         }
 
-        if (password) { 
-            this.gamesessionService.handleLogin(user.id);
+        if (password) {     // mean user just logged in 
+            this.gamesessionService.updateState(user.id);
         }
 
         // Find the team for the user

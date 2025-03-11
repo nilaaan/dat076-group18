@@ -109,6 +109,7 @@ export class TeamService implements ITeamService {
         return { ...player };
     }
 
+
     private increaseBalance(user: User, amount: number) {
         user.team.balance += amount; 
     }

@@ -4,8 +4,9 @@ import { RatingModel } from '../db/rating.db';
 import { Player } from '../model/player.interface';  
 import { PlayerService } from './player';
 import { IPlayerService } from './player.interface';
+import { IPlayerStateService } from './player_state.interface';
 
-export class PlayerDBService implements IPlayerService {
+export class PlayerDBService implements IPlayerService, IPlayerStateService {
 
     // returns a copy of a specific player with the given id number as type Player
     // returns undefined if there is no such player 

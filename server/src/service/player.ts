@@ -1,6 +1,7 @@
 import { Player } from '../model/player.interface';  
+import { IPlayerService } from './player.interface';
 
-export class PlayerService {
+export class PlayerService implements IPlayerService {
     private players: Player[] = [ 
         {
             id: 1, 
@@ -68,4 +69,5 @@ export class PlayerService {
     async getPlayers() : Promise<Player[]> {
         return JSON.parse(JSON.stringify(this.players));
     }
+
 }
