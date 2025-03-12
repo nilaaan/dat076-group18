@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
-import { UserRound, Plus, Minus, CircleUser } from 'lucide-react';
+import { UserRound, Plus, Minus } from 'lucide-react';
 import { getPlayer } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import SellButton from './SellButton.tsx';
@@ -16,7 +16,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
     const [loading, setLoading] = useState<boolean>(true);
     const [player, setPlayer] = useState<Player | null>(null);
     const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    //const [error, setError] = useState<string | null>(null);
     
 
     useEffect(() => {
@@ -43,7 +43,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                     const teamPlayersData = await getTeamPlayers();
                     setTeamPlayers(teamPlayersData);
                 } catch {
-                    setError('Failed to fetch players');
+                    //setError('Failed to fetch players');
                 } finally {
                     setLoading(false);
                 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
-import PlayerSlot from '../components/PlayerSlot.tsx';
 import { getPlayers } from '../api/playerApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 
@@ -21,16 +20,16 @@ const StartPageTest = () => {
     }, []);
 
 
-    const handlePlayerClick = (player: Player | undefined) => {
+    /*const handlePlayerClick = (player: Player | undefined) => {
         setSelectedPlayer(player);
-    };
+    };*/
 
     const closePopup = () => {
         setSelectedPlayer(undefined); 
     };
 
 
-    function getPlayer(index: number): Player | undefined {
+    /*function getPlayer(index: number): Player | undefined {
         return players[index] || undefined;
     }
 
@@ -40,7 +39,7 @@ const StartPageTest = () => {
                 p.id === playerId ? { ...p, available } : p
             )
         );
-    }
+    }*/
 
     return (
         <div className="flex justify-center pb-20 overflow-hidden">
