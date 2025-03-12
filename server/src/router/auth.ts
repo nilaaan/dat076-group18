@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { AuthService } from "../service/auth";
 import { IUserService } from "../service/user.interface";
+import { User } from "../model/user.interface";
 
 
 export function authRouter(userService: IUserService): Router {
@@ -9,7 +10,7 @@ export function authRouter(userService: IUserService): Router {
 
     authRouter.post("/", async (
         req: Request<{}, {}, { username: string, password: string }>,
-        res: Response
+        res: Response<User | string>
     ) => {
         try {
             const { username, password } = req.body;
@@ -39,7 +40,7 @@ export function authRouter(userService: IUserService): Router {
     // Login user
     authRouter.post("/login", async (
         req: Request<{}, {}, { username: string, password: string }>,
-        res: Response
+        res: Response<string>
     ) => {
         try {
             const { username, password } = req.body;
@@ -71,7 +72,7 @@ export function authRouter(userService: IUserService): Router {
     // Logout user
     authRouter.post("/logout", (
         req: Request,
-        res: Response
+        res: Response<string>
     ) => {
         req.session.destroy((err) => {
             if (err) {

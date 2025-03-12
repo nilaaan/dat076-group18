@@ -18,5 +18,8 @@ export interface ITeamService {
     // and returns a copy of the player sold
     // returns undefined otherwise
     sellPlayer(username: string, id: number) : Promise<Player | undefined>;    
+
+    // returns the current points of the user's team
+    getPoints(username: string) : Promise<number | undefined>;
     
 }

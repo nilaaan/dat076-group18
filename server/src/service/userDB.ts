@@ -46,7 +46,8 @@ export class UserDBService implements IUserService {
             password: newUser.password,
             team: {
                 players: [],
-                balance: 100000000
+                balance: 100000000,
+                points: 0
             }
         } as User;
     }
@@ -70,7 +71,7 @@ export class UserDBService implements IUserService {
         }
 
         if (password) {     // means user just logged in 
-            this.gamesessionService.updateState(user.id);
+            this.gamesessionService.updateState(username);
         }
 
         // Find the team for the user
@@ -116,7 +117,8 @@ export class UserDBService implements IUserService {
             password: user.password,
             team: {
                 players: players,
-                balance: team.balance
+                balance: team.balance,
+                points: team.points
             }
         } as User;
     }

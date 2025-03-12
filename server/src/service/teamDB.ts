@@ -37,6 +37,19 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         return user.team.balance;
     }
 
+
+    // returns the current balance of the user's team 
+    async getPoints(username: string) : Promise<number | undefined> {
+        const user = await this.userService.findUser(username);
+
+        if (! user) {
+            console.error(`User ${username} does not exist`);
+            return undefined
+        }
+
+        return user.team.points;
+    }
+
     // returns all players from the user's team 
     async getPlayers(username: string) : Promise <Player[] | undefined> {
 

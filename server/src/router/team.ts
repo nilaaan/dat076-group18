@@ -55,6 +55,29 @@ export function teamRouter(teamService: ITeamService): Router {
             console.error(e.message);
         }
     });
+
+    teamRouter.get("/points", async (
+        req: Request,
+        res: Response<{ points: Number } | String>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+            const points = await teamService.getPoints(req.session.user.username);
+            if (!points) {
+                console.log("user logged in as " + req.session.user.username + " no longer exists");
+                delete req.session.user;
+                res.status(401).send("Not logged in");
+                return;
+            }
+            res.status(200).send({ points });
+        } catch (e: any) {
+            res.status(500).send(e.message);
+            console.error(e.message);
+        }
+    });
     
 
     teamRouter.post("/:id", async (    

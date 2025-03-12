@@ -1,15 +1,16 @@
 
 export interface IGameSessionService {
 
-    startGameSession(username: string): Promise<boolean|undefined>;
+    startGameSession(username: string): Promise<boolean | undefined>;
 
-    isGameSession(user_id: number): Promise<boolean>;
+    isGameSession(username: string): Promise<boolean | undefined>;
 
-    isGameSessionFinished(user_id: number): Promise<boolean | undefined> 
+    isGameSessionFinished(username: string): Promise<boolean | undefined> 
 
-    isMatchesInProgress(user_id: number): Promise<boolean | undefined> 
+    isMatchesInProgress(username: string): Promise<boolean | undefined> 
 
-    updateState(user_id: number): Promise<boolean | undefined>
+    updateState(username: string): Promise<boolean | undefined>
 
-    getUserRound(user_id: number): Promise<number | undefined>
+    getUserRound(username: string): Promise<number | undefined>
+
 }
