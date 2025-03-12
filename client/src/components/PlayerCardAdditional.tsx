@@ -66,7 +66,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
             <header className="aspect-square relative">
                 {player ? (
                     <>
-                        <UserRound className="w-3/4 h-full m-auto" />
+                        <img src={`${player.image}`}></img>
                         {fieldCase ? (
                         <button
                             type="button"

@@ -1,13 +1,12 @@
 export interface Player {
-    id: number;
-    name: string;
+    id: number; 
+    name: string; 
     position: string;
-    number: number;
+    number: number; 
     club: string;
-    price: number;
-    available: boolean;
-    points: number;
-}
+    price: number;    
+    image : string;
+}      
 
 export interface Team {
     players: Player[];
