@@ -47,6 +47,7 @@ const teamService = new TeamDBService(userService, playerService, pointSystemSer
 
 gamesessionService.setTeamService(teamService);
 gamesessionService.setPlayerService(playerService);
+gamesessionService.setUserService(userService);
 
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));

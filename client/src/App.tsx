@@ -8,6 +8,7 @@ import RegisterView from './views/RegisterView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
 import FieldView from './views/FieldView.tsx';
 import TempAuth from './views/TempAuth.tsx';
+import MatchesView from './views/MatchesView.tsx';
 
 import './App.css'
 import { CircleUser, Github } from 'lucide-react';
@@ -46,6 +47,7 @@ function App() {
               <NavLink to="/player">Player</NavLink>
               <NavLink to="/balance">Balance</NavLink>
               <NavLink to="/buy">Buy/Sell</NavLink>
+              <NavLink to="/matches">Matches</NavLink>
             </div>
           </AppBar.ToolbarCenter>
           <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
@@ -69,6 +71,7 @@ function App() {
           <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
           <Route path="/login" element={<LoginView />}></Route>
           <Route path="/register" element={<RegisterView />}></Route>
+          <Route path="/matches" element={<ProtectedComponent> <MatchesView /> </ProtectedComponent>}></Route>
         </Routes>
       </main>
     </Router>

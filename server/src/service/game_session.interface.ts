@@ -1,7 +1,7 @@
 
 export interface IGameSessionService {
 
-    startGameSession(user_id: number): Promise<boolean>;
+    startGameSession(username: string): Promise<boolean|undefined>;
 
     isGameSession(user_id: number): Promise<boolean>;
 
@@ -11,4 +11,5 @@ export interface IGameSessionService {
 
     updateState(user_id: number): Promise<boolean | undefined>
 
+    getUserRound(user_id: number): Promise<number | undefined>
 }

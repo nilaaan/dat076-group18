@@ -116,6 +116,36 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
     });
 
 
+    gamesessionRouter.get("/:userId/round", async (
+        req: Request<{ userId: string }, {}, {}>,
+        res: Response<number | string>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+            if (!req.params.userId) {
+                res.status(400).send(`Missing id param`);
+                return;
+            }
+            const user_id = parseInt(req.params.userId, 10);
+            if (!Number.isInteger(user_id) || user_id < 0) {
+                res.status(400).send(`id number must be a non-negative integer`);
+                return;
+            }
+            const round = await gameSessionService.getUserRound(user_id);
+            if (!round) {
+                res.status(404).send(`No game session found for user ${user_id}`);
+                return;
+            }
+            res.status(200).send(round);
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    });
+
+
     gamesessionRouter.put("/:userId/state", async (
         req: Request<{ userId: string }, {}, {}>,
         res: Response<boolean | string>

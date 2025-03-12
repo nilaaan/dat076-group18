@@ -69,7 +69,7 @@ export class UserDBService implements IUserService {
             return null;
         }
 
-        if (password) {     // mean user just logged in 
+        if (password) {     // means user just logged in 
             this.gamesessionService.updateState(user.id);
         }
 

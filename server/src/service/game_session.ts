@@ -7,6 +7,7 @@ import { IPlayerService } from './player.interface';
 import { ITeamService } from './team.interface';
 import { IPlayerStateService } from './player_state.interface';
 import { ITeamStateService } from './team_state.interface';
+import { IUserService } from './user.interface';
 
 
 export class GameSessionService implements IGameSessionService {
@@ -18,8 +19,9 @@ export class GameSessionService implements IGameSessionService {
 
     private test_round_time = 10;   // in minutes 
 
-    private playerService: IPlayerStateService | null = null;;
-    private teamService: ITeamStateService | null = null;;
+    private playerService: IPlayerStateService | null = null;
+    private teamService: ITeamStateService | null = null;
+    private userService: IUserService | null = null;
 
 
     setPlayerService(playerService: IPlayerStateService): void {
@@ -30,12 +32,16 @@ export class GameSessionService implements IGameSessionService {
         this.teamService = teamService;
     }
 
+    setUserService(userService: IUserService): void {
+        this.userService = userService;
+    }
+
     // is called everytime user logs in or is logged in and navigates to the matches page 
     // needs to update the tables, collect points, one round at a time, until the current round is reached
     async updateState(user_id: number): Promise<boolean | undefined> {
         const isGameSession = await this.isGameSession(user_id);
         if (!isGameSession) {
-            return undefined;
+            return true;
         }
 
         const isAfterMatches = await this.isAfterMatches(user_id);
@@ -93,7 +99,13 @@ export class GameSessionService implements IGameSessionService {
     // if there exists a game session where the matches of the first round haven't been played yet, that one is assigned to the user
     // otherwise if all existing game sessions are already in progress, a new one is started and assigned to the user
     // returns the game session that was assigned to the user
-    async startGameSession(user_id: number): Promise<boolean> {
+    async startGameSession(username: string): Promise<boolean | undefined> {
+        const user_id = await this.getUserId(username);
+        if (!user_id) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
+
         const game_sessions = await Game_sessionModel.findAll();
         const current_date = new Date();
         for (const game_session of game_sessions) {
@@ -246,4 +258,16 @@ export class GameSessionService implements IGameSessionService {
         const end_date = new Date(start_date.getTime() + 8 * 60 * 1000); // Add 8 minutes in milliseconds
         return end_date;
     }
+
+
+    async getUserId(username: string) : Promise<number | undefined> {
+        const user = await this.userService?.findUser(username);
+        if (!user) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
+        return user.id;
+    }
+
+
 }
