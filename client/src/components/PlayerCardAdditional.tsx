@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
-import { UserRound, Plus, Minus } from 'lucide-react';
+import { UserRound, Plus, Minus, CircleUser } from 'lucide-react';
 import { getPlayer } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import SellButton from './SellButton.tsx';
@@ -66,7 +66,12 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
             <header className="aspect-square relative">
                 {player ? (
                     <>
-                        <img src={`${player.image}`}></img>
+                        {player.image ?
+                        <img src={`${player.image}`} className="w-full h-full"></img>
+                        : <UserRound className="w-3/4 h-full m-auto"></UserRound>
+                        }
+                        
+                        
                         {fieldCase ? (
                         <button
                             type="button"
