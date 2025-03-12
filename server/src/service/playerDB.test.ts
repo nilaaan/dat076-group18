@@ -1,4 +1,5 @@
 import { RatingModel } from "../db/rating.db";
+import { GameSessionService } from "./game_session";
 import { PlayerDBService } from "./playerDB";
 
 
@@ -34,9 +35,9 @@ test("testing obtainRecentForm method", async () => {
     
         await addAllRatings();
     
-        const playerDBService = new PlayerDBService();
+        const playerDBService = new PlayerDBService(new GameSessionService());
     
-        const recentForm = await playerDBService.obtainRecentForm(1, 5);
+        const recentForm = await playerDBService.calculateRecentForm(1, 5);
 
         console.log("Player 1 recent form: " + recentForm);
 

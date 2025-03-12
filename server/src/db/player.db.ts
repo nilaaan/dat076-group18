@@ -10,10 +10,7 @@ export class PlayerModel extends Model<InferAttributes<PlayerModel>, InferCreati
     declare number: number;
     declare club: string;   // foreign key
     declare price: number;
-    declare image: string; 
-    declare last_rating: number | null;    // foreign key, references rating in ratingModel
-    declare next_rating: number | null;    // foreign key, references rating in ratingModel
-    declare form: number | null;           
+    declare image: string;       
 }
 
 PlayerModel.init(
@@ -47,22 +44,7 @@ PlayerModel.init(
             type: DataTypes.STRING,         // constraint must be a valid URL (if can with regex or smth)  
             allowNull: false,
             defaultValue: 'default_image.png'   // add some generic player image (??)
-        },
-        last_rating: {
-            type: DataTypes.FLOAT,        // foreign key, references rating in ratingModel
-            allowNull: true,
-            defaultValue: null
-        },
-        next_rating: {
-            type: DataTypes.FLOAT,        // foreign key, references rating in ratingModel
-            allowNull: true,
-            defaultValue: null
-        }, 
-        form: {
-            type: DataTypes.FLOAT,        // constraint >= 0
-            allowNull: true,
-            defaultValue: null
-        }           
+        }        
 
     }, {
         sequelize: conn,

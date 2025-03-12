@@ -4,9 +4,15 @@ import { RatingModel } from '../db/rating.db';
 import { Player } from '../model/player.interface';  
 import { PlayerService } from './player';
 import { IPlayerService } from './player.interface';
-import { IPlayerStateService } from './player_state.interface';
+import { GameSessionService } from './game_session';
+import { IGameSessionService } from './game_session.interface';
 
-export class PlayerDBService implements IPlayerService, IPlayerStateService {
+export class PlayerDBService implements IPlayerService {
+    private gamesessionService;
+
+    constructor(gamesessionService : IGameSessionService) {
+        this.gamesessionService = gamesessionService;
+    }
 
     // returns a copy of a specific player with the given id number as type Player
     // returns undefined if there is no such player 
@@ -35,7 +41,8 @@ export class PlayerDBService implements IPlayerService, IPlayerStateService {
     }
 
 
-    async updatePlayerStats(round: number): Promise<boolean | undefined> {
+    ///// CHANGE // REMOVE COMPLETELY 
+   /* async updatePlayerStats(round: number): Promise<boolean | undefined> {
         const players = await PlayerModel.findAll();
 
         for (const player of players) {
@@ -58,15 +65,63 @@ export class PlayerDBService implements IPlayerService, IPlayerStateService {
             await player.update({ form: recentForm });
         }
         return true; 
-    }
+    }*/
     // set player.last rating to the current round player ratings, set player.next rating to the next round player ratings,
     // calculate recent form (other method within this class) and seasonal form and update those attributes
 
 
     // isPlayerAvailable() called in buy/sell methods of TeamDB (and frontend) to check if existing teamPlayer is unavailable next match 
     
+    async getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined> {
+        const current_round = await this.gamesessionService.getUserRound(username);
+        if (!current_round) {
+            console.error(`User ${username} does not have a game session`);
+            return undefined;
+        }
+        const rating_row = await RatingModel.findOne({
+            where: { player_id: player_id, round: current_round - 1 }
+        });
+        if (!rating_row) {
+            console.error(`Rating not found for player: ${player_id} in round: current_round - 1`);
+            return undefined;
+        }
+        return rating_row.rating;
+    }
+
+
+    async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> {
+        const current_round = await this.gamesessionService.getUserRound(username);
+        if (!current_round) {
+            console.error(`User ${username} does not have a game session`);
+            return undefined;
+        }
+        const rating_row = await RatingModel.findOne({
+            where: { player_id: player_id, round: current_round }
+        });
+        if (!rating_row) {
+            console.error(`Rating not found for player: ${player_id} in round: ${current_round - 1}`);
+            return undefined;
+        }
+
+        if (rating_row.rating === null) {
+            return false;
+        }
+        return true;
+    }
+
+
+    async getRecentForm(player_id: number, username: string): Promise<number | null | undefined> {
+        const current_round = await this.gamesessionService.getUserRound(username);
+        if (!current_round) {
+            console.error(`User ${username} does not have a game session`);
+            return undefined;
+        }
+        return await this.calculateRecentForm(player_id, current_round);
+    }
+
+
     // returns the average rating of the last 4 played games pf the given player as recent form
-    async obtainRecentForm(player_id: number, round: number): Promise <number | null> {
+    async calculateRecentForm(player_id: number, round: number): Promise <number | null> {
         const ratings = await RatingModel.findAll({
             where: {
                 player_id: player_id,

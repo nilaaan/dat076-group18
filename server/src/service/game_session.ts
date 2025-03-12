@@ -5,7 +5,6 @@ import { IGameSessionService } from './game_session.interface';
 import { ClubModel } from '../db/club.db';
 import { IPlayerService } from './player.interface';
 import { ITeamService } from './team.interface';
-import { IPlayerStateService } from './player_state.interface';
 import { ITeamStateService } from './team_state.interface';
 import { IUserService } from './user.interface';
 
@@ -19,14 +18,9 @@ export class GameSessionService implements IGameSessionService {
 
     private test_round_time = 10;   // in minutes 
 
-    private playerService: IPlayerStateService | null = null;
     private teamService: ITeamStateService | null = null;
     private userService: IUserService | null = null;
 
-
-    setPlayerService(playerService: IPlayerStateService): void {
-        this.playerService = playerService;
-    }
 
     setTeamService(teamService: ITeamStateService): void {
         this.teamService = teamService;
@@ -38,6 +32,9 @@ export class GameSessionService implements IGameSessionService {
 
     // is called everytime user logs in or is logged in and navigates to the matches page 
     // needs to update the tables, collect points, one round at a time, until the current round is reached
+
+
+    // CHANGE 
     async updateState(username: string): Promise<boolean | undefined> {
         const user_id = await this.getUserId(username);
         if (!user_id) {
@@ -62,20 +59,15 @@ export class GameSessionService implements IGameSessionService {
             
             // updates state one round at a time until the user's gamesession round reaches the current round 
             while (user_round < current_round) {
-                if (this.playerService) {
-                    const isPlayerStatsUpdated = await this.playerService.updatePlayerStats(user_round);
-                    if (!isPlayerStatsUpdated) {
-                        throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);
-                    }
-                }
+                await this.incrementUserRound(user_id);
+                user_round++;
+
                 if (this.teamService) {
-                    const isTeamPointsUpdated = await this.teamService.updateTeamPoints(user_id);
+                    const isTeamPointsUpdated = await this.teamService.updateTeamPoints(username);
                     if (!isTeamPointsUpdated) {
                         throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);
                     }
                 }
-                this.incrementUserRound(user_id);
-                user_round++;
             }
         }
         return true; 
