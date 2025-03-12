@@ -66,7 +66,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
             <header className="aspect-square relative">
                 {player ? (
                     <>
-                        {player.image ?
+                        {player.image !== "" ?
                         <img src={`${player.image}`} className="w-full h-full"></img>
                         : <UserRound className="w-3/4 h-full m-auto"></UserRound>
                         }
@@ -94,8 +94,6 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                 <p>Number: {player.number}</p>
                 <p>Club: {player.club}</p>
                 <p>Price: ${player.price}</p>
-                <p>Points: {player.points}</p>
-                <p>Status: {player.available ? 'Available' : 'Not Available'}</p>
 
                 {/* Buy and Sell Buttons */}
                 {isPlayerBought(player.id) ? (

@@ -52,7 +52,7 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable, onInfoClick }: PlayerSl
             <header className="aspect-square relative">
                 {player ?
                     (<>
-                        <UserRound className="w-3/4 h-full m-auto" />
+                        <img src={player.image} className="w-full h-full"></img>
                         {/* <a href={`/player/${player.id}`}> */}
                             <button type="button" className="btn absolute rounded-none top-0 left-0 px-2 preset-filled-surface-400-600" onClick={onInfoClick}>
                                 <Info />
