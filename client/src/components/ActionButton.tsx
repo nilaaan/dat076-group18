@@ -25,7 +25,7 @@ function ActionButton({playerId, onAction, buttonText, successText, completed}: 
                 } else {
                     setSuccess(true);
                 }
-            } catch (error) {
+            } catch {
                 setError('An unexpected error occurred');
             } finally {
                 setLoading(false);

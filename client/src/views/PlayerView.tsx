@@ -1,57 +1,81 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
-import { getPlayer } from '../api/playerApi.ts';
+import PlayerSlot from '../components/PlayerSlot.tsx';
+import { getPlayers } from '../api/playerApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
-import ChoiceBox from '../components/DemoChoiceBox.tsx';
 
-/**
- * Data Flow:
- * Frontend sends GET request to /players
- * - Frontend displays id selection while loading.
- * Backend responds with the player with selected id.
- * - Error: frontend display error message
- * - Success: frontend displays the player with selected id.
-*/
+const StartPageTest = () => {
+    const [players, setPlayers] = useState<Player[]>([]);
+    const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
 
-const PlayerView = () => {
-    const [currPlayer, setPlayer] = useState<Player | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [currId, setId] = useState<number | null>(null);
+
 
     useEffect(() => {
-        if (!currId) return; 
+        getPlayers().then((data) => {
+            console.log("players:", players);
+            setPlayers(data);
+            //setLoading(false);
+        }).catch(() => {
+            //setLoading(false);
+        });
+    }, []);
 
-        setLoading(false);
-        getPlayer(currId)
-            .then((data) => {
-                setPlayer(data);
-            })
-            .catch(() => {
-                setPlayer(null);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
 
-    }, [currId]); 
+    const handlePlayerClick = (player: Player | undefined) => {
+        setSelectedPlayer(player);
+    };
 
-    if (loading) return (
-        
-        <ChoiceBox func={setId}/>
-        
-    );
+    const closePopup = () => {
+        setSelectedPlayer(undefined); 
+    };
 
-    if (!currPlayer) return <h1>Error loading player</h1>;
+
+    function getPlayer(index: number): Player | undefined {
+        return players[index] || undefined;
+    }
+
+    function setPlayerAvailable(playerId: number, available: boolean) {
+        setPlayers((ps: Player[]) =>
+            ps.map((p) =>
+                p.id === playerId ? { ...p, available } : p
+            )
+        );
+    }
 
     return (
-        <div>
-            <ChoiceBox func={setId}/>
-            <h1>Player</h1>
-            <PlayerCardAdditional key={currPlayer.id} name={currPlayer.name} price={currPlayer.price}
-            position={currPlayer.position} number={currPlayer.number} club={currPlayer.club}
-            ></PlayerCardAdditional>
+        <div className="flex justify-center pb-20 overflow-hidden">
+            <div className="relative w-full">
+                
+                <div className="flex flex-row absolute w-full">
+                
+                </div>
+                <div className="w-full flex flex-col gap-5 p-5">
+                    {Array.from({ length: Math.ceil(players.length / 6) }, (_, rowIndex) => (
+                        <div className="flex justify-evenly" key={rowIndex}>
+                            {Array.from({ length: 6 }, (_, index) => (
+                                <PlayerCardAdditional 
+                                    key={rowIndex * 6 + index} // Unique key combining row index and column index
+                                    id={1 + index + rowIndex * 6} 
+                                    // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
+                                    onClose={closePopup} 
+                                    fieldCase={false}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {selectedPlayer && (
+                <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50 popup-enter">
+                    <PlayerCardAdditional 
+                        id={selectedPlayer.id} 
+                        onClose={closePopup} 
+                        fieldCase={false}
+                    />
+                </div>
+            )}
         </div>
     );
 };
 
-export default PlayerView;
+export default StartPageTest;

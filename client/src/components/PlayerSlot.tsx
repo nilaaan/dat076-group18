@@ -5,9 +5,10 @@ import { UserRound, X, Info, Plus } from 'lucide-react';
 interface PlayerSlotProps {
     initialPlayer?: Player;
     setPlayerAvailable: (id: number, available: boolean) => void;
+    onInfoClick: () => void;
 }
 
-function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
+function PlayerSlot({ initialPlayer, setPlayerAvailable, onInfoClick }: PlayerSlotProps) {
     const [player, setPlayer] = useState<Player | undefined>();
 
     useEffect(() => {
@@ -52,11 +53,11 @@ function PlayerSlot({ initialPlayer, setPlayerAvailable }: PlayerSlotProps) {
                 {player ?
                     (<>
                         <UserRound className="w-3/4 h-full m-auto" />
-                        <a href="/player">
-                            <button type="button" className="btn absolute rounded-none top-0 left-0 px-2 preset-filled-surface-400-600">
+                        {/* <a href={`/player/${player.id}`}> */}
+                            <button type="button" className="btn absolute rounded-none top-0 left-0 px-2 preset-filled-surface-400-600" onClick={onInfoClick}>
                                 <Info />
                             </button>
-                        </a>
+                        {/* </a> */}
                         <a href="/buy">
                             <button type="button" className="btn absolute rounded-none top-0 right-0 px-2 preset-filled-surface-400-600">
                                 <X />

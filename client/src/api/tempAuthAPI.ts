@@ -19,10 +19,25 @@ export const testLogout = async() => {
 
 export const checkAuthenticated = async (): Promise<boolean> => {
     const res = await axios.get("http://localhost:8080/user/check-session");
-    return res.data.loggedIn; 
+    return res.data.loggedIn;
 };
 
 export const getUsername = async (): Promise<string> => {
     const res = await axios.get("http://localhost:8080/user/check-session");
     return res.data.user.username; 
 };
+
+interface Session {
+    loggedIn: boolean;
+    user?: { username: string };
+}
+
+export const getSession = async (): Promise<Session> => {
+    try {
+        const res = await axios.get("http://localhost:8080/user/check-session");
+        return res.data;
+    } catch {
+        return { loggedIn: false };
+    }
+    
+}

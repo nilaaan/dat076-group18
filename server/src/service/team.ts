@@ -103,14 +103,25 @@ export class TeamService implements ITeamService {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-        
+        if (this.checkForTeamSize(user)) {        
+        // this.markPlayerAvailable(player);
         this.removePlayer(user, player.id);
         this.increaseBalance(user, player.price);
+        }
+        else{
+            console.error(`Team is full`);
+            return undefined;
+        }
+
         return { ...player };
     }
 
     private increaseBalance(user: User, amount: number) {
         user.team.balance += amount; 
+    }
+
+    private checkForTeamSize(user: User): boolean {
+        return user.team.players.length < 11;
     }
 
     private decreaseBalance(user: User, amount: number) {

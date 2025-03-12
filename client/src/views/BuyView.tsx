@@ -4,7 +4,6 @@ import { getPlayers } from '../api/playerApi';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import BuyButton from '../components/BuyButton';
 import SellButton from '../components/SellButton.tsx';
-import BalanceView from './BalanceView.tsx';
 
 const BuyView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -43,7 +42,6 @@ const BuyView = () => {
 
     return (
         <div className="p-10 flex flex-col items-center">
-            <BalanceView></BalanceView>
             <table className="table lg:w-3/4">
                 <thead className="preset-filled-surface-300-700 sticky top-0 !text-white">
                     <tr>

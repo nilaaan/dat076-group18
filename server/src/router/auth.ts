@@ -44,6 +44,11 @@ export function authRouter(userService: IUserService): Router {
         try {
             const { username, password } = req.body;
 
+            if (req.session.user) {
+                res.status(400).send("You are already logged in");
+                return;
+            }
+
             if (!username || !password) {
                 res.status(400).send("Missing username or password");
                 return;
