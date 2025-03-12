@@ -18,7 +18,7 @@ app.listen(PORT, () => {
 });
 
 initDB(); 
-fetchPlayersAndInsertToDB();
+//fetchPlayersAndInsertToDB();
 
 
 

@@ -55,7 +55,7 @@ const StartPageTest = () => {
                             {Array.from({ length: 6 }, (_, index) => (
                                 <PlayerCardAdditional 
                                     key={rowIndex * 6 + index} // Unique key combining row index and column index
-                                    id={1 + index + rowIndex * 6} 
+                                    id={players[index + rowIndex * 6].id} 
                                     // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
                                     onClose={closePopup} 
                                     fieldCase={false}
