@@ -34,6 +34,33 @@ export class GameSessionService implements IGameSessionService {
     // needs to update the tables, collect points, one round at a time, until the current round is reached
 
 
+    // assigns a new game session to the user with the given user id
+    // if there exists a game session where the matches of the first round haven't been played yet, that one is assigned to the user
+    // otherwise if all existing game sessions are already in progress, a new one is started and assigned to the user
+    // returns the game session that was assigned to the user
+    async startGameSession(username: string): Promise<boolean | undefined> {
+        const user_id = await this.getUserId(username);
+        if (!user_id) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
+
+        const game_sessions = await Game_sessionModel.findAll();
+        const current_date = new Date();
+        for (const game_session of game_sessions) {
+            const round1matchestime = this.getFirstRoundMatchesStart(game_session.start_date);
+            if (current_date.getTime() < round1matchestime.getTime()) {
+                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: 0 });
+                return true; 
+            }
+        }
+        const newGameSession = await Game_sessionModel.create({ start_date: current_date });
+        await User_games.create({ user_id: user_id, game_id: newGameSession.id, current_round: 0 });
+        return true;
+    }
+
+
+
     // CHANGE 
     async updateState(username: string): Promise<boolean | undefined> {
         const user_id = await this.getUserId(username);
@@ -97,30 +124,6 @@ export class GameSessionService implements IGameSessionService {
     // if there is a game session that is still on round 1 (according to the getRound() method, not database round), create new game session with the same id and this user_id
     // otherwise start 
 
-    // assigns a new game session to the user with the given user id
-    // if there exists a game session where the matches of the first round haven't been played yet, that one is assigned to the user
-    // otherwise if all existing game sessions are already in progress, a new one is started and assigned to the user
-    // returns the game session that was assigned to the user
-    async startGameSession(username: string): Promise<boolean | undefined> {
-        const user_id = await this.getUserId(username);
-        if (!user_id) {
-            console.error(`User ${username} does not exist`);
-            return undefined;
-        }
-
-        const game_sessions = await Game_sessionModel.findAll();
-        const current_date = new Date();
-        for (const game_session of game_sessions) {
-            const round1matchestime = this.getFirstRoundMatchesStart(game_session.start_date);
-            if (current_date.getTime() < round1matchestime.getTime()) {
-                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: 1 });
-                return true; 
-            }
-        }
-        const newGameSession = await Game_sessionModel.create({ start_date: current_date });
-        await User_games.create({ user_id: user_id, game_id: newGameSession.id, current_round: 1 });
-        return true;
-    }
 
     // isBeforeMatches()
     // get current date and time
@@ -272,6 +275,7 @@ export class GameSessionService implements IGameSessionService {
         const difference_in_min = difference_in_ms / (1000 * 60);
         return difference_in_min;
     }
+
 
     getFirstRoundMatchesStart(start_date: Date) {    // if not used, just remove this 
         const end_date = new Date(start_date.getTime() + 8 * 60 * 1000); // Add 8 minutes in milliseconds

@@ -8,7 +8,7 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
 
     gamesessionRouter.post("/", async (
         req: Request,
-        res: Response<string>
+        res: Response<boolean | string>
     ) => {
         try {
             if (!req.session?.user) {
@@ -22,7 +22,7 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
                 res.status(401).send(`Not logged in`);
                 return;
             }
-            res.status(200).send("Game session started");
+            res.status(200).send(isStarted);
         } catch (e: any) {
             res.status(500).send(e.message);
         }

@@ -1,47 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { isGameSession as checkGameSession } from '../api/gamesessionApi';
+import { isGameSessionFinished as checkGameFinsihed } from '../api/gamesessionApi';
+import { isMatchesInProgress as checkMatchesInProgress } from '../api/gamesessionApi';
+import { getCurrentRound } from '../api/gamesessionApi';
+import { updateGameState as updateGame } from '../api/gamesessionApi';
+import { startGameSession } from '../api/gamesessionApi';
+
 
 const MatchesView: React.FC = () => {
-    const [isGameSession, setIsGameSession] = useState<boolean | null>(null);
-    const [isGameSessionFinished, setIsGameSessionFinished] = useState<boolean | null>(null);
-    const [isMatchesInProgress, setIsMatchesInProgress] = useState<boolean | null>(null);
+    const [isGameSession, setIsGameSession] = useState<boolean>(false);
+    const [isGameSessionFinished, setIsGameSessionFinished] = useState<boolean>(false);
+    const [isMatchesInProgress, setIsMatchesInProgress] = useState<boolean>(false);
     const [userRound, setUserRound] = useState<number | null>(null);
 
+
+    const updateGameState = async () => {
+        try {
+            await updateGame();
+            const finishedResponse = await checkGameFinsihed();
+            if (typeof finishedResponse === 'boolean') {
+                setIsGameSessionFinished(finishedResponse);
+            } else {
+                console.error('Error checking if game session is finished:', finishedResponse);
+            }
+            const inProgressResponse = await checkMatchesInProgress();
+            if (typeof inProgressResponse === 'boolean') {
+                setIsMatchesInProgress(inProgressResponse);
+            } else {
+                console.error('Error checking if matches are in progress:', inProgressResponse);
+            }
+            const roundResponse = await getCurrentRound();
+            if (typeof roundResponse === 'number') {
+                setUserRound(roundResponse);
+            } else {
+                console.error('Error getting current round:', roundResponse);
+            }
+        } catch (error) {
+            console.error('Error updating game state:', error);
+        }
+    };
+
+
     useEffect(() => {
-        const checkGameSession = async () => {
+        const checkIfGameSession = async () => {
             try {
-                const response = await axios.get('/router/gamesession/isGameSession');
-                setIsGameSession(response.data);
-                if (response.data) {
-                    await updateGameState();
+                const response = await checkGameSession();
+                if (typeof response === 'boolean') {
+                    setIsGameSession(response);
+                    if (response) {
+                        await updateGameState();
+                    }
+                } else {
+                    console.error('Error checking game session:', response);
                 }
             } catch (error) {
                 console.error('Error checking game session:', error);
             }
         };
 
-        const updateGameState = async () => {
-            try {
-                await axios.put('/router/gamesession/updateState');
-                const finishedResponse = await axios.get('/router/gamesession/isGameSessionFinished');
-                setIsGameSessionFinished(finishedResponse.data);
-                const inProgressResponse = await axios.get('/router/gamesession/isMatchesInProgress');
-                setIsMatchesInProgress(inProgressResponse.data);
-                const roundResponse = await axios.get('/router/gamesession/getUserRound');
-                setUserRound(roundResponse.data);
-            } catch (error) {
-                console.error('Error updating game state:', error);
-            }
-        };
-
-        checkGameSession();
+        checkIfGameSession();
     }, []);
 
     const handleStartFantasyLeague = async () => {
         try {
-            await axios.post('/router/gamesession/startGameSession');
-            setIsGameSession(true);
-            await updateGameState();
+            const response = await startGameSession();
+            if (typeof response === 'boolean') {
+                if (response) {
+                    setIsGameSession(true);
+                    await updateGameState();
+                } else {
+                    console.error('Could not start fantasy league:'); // impossible to get here since only possible boolean response value is true
+                }
+
+            } else {
+                console.error('Error starting fantasy league:', response);
+            }
         } catch (error) {
             console.error('Error starting fantasy league:', error);
         }
@@ -49,18 +83,16 @@ const MatchesView: React.FC = () => {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            {isGameSession === null ? (
-                <p>Loading...</p>
-            ) : !isGameSession ? (
+            {!isGameSession ? (
                 <button onClick={handleStartFantasyLeague}>
                     Start Fantasy League
                 </button>
             ) : isGameSessionFinished ? (
-                <p>League is over!</p>
+                <p>League is over! Check your final position in the Leaderboard!</p>
             ) : isMatchesInProgress ? (
                 <p>Round: {userRound}. Matches in progress...</p>
             ) : (
-                <p>Round: {userRound}. Matches will be played tonight at 8:45</p>
+                <p>Round: {userRound}. Matches will be played tonight at 8:45. Form your team!</p>
             )}
         </div>
     );
