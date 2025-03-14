@@ -30,27 +30,42 @@ test("if a player is bought then the player should be added to the user's team a
         price: 5,
         image: "img4",
     };
+
+    const playerService = new PlayerService();
+
+    const pointSystemService = new PointSystemService();
+
+    const gameSessionService = new GameSessionService();
     
-    const userDBService = new UserDBService(new GameSessionService());
+    const userDBService = new UserDBService(gameSessionService);
+    
+    const teamDBService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+
+    gameSessionService.setTeamService(teamDBService);
+    gameSessionService.setUserService(userDBService);
 
     await userDBService.registerUser("username", "username");
-    
-    const teamDBService = new TeamDBService(userDBService, new PlayerDBService(), new PointSystemService());
 
     const player = await teamDBService.buyPlayer("username", 4);    
 
     expect(player).toEqual(player4);
-
 });
 
 
 test("if all players from a user's team are requested then all players should be returned", async () => {
 
-    const userDBService = new UserDBService(new GameSessionService());
+    const playerService = new PlayerService();
 
-    //await userDBService.registerUser("username", "username");
+    const pointSystemService = new PointSystemService();
+
+    const gameSessionService = new GameSessionService();
     
-    const teamDBService = new TeamDBService(userDBService, new PlayerDBService(), new PointSystemService());
+    const userDBService = new UserDBService(gameSessionService);
+    
+    const teamDBService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+
+    gameSessionService.setTeamService(teamDBService);
+    gameSessionService.setUserService(userDBService);
 
     const player = await teamDBService.buyPlayer("username", 1);    
 

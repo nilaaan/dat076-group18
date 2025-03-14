@@ -1,5 +1,5 @@
-import { Team } from '../model/team.interface';  
-import { Player } from '../model/player.interface'; 
+import { Team } from '../model/team.interface';
+import { Player } from '../model/player.interface';
 import { IPlayerService } from './player.interface';
 import { AuthService } from './auth';
 import { User } from '../model/user.interface';
@@ -16,12 +16,12 @@ import { IGameSessionService } from './game_session.interface';
 
 
 export class TeamDBService implements ITeamService, ITeamStateService {
-    private userService;  
+    private userService;
     private playerService;
     private pointSystemService;
     private gamesessionService;
 
-    constructor(userService: IUserService, playerService: IPlayerService, pointSystemService : IPointSystemService, gamesessionService : IGameSessionService) {
+    constructor(userService: IUserService, playerService: IPlayerService, pointSystemService: IPointSystemService, gamesessionService: IGameSessionService) {
         this.userService = userService;
         this.playerService = playerService;
         this.pointSystemService = pointSystemService;
@@ -29,10 +29,10 @@ export class TeamDBService implements ITeamService, ITeamStateService {
     }
 
     // returns the current balance of the user's team 
-    async getBalance(username: string) : Promise<number | undefined> {
+    async getBalance(username: string): Promise<number | undefined> {
         const user = await this.userService.findUser(username);
 
-        if (! user) {
+        if (!user) {
             console.error(`User ${username} does not exist`);
             return undefined
         }
@@ -42,10 +42,10 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
 
     // returns the current balance of the user's team 
-    async getPoints(username: string) : Promise<number | undefined> {
+    async getPoints(username: string): Promise<number | undefined> {
         const user = await this.userService.findUser(username);
 
-        if (! user) {
+        if (!user) {
             console.error(`User ${username} does not exist`);
             return undefined
         }
@@ -54,15 +54,15 @@ export class TeamDBService implements ITeamService, ITeamStateService {
     }
 
     // returns all players from the user's team 
-    async getPlayers(username: string) : Promise <Player[] | undefined> {
+    async getPlayers(username: string): Promise<Player[] | undefined> {
 
         const user = await this.userService.findUser(username);
 
-        if (! user) {
+        if (!user) {
             console.error(`User ${username} does not exist`);
             return undefined
         }
-  
+
         // get the user's team players 
         const teamPlayers = user.team.players;
         // CHECK IF ANY CURRENT PLAYERS ARE NOT PLAYING NEXT MATCH OR CREATE SEPARATE GET REQUEST 
@@ -72,27 +72,30 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
         // Convert the player instances to plain JavaScript objects and then to Player objects
 
-        return teamPlayers; 
+        return teamPlayers;
     }
-    
+
     // buys a player to the user's team and updates the user's team balance
     // returns undefined if the player does not exist, the user has insufficient balance, the player is already in the team, the team is full, 
     // or if matches are currently being played (in which case the user should not be able to make changes to the team)
-    async buyPlayer(username: string, player_id: number) : Promise <Player | undefined> {
+    async buyPlayer(username: string, player_id: number): Promise<Player | undefined> {
 
         const user = await this.userService.findUser(username);
 
-        if (! user) {
+        if (!user) {
             console.error(`User ${username} does not exist`);       // extract to check conditions, etc. 
             return undefined
         }
 
         // check if matches are currently being played
+        // check if matches are currently being played
         const isMatchesInProgress = await this.gamesessionService.isMatchesInProgress(username);
+
         if (isMatchesInProgress === undefined) {
-            console.error(`User ${username} does not have a game session`);
+            console.error(`Problem finding user ${username} and its game session`);
             return undefined;
         }
+
         if (isMatchesInProgress) {
             console.error(`Matches are in progress, you cannot make changes to the team right now..`);
             return undefined;
@@ -107,7 +110,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
         // check if user has enough balance to buy the player
         if (player.price > user.team.balance) {
-            console.error(`Insufficient balance to buy player: ${player_id}`); 
+            console.error(`Insufficient balance to buy player: ${player_id}`);
             return undefined;
         }
 
@@ -138,11 +141,11 @@ export class TeamDBService implements ITeamService, ITeamStateService {
             team_id: team.id,
             player_id: player_id
         });
-        
+
         const new_balance = Number(team.balance) - Number(player.price);
 
         // Update the team's balance
-        await team.update({ balance: new_balance});
+        await team.update({ balance: new_balance });
 
         return player
     }
@@ -150,31 +153,34 @@ export class TeamDBService implements ITeamService, ITeamStateService {
     // sells a player from the user's team and updates the user's team balance
     // returns undefined if the player does not exist in the user's team or if matches are currently being played 
     // (in which case the user should not be able to make changes to the team)
-    async sellPlayer(username: string, player_id : number) : Promise <Player | undefined> {
+    async sellPlayer(username: string, player_id: number): Promise<Player | undefined> {
 
         const user = await this.userService.findUser(username);
 
-        if (! user) {
+        if (!user) {
             console.error(`User ${username} does not exist`);
             return undefined
         }
 
-        // check if matches are currently being played 
+
+        // check if matches are currently being played
         const isMatchesInProgress = await this.gamesessionService.isMatchesInProgress(username);
+
         if (isMatchesInProgress === undefined) {
-            console.error(`User ${username} does not have a game session`);
+            console.error(`Problem finding user ${username} and its game session`);
             return undefined;
         }
+
         if (isMatchesInProgress) {
             console.error(`Matches are in progress, you cannot make changes to the team right now..`);
             return undefined;
         }
 
         const player = user.team.players.find((player) => Number(player.id) === player_id);
-        
 
-        if (! player) {
-            console.error(`Player not found: ${player_id}`);        
+
+        if (!player) {
+            console.error(`Player not found: ${player_id}`);
             return undefined;
         }
 
@@ -194,7 +200,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
         // Update the team's balance
         await team.update({ balance: new_balance });
- 
+
         return player;
     }
 
@@ -236,27 +242,56 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
         for (const teamPlayer of teamPlayers) {
             const player_round_rating = await this.playerService.getLastMatchRating(teamPlayer.player_id, username)
-            if (player_round_rating === undefined) { 
+            if (player_round_rating === undefined) {
                 console.error(`Could not get last match rating for player ${teamPlayer.player_id}`);
                 return undefined;
             }
             const playerPoints = await this.pointSystemService.calculatePoints(player_round_rating);     // converts rating (1-10) into points 0-70
 
-            if (!playerPoints) {
+            if (playerPoints === undefined) {
                 console.error(`Could not calculate points for player ${teamPlayer.player_id}`);
                 return undefined;
             } else {
                 roundPoints += playerPoints;
             }
         }
-        
+
         const updatedPoints = Number(team.points) + roundPoints;
 
         await team.update({ points: updatedPoints });
 
-        return true; 
+        return true;
     }
+
+
+   /* async isMatchesInProgress(username: string): Promise<boolean | undefined> {
+        const isGameSession = await this.gamesessionService.isGameSession(username);
+        if (isGameSession === undefined) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
+
+        if (isGameSession) {
+            const isMatchesInProgress = await this.gamesessionService.isMatchesInProgress(username);
+            if (isMatchesInProgress === undefined) {
+                console.error(`User ${username} does not have a game session`);
+                return undefined;
+            }
+
+            if (isMatchesInProgress) {
+                return true;
+            }
+            else {
+                return false; 
+            }
+
+        } else {
+            return false; 
+        }
+    }*/
+
+    
 }
 
 
-    
+

@@ -45,29 +45,48 @@ export class GameSessionService implements IGameSessionService {
             return undefined;
         }
 
+        // check if user already has a game session
+        const isGameSession = await this.isGameSession(username);
+        if (isGameSession) {
+            console.error(`User ${username} already has a game session`);
+            return undefined;
+        }
+
+
         const game_sessions = await Game_sessionModel.findAll();
         const current_date = new Date();
         for (const game_session of game_sessions) {
             const round1matchestime = this.getFirstRoundMatchesStart(game_session.start_date);
             if (current_date.getTime() < round1matchestime.getTime()) {
-                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: 0 });
+                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: 1 });
                 return true; 
             }
         }
         const newGameSession = await Game_sessionModel.create({ start_date: current_date });
-        await User_games.create({ user_id: user_id, game_id: newGameSession.id, current_round: 0 });
+        await User_games.create({ user_id: user_id, game_id: newGameSession.id, current_round: 1 });
         return true;
     }
 
-
-
-    // CHANGE 
-    async updateState(username: string): Promise<boolean | undefined> {
-        const user_id = await this.getUserId(username);
-        if (!user_id) {
+    
+    // checks if there is a game session with the given user_id
+    // returns true if there is a game session, false otherwise
+    async isGameSession(username: string): Promise<boolean | undefined> {  // if we want to allow for multiple games, we need to check for user_id and current_round != 0
+        const user_game = await this.getUserGame(username)  
+        
+        if (user_game === undefined) {
             console.error(`User ${username} does not exist`);
             return undefined;
-        }    
+        }
+        
+        if (user_game) {
+            return true;
+        }
+        return false;
+    }
+
+
+    // updates the state of the user's game session
+    async updateState(username: string): Promise<boolean | undefined> {
         const isGameSession = await this.isGameSession(username);
         if (!isGameSession) {
             return true;
@@ -76,48 +95,27 @@ export class GameSessionService implements IGameSessionService {
         const isAfterMatches = await this.isAfterMatches(username);
         if (isAfterMatches) {
             
-            const current_round = await this.getCurrentRound(user_id);
+            const current_round= await this.getCurrentRound(username);
+            console.log("REAL CURRENT ROUND FOR USER " + username + " IS " + current_round);
             let user_round = await this.getUserRound(username);
 
-            if (!current_round || !user_round) {
+            if (!current_round|| !user_round) {
                 console.error(`User ${username} does not have a game session`);
                 return undefined;
             }
             
             // updates state one round at a time until the user's gamesession round reaches the current round 
             while (user_round < current_round) {
-                await this.incrementUserRound(user_id);
+                await this.incrementUserRound(username);
                 user_round++;
 
-                if (this.teamService) {
-                    const isTeamPointsUpdated = await this.teamService.updateTeamPoints(username);
-                    if (!isTeamPointsUpdated) {
-                        throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);
-                    }
+                const isTeamPointsUpdated = await this.teamService?.updateTeamPoints(username);
+                if (!isTeamPointsUpdated) {
+                    throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);   
                 }
             }
         }
         return true; 
-    }
-
-
-
-    // checks if there is a game session with the given user_id
-    // returns true if there is a game session, false otherwise
-    async isGameSession(username: string): Promise<boolean | undefined> {  
-        const user_id = await this.getUserId(username);
-        if (!user_id) {
-            console.error(`User ${username} does not exist`);
-            return undefined;
-        }                                                                   // if we want to allow for multiple games, we need to check for user_id and current_round != 0
-        const user_game = await User_games.findOne({
-            where: { user_id: user_id }
-        });             // add current_round != 0 if implementing multiple games       
-
-        if (user_game) {
-            return true;
-        }
-        return false;
     }
 
 
@@ -131,20 +129,19 @@ export class GameSessionService implements IGameSessionService {
 
 
     async isMatchesInProgress(username: string): Promise<boolean | undefined> {
-        const user_id = await this.getUserId(username);
-        if (!user_id) {
-            console.error(`User ${username} does not exist`);
-            return undefined;
-        }    
+        const isGameSession = await this.isGameSession(username);
+        if (!isGameSession) {
+            return false;
+        }
 
         const current_date = new Date();
-        const current_round = await this.getCurrentRound(user_id);
+        const current_round = await this.getCurrentRound(username);
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
 
-        const start_date = await this.getUserGameStartDate(user_id);
+        const start_date = await this.getUserGameStartDate(username);
         if (!start_date) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
@@ -158,13 +155,8 @@ export class GameSessionService implements IGameSessionService {
 
 
     async isAfterMatches(username: string): Promise<boolean | undefined> {
-        const user_id = await this.getUserId(username);
-        if (!user_id) {
-            console.error(`User ${username} does not exist`);
-            return undefined;
-        }    
         const user_game_round = await this.getUserRound(username);
-        const current_round = await this.getCurrentRound(user_id);
+        const current_round = await this.getCurrentRound(username);
         if (!user_game_round || !current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
@@ -179,15 +171,22 @@ export class GameSessionService implements IGameSessionService {
 
 
     async isGameSessionFinished(username: string): Promise<boolean | undefined> {
-        const round = await this.getUserRound(username);
-        if (!round) {
+        const isGameSession = await this.isGameSession(username);
+        if (!isGameSession) {
+            return false;
+        }
+
+        const user_round = await this.getUserRound(username);
+        if (!user_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        if (round > 38) {
+
+        if (user_round > 38) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     };
 
 
@@ -197,10 +196,10 @@ export class GameSessionService implements IGameSessionService {
     // we want the same team to have collected points normally during all games 
     // clarify that this reflects the actual current round based on the start date of the game session, '
     // in constrast to user_round which is the last round the user logged in
-    async getCurrentRound(user_id: number): Promise<number | undefined> {
-        const start_date = await this.getUserGameStartDate(user_id);
+    async getCurrentRound(username: string): Promise<number | undefined> {
+        const start_date = await this.getUserGameStartDate(username);
         if (!start_date) {
-            console.error(`User ${user_id} does not have a game session`);
+            console.error(`User ${username} does not have a game session`);
             return undefined;
         }
         const time_difference = this.getTimeDifferenceFromStart(start_date);
@@ -208,12 +207,18 @@ export class GameSessionService implements IGameSessionService {
 
         if (current_round > 38) {
             return 39;
+        } else {
+            return Number(current_round);
         }
-        return current_round
     }
 
 
-    async getUserGame(user_id: number): Promise<User_games | null> {
+    async getUserGame(username: string): Promise<User_games | null | undefined> {
+        const user_id = await this.getUserId(username);
+        if (!user_id) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
         const user_game = await User_games.findOne({ where: { user_id: user_id } });
         return user_game;
     }
@@ -225,19 +230,19 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not exist`);
             return undefined;
         }    
-        const user_game = await this.getUserGame(user_id);
+        const user_game = await this.getUserGame(username);
         if (!user_game) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        return user_game.current_round;
+        return Number(user_game.current_round);
     }
 
 
-    async getUserGameStartDate(user_id: number) {
-        const user_game = await this.getUserGame(user_id);
+    async getUserGameStartDate(username: string) {
+        const user_game = await this.getUserGame(username);
         if (!user_game) {
-            console.error(`User ${user_id} does not have a game session`);
+            console.error(`User ${username} does not have a game session`);
             return undefined;
         }
 
@@ -252,13 +257,19 @@ export class GameSessionService implements IGameSessionService {
 
 
     // increments the current round of the user gamesession by one
-    async incrementUserRound(user_id: number): Promise<void> {
-        const user_game = await this.getUserGame(user_id);
+    async incrementUserRound(username: string): Promise<void> {
+        const user_game = await this.getUserGame(username);
         if (!user_game) {
-            console.error(`User ${user_id} does not have a game session`);
+            console.error(`User ${username} does not have a game session`);
             return;
         }
-        user_game.current_round++;
+        const user_round = await this.getUserRound(username);
+        if (!user_round) {
+            console.error(`User ${username} does not have a game session`);
+            return;
+        }
+        const new_round = Number(user_round) + 1;
+        await user_game.update({ current_round: new_round }); 
     }
 
 
@@ -290,6 +301,16 @@ export class GameSessionService implements IGameSessionService {
             return undefined;
         }
         return user.id;
+    }
+
+
+    async getGameSessionId(username: string): Promise<number | undefined> {
+        const user_game = await this.getUserGame(username);
+        if (!user_game) {
+            console.error(`User ${username} does not have a game session`);
+            return undefined;
+        }
+        return user_game.game_id;
     }
 
 

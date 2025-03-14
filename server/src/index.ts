@@ -1,6 +1,7 @@
 import { app } from "./start";
 import { initDB } from "./db/conn";
 import { ClubModel } from "./db/club.db";
+import { addPlayers, addRatings } from "./service/addPlayers";
 
 /**
  * App Variables
@@ -17,6 +18,9 @@ app.listen(PORT, () => {
 });
 
 initDB(); 
+
+//addPlayers();
+//addRatings(); 
 
 
 

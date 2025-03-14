@@ -109,7 +109,7 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
                 res.status(404).send(`No game session found for user ${req.session.user.username}`);
                 return;
             }
-            res.status(200).send(round);
+            res.status(200).json(round);
         } catch (e: any) {
             res.status(500).send(e.message);
         }

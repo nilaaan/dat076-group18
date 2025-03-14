@@ -29,6 +29,7 @@ export class PlayerDBService implements IPlayerService {
         }
         return player.get({plain: true}) as Player;
     }
+    
 
     // returns a deep copy of all existing players as type Player
     async getPlayers() : Promise<Player[]> {
@@ -73,24 +74,34 @@ export class PlayerDBService implements IPlayerService {
     // isPlayerAvailable() called in buy/sell methods of TeamDB (and frontend) to check if existing teamPlayer is unavailable next match 
     
     async getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined> {
-        const current_round = await this.gamesessionService.getUserRound(username);
+        const round = await this.gamesessionService.getUserRound(username);
+        const current_round = Number(round);
+
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        const rating_row = await RatingModel.findOne({
-            where: { player_id: player_id, round: current_round - 1 }
-        });
-        if (!rating_row) {
-            console.error(`Rating not found for player: ${player_id} in round: current_round - 1`);
-            return undefined;
+        const last_round = Number(current_round) - 1;
+        if (last_round >= 1) {
+            const rating_row = await RatingModel.findOne({
+                where: { player_id: player_id, round: last_round}
+            });
+            if (!rating_row) {
+                console.error(`Rating not found for player: ${player_id} in round: ${last_round}`);
+                return undefined;
+            }
+            return rating_row.rating;
         }
-        return rating_row.rating;
+        else {
+            return null;
+        }
     }
 
 
     async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> {
-        const current_round = await this.gamesessionService.getUserRound(username);
+        const round = await this.gamesessionService.getUserRound(username);
+        const current_round = Number(round);
+
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
@@ -98,6 +109,7 @@ export class PlayerDBService implements IPlayerService {
         const rating_row = await RatingModel.findOne({
             where: { player_id: player_id, round: current_round }
         });
+
         if (!rating_row) {
             console.error(`Rating not found for player: ${player_id} in round: ${current_round - 1}`);
             return undefined;
@@ -111,7 +123,9 @@ export class PlayerDBService implements IPlayerService {
 
 
     async getRecentForm(player_id: number, username: string): Promise<number | null | undefined> {
-        const current_round = await this.gamesessionService.getUserRound(username);
+        const round = await this.gamesessionService.getUserRound(username);
+        const current_round = Number(round);
+        
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
@@ -152,7 +166,6 @@ export class PlayerDBService implements IPlayerService {
         
         return averageRating;
     } 
-
 }
 
 

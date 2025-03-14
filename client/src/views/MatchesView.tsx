@@ -6,6 +6,7 @@ import { isMatchesInProgress as checkMatchesInProgress } from '../api/gamesessio
 import { getCurrentRound } from '../api/gamesessionApi';
 import { updateGameState as updateGame } from '../api/gamesessionApi';
 import { startGameSession } from '../api/gamesessionApi';
+import TeamPoints from '../components/TeamPoints';
 
 
 const MatchesView: React.FC = () => {
@@ -81,6 +82,7 @@ const MatchesView: React.FC = () => {
         }
     };
 
+    
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             {!isGameSession ? (
@@ -88,11 +90,11 @@ const MatchesView: React.FC = () => {
                     Start Fantasy League
                 </button>
             ) : isGameSessionFinished ? (
-                <p>League is over! Check your final position in the Leaderboard!</p>
+                <p>League is over! Check your final position in the Leaderboard!<TeamPoints/></p>
             ) : isMatchesInProgress ? (
-                <p>Round: {userRound}. Matches in progress...</p>
+                <p>Round: {userRound} Matches in progress...</p>
             ) : (
-                <p>Round: {userRound}. Matches will be played tonight at 8:45. Form your team!</p>
+                <p>Round: {userRound} Matches will be played tonight at 8:45. Form your team!<TeamPoints/></p>
             )}
         </div>
     );

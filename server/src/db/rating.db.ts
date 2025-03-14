@@ -21,7 +21,7 @@ RatingModel.init(
             primaryKey: true,
         },
         rating: {
-            type: DataTypes.INTEGER,       // constraint >= 0 
+            type: DataTypes.FLOAT,       // constraint >= 0 
             allowNull: true
         }
     }, {

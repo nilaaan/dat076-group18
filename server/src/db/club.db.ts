@@ -5,7 +5,6 @@ import { PlayerModel } from './player.db';
 export class ClubModel extends Model<InferAttributes<ClubModel>, InferCreationAttributes<ClubModel>> {
     declare id: number; 
     declare name: string; 
-    // add points, position, form, image etc...
     /*declare static associations: {
         players: Association<ClubModel, PlayerModel>;
     }*/

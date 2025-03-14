@@ -30,7 +30,7 @@ TeamModel.init(
             allowNull: false
         },
         points: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allowNull: false
         }
     }, {

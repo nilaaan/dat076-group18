@@ -38,10 +38,10 @@ const BuyView = () => {
         return teamPlayers.some(player => player.id === playerId);
     };
 
-    const forwards = players.filter(player => player.position === "Forward");
-    const midfielders = players.filter(player => player.position === "Midfielder");
-    const defenders = players.filter(player => player.position === "Defender");
-    const goalkeepers = players.filter(player => player.position === "Goalkeeper");
+    const forwards = players.filter(player => player.position === "forward");
+    const midfielders = players.filter(player => player.position === "midfielder");
+    const defenders = players.filter(player => player.position === "defender");
+    const goalkeepers = players.filter(player => player.position === "goalkeeper");
 
     return (
         <div className="p-10 flex flex-col items-center">
