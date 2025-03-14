@@ -88,11 +88,13 @@ export class GameSessionService implements IGameSessionService {
     // updates the state of the user's game session
     async updateState(username: string): Promise<boolean | undefined> {
         const isGameSession = await this.isGameSession(username);
+
         if (!isGameSession) {
             return true;
         }
 
         const isAfterMatches = await this.isAfterMatches(username);
+
         if (isAfterMatches) {
             
             const current_round= await this.getCurrentRound(username);
@@ -157,12 +159,16 @@ export class GameSessionService implements IGameSessionService {
     async isAfterMatches(username: string): Promise<boolean | undefined> {
         const user_game_round = await this.getUserRound(username);
         const current_round = await this.getCurrentRound(username);
+
+        console.log("USER GAME ROUND: " + user_game_round + " AND CURRENT ROUND: " + current_round);
+
         if (!user_game_round || !current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
 
         if (user_game_round < current_round) {
+            console.log("User " + username + " HAS TRUE CURRENT ROUND : " + current_round + " AND USER ROUND: " + user_game_round);
             return true;
         }
         return false;
@@ -202,13 +208,18 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
+
+        console.log("START DATE: " + start_date);
+
         const time_difference = this.getTimeDifferenceFromStart(start_date);
         const current_round = Math.floor(time_difference / this.test_round_time) + 1;
+
+        console.log("CURRENT ROUND: " + current_round);
 
         if (current_round > 38) {
             return 39;
         } else {
-            return Number(current_round);
+            return current_round;
         }
     }
 

@@ -66,7 +66,7 @@ export function teamRouter(teamService: ITeamService): Router {
                 return;
             }
             const points = await teamService.getPoints(req.session.user.username);
-            if (!points) {
+            if (points === undefined) {
                 console.log("user logged in as " + req.session.user.username + " no longer exists");
                 delete req.session.user;
                 res.status(401).send("Not logged in");

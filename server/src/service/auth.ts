@@ -22,7 +22,8 @@ export class AuthService implements IUserService {
          password: bcrypt.hashSync(password, salt),
          team: {
             players: [],
-            balance: 100000000
+            balance: 100000000,
+            points: 0
          }
       }
       // TODO Database
