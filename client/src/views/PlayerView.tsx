@@ -11,7 +11,6 @@ const StartPageTest = () => {
 
     useEffect(() => {
         getPlayers().then((data) => {
-            console.log("players:", players);
             setPlayers(data);
             //setLoading(false);
         }).catch(() => {
@@ -51,15 +50,21 @@ const StartPageTest = () => {
                 <div className="w-full flex flex-col gap-5 p-5">
                     {Array.from({ length: Math.ceil(players.length / 6) }, (_, rowIndex) => (
                         <div className="flex justify-evenly" key={rowIndex}>
-                            {Array.from({ length: 6 }, (_, index) => (
-                                <PlayerCardAdditional 
-                                    key={rowIndex * 6 + index} // Unique key combining row index and column index
-                                    id={players[index + rowIndex * 6].id} 
-                                    // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
-                                    onClose={closePopup} 
-                                    fieldCase={false}
-                                />
-                            ))}
+                            {Array.from({ length: 6 }, (_, index) => {
+                                const playerIndex = index + rowIndex * 6;
+                                if (playerIndex < players.length) {
+                                    return (
+                                        <PlayerCardAdditional 
+                                            key={players[playerIndex].id} // Unique key using player ID
+                                            id={players[playerIndex].id} 
+                                            // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
+                                            onClose={closePopup} 
+                                            fieldCase={false}
+                                        />
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                     ))}
                 </div>

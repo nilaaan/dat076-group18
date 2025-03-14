@@ -27,7 +27,6 @@ export class PlayerDBService implements IPlayerService {
         const players = await PlayerModel.findAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
-        console.log("these are the players fam: ", players);
         return players.map(player => player.get({ plain: true }) as Player);
     }
 }

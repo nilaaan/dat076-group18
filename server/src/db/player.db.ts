@@ -16,7 +16,7 @@ export class PlayerModel extends Model<InferAttributes<PlayerModel>, InferCreati
 PlayerModel.init(
     {
         id: {
-            type: DataTypes.BIGINT,         // constraint >= 0
+            type: DataTypes.INTEGER,         // constraint >= 0
             primaryKey: true
         },
         name: {
