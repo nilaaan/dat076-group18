@@ -225,7 +225,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
 
     // for all team players, get their last_ratings, pass it to pointSystem class method, get the team points, and update team points 
-    async updateTeamPoints(username: string): Promise<boolean | undefined> {
+    async updateTeamPoints(username: string, round: number): Promise<boolean | undefined> {
         const team = await this.getUserTeam(username);
 
         if (!team) {
@@ -240,7 +240,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         let roundPoints: number = 0;
 
         for (const teamPlayer of teamPlayers) {
-            const player_round_rating = await this.playerService.getLastMatchRating(teamPlayer.player_id, username)
+            const player_round_rating = await this.playerService.getRoundRating(teamPlayer.player_id, round);
             if (player_round_rating === undefined) {
                 console.error(`Could not get last match rating for player ${teamPlayer.player_id}`);
                 return undefined;

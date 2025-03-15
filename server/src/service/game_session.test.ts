@@ -81,7 +81,7 @@ test("get current round", async () => {
 
     gameSessionService.setUserService(userDBService);
 
-    const currentRound = await gameSessionService.getUserRound("user1");
+    const currentRound = await gameSessionService.getRound("user1");
     expect(currentRound).toBe(1);
     console.log("current round: " + currentRound);
 

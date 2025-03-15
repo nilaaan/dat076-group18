@@ -10,12 +10,17 @@ export interface IPlayerService {
     getPlayers() : Promise<Player[]>;
 
 
-    getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined>
+    getRoundRating(player_id: number, round: number): Promise<number | null | undefined>
 
 
-    getNextMatchAvailability(player_id: number, username: string): Promise<boolean | null | undefined> 
+    getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> 
 
 
-    getRecentForm(player_id: number, username: string): Promise<number | null | undefined>
+    getRecentForm(player_id: number, round: number): Promise<number | null | undefined>
+    
+
+    getTopPerformers(round: number): Promise<Player[] | undefined> 
+
+
 
 }

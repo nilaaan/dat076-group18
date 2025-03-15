@@ -7,6 +7,8 @@ import { IPlayerService } from './player.interface';
 import { ITeamService } from './team.interface';
 import { ITeamStateService } from './team_state.interface';
 import { IUserService } from './user.interface';
+import { User } from '../model/user.interface';
+import { UserModel } from '../db/user.db';
 
 
 export class GameSessionService implements IGameSessionService {
@@ -99,7 +101,7 @@ export class GameSessionService implements IGameSessionService {
             
             const current_round= await this.getCurrentRound(username);
             console.log("REAL CURRENT ROUND FOR USER " + username + " IS " + current_round);
-            let user_round = await this.getUserRound(username);
+            let user_round = await this.getRound(username);
 
             if (!current_round || !user_round) {
                 console.error(`User ${username} does not have a game session`);
@@ -108,13 +110,13 @@ export class GameSessionService implements IGameSessionService {
             
             // updates state one round at a time until the user's gamesession round reaches the current round 
             while (user_round < current_round) {
-                await this.incrementUserRound(username);
-                user_round++;
-
-                const isTeamPointsUpdated = await this.teamService?.updateTeamPoints(username);
+                const isTeamPointsUpdated = await this.teamService?.updateTeamPoints(username, user_round);
                 if (!isTeamPointsUpdated) {
                     throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);   
                 }
+
+                await this.incrementUserRound(username);
+                user_round++;
             }
         }
         return true; 
@@ -157,7 +159,7 @@ export class GameSessionService implements IGameSessionService {
 
 
     async isAfterMatches(username: string): Promise<boolean | undefined> {
-        const user_game_round = await this.getUserRound(username);
+        const user_game_round = await this.getRound(username);
         const current_round = await this.getCurrentRound(username);
 
         console.log("USER GAME ROUND: " + user_game_round + " AND CURRENT ROUND: " + current_round);
@@ -182,7 +184,7 @@ export class GameSessionService implements IGameSessionService {
             return false;
         }
 
-        const user_round = await this.getUserRound(username);
+        const user_round = await this.getRound(username);
         if (!user_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
@@ -235,7 +237,7 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
-    async getUserRound(username: string): Promise<number | undefined> {
+    async getRound(username: string): Promise<number | undefined> {
         const user_id = await this.getUserId(username);
         if (!user_id) {
             console.error(`User ${username} does not exist`);
@@ -276,7 +278,7 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not have a game session`);
             return;
         }
-        const user_round = await this.getUserRound(username);
+        const user_round = await this.getRound(username);
         if (!user_round) {
             console.error(`User ${username} does not have a game session`);
             return;
@@ -327,4 +329,55 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
+    async getLeaderboard(username: string): Promise<[string, number][] | undefined> {
+        const isGameSession = await this.isGameSession(username);
+        if (!isGameSession) {
+            return [];  
+        }
+        const game_id = await this.getGameSessionId(username);
+        if (!game_id) {
+            console.error("No game session found for user: " + username);
+            return undefined;  
+        }
+
+        // Get all users in the game session
+        const user_games = await User_games.findAll({
+            where: {
+                game_id: game_id
+            }
+        });
+
+        let users : User[]  = [];
+
+        for (const user_game of user_games) {
+
+            const userrow = await UserModel.findOne({
+                where: {
+                    id: user_game.user_id
+                }
+            });
+            if (!userrow) {
+                console.error("No user found with id: " + user_game.user_id);
+                return undefined;  
+            }
+
+            const gamesession_username = userrow.username
+            const user = await this.userService?.findUser(gamesession_username);
+            if (!user) {
+                console.error("No user found with username: " + gamesession_username);
+                return undefined;  
+            }
+            users.push(user);
+        }
+
+        let leaderboard : [string, number][] = [];
+
+        for (const user of users) {
+            const points = Number(user.team.points);
+            leaderboard.push([user.username, points]);
+        }
+
+        return leaderboard; 
+    }
+    
 }

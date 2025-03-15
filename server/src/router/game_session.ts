@@ -104,7 +104,7 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
                 return;
             }
 
-            const round = await gameSessionService.getUserRound(req.session.user.username);
+            const round = await gameSessionService.getRound(req.session.user.username);
             if (!round) {
                 res.status(404).send(`No game session found for user ${req.session.user.username}`);
                 return;
@@ -132,6 +132,28 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
                 return;
             }
             res.status(200).send("Game session state updated");
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    });
+
+
+    gamesessionRouter.get("/leaderboard", async (
+        req: Request,
+        res: Response<[string, number][] | string>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+
+            const leaderboard = await gameSessionService.getLeaderboard(req.session.user.username);
+            if (!leaderboard) {
+                res.status(404).send(`Couldn't get leaderboard for user: ${req.session.user.username}`);
+                return;
+            }
+            res.status(200).send(leaderboard);
         } catch (e: any) {
             res.status(500).send(e.message);
         }

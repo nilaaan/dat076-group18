@@ -39,9 +39,9 @@ app.use(cors({
     credentials: true
 }));
 
-const pointSystemService = new PointSystemService();
 const gamesessionService = new GameSessionService();
 const userService = new UserDBService(gamesessionService);
+const pointSystemService = new PointSystemService();
 const playerService = new PlayerDBService(gamesessionService);
 const teamService = new TeamDBService(userService, playerService, pointSystemService, gamesessionService);
 

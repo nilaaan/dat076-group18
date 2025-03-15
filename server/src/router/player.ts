@@ -46,90 +46,108 @@ export function playerRouter(playerService: IPlayerService): Router {
     });
 
 
-    playerRouter.get("/:id/rating", async (
-        req: Request<{ id: string }, {}, {}>,
+    playerRouter.get("/:id/rating/:round", async (
+        req: Request<{ id: string; round: string }, {}, {}>,
         res: Response<number | string | null>
     ) => {
         try {
-            if (!req.session?.user) {
-                res.status(401).send("Not logged in");
-                return;
-            }
             if (!req.params.id) {
                 res.status(400).send(`Missing id param`);
                 return;
             }
+            if (!req.params.round) {
+                res.status(400).send(`Missing round param`);
+                return;
+            }
+
             const id = parseInt(req.params.id, 10);
+            const round = parseInt(req.params.round, 10);
             if (!Number.isInteger(id) || id < 0) {
                 res.status(400).send(`id number must be a non-negative integer`);
                 return;
             }
-
-            const last_match_rating = await playerService.getLastMatchRating(id, req.session.user.username);
-            if (last_match_rating === undefined) {
-                res.status(404).send(`User ${req.session.user.username} does not have a game session`);
+            if (!Number.isInteger(round) || round < 0 || round > 38) {
+                res.status(400).send(`round number must be a non-negative integer between 0 and 38`);
                 return;
             }
-            res.status(200).send(last_match_rating);
+
+            const round_rating = await playerService.getRoundRating(id, round);
+            if (round_rating === undefined) {
+                res.status(404).send(`Rating not found for player: ${id} in round: ${round}`);
+                return;
+            }
+            res.status(200).send(round_rating);
         } catch (e: any) {
             res.status(500).send(e.message);
         }
     });
 
 
-    playerRouter.get("/:id/availability", async (
-        req: Request<{ id: string }, {}, {}>,
+    playerRouter.get("/:id/availability/:round", async (
+        req: Request<{ id: string; round: string }, {}, {}>,
         res: Response<boolean | null | string >
     ) => {
         try {
-            if (!req.session?.user) {
-                res.status(401).send("Not logged in");
-                return;
-            }
             if (!req.params.id) {
                 res.status(400).send(`Missing id param`);
                 return;
             }
+            if (!req.params.round) {
+                res.status(400).send(`Missing round param`);
+                return;
+            }
+
             const id = parseInt(req.params.id, 10);
+            const round = parseInt(req.params.round, 10);
             if (!Number.isInteger(id) || id < 0) {
                 res.status(400).send(`id number must be a non-negative integer`);
                 return;
             }
-
-            const next_match_availability = await playerService.getNextMatchAvailability(id, req.session.user.username);
-            if (next_match_availability === undefined) {
-                res.status(404).send('Could not find availability');
+            if (!Number.isInteger(round) || round < 0 || round > 38) {
+                res.status(400).send(`round number must be a non-negative integer between 0 and 38`);
                 return;
             }
-            res.status(200).send(next_match_availability);
+
+            const round_availability = await playerService.getRoundAvailability(id, round);
+            if (round_availability === undefined) {
+                res.status(404).send(`Rating not found for player: ${id} in round: ${round}`);
+                return;
+            }
+            res.status(200).send(round_availability);
         } catch (e: any) {
             res.status(500).send(e.message);
         }
     });
 
 
-    playerRouter.get("/:id/form", async (
-        req: Request<{ id: string }, {}, {}>,
+    playerRouter.get("/:id/form/:round", async (
+        req: Request<{ id: string; round: string }, {}, {}>,
         res: Response<number | string | null>
     ) => {
         try {
-            if (!req.session?.user) {
-                res.status(401).send("Not logged in");
-                return;
-            }
             if (!req.params.id) {
                 res.status(400).send(`Missing id param`);
                 return;
             }
+            if (!req.params.round) {
+                res.status(400).send(`Missing round param`);
+                return;
+            }
+
             const id = parseInt(req.params.id, 10);
+            const round = parseInt(req.params.round, 10);
             if (!Number.isInteger(id) || id < 0) {
                 res.status(400).send(`id number must be a non-negative integer`);
                 return;
             }
+            if (!Number.isInteger(round) || round < 0 || round > 39) {
+                res.status(400).send(`round number must be a non-negative integer between 0 and 39`);
+                return;
+            }
 
-            const recent_form = await playerService.getRecentForm(id, req.session.user.username);
+            const recent_form = await playerService.getRecentForm(id, round);
             if (recent_form === undefined) {
-                res.status(404).send(`User ${req.session.user.username} does not have a game session`);
+                res.status(404).send(`Rating not found for player: ${id} in round: ${round}`);
                 return;
             }
             res.status(200).send(recent_form);
@@ -137,6 +155,37 @@ export function playerRouter(playerService: IPlayerService): Router {
             res.status(500).send(e.message);
         }
     });
+
+    
+    playerRouter.get("/performance/:round", async (
+        req: Request<{ round: string }, {}, {}>,
+        res: Response<Player[] | string | null>
+    ) => {
+        try {
+
+            if (!req.params.round) {
+                res.status(400).send(`Missing round param`);
+                return;
+            }
+
+            const round = parseInt(req.params.round, 10);
+            if (!Number.isInteger(round) || round < 0 || round > 38) {
+                res.status(400).send(`round number must be a non-negative integer between 0 and 38`);
+                return;
+            }
+
+            const top_perfomers = await playerService.getTopPerformers(round);
+            if (top_perfomers === undefined) {
+                res.status(404).send(`Rating not found for players in round: ${round}`);
+                return;
+            }
+            res.status(200).send(top_perfomers);
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    });
+
+
     
     return playerRouter;
 };

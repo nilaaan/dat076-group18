@@ -11,6 +11,10 @@ export interface IGameSessionService {
 
     updateState(username: string): Promise<boolean | undefined>
 
-    getUserRound(username: string): Promise<number | undefined>
+    getRound(username: string): Promise<number | undefined>
+
+    getGameSessionId(username: string): Promise<number | undefined>
+
+    getLeaderboard(username: string) : Promise<[string,  number][] | undefined>;
 
 }

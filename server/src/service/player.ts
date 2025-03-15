@@ -87,19 +87,24 @@ export class PlayerService implements IPlayerService {
         return JSON.parse(JSON.stringify(this.players));
     }
 
-    async getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined> {
+    async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
         // not used before creating playerDB and therefore has no implementation 
         return undefined;
     }
 
 
-    async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> {
+    async getRoundAvailability(player_id: number, round: number): Promise<boolean | undefined> {
         // not used before creating playerDB and therefore has no implementation 
         return undefined;
     }
 
 
-    async getRecentForm(player_id: number, username: string): Promise<number | null | undefined> {
+    async getRecentForm(player_id: number, round: number): Promise<number | null | undefined> {
+        // not used before creating playerDB and therefore has no implementation 
+        return undefined;
+    }
+
+    async getTopPerformers(round: number): Promise<Player[] | undefined> {
         // not used before creating playerDB and therefore has no implementation 
         return undefined;
     }
