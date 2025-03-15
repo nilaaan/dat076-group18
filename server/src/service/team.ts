@@ -112,12 +112,8 @@ export class TeamService implements ITeamService {
             console.error(`Player not found: ${id}`);
             return undefined;
         }
-<<<<<<< HEAD
         if (this.checkForTeamSize(user)) {        
         // this.markPlayerAvailable(player);
-=======
-
->>>>>>> pointsystem
         this.removePlayer(user, player.id);
         this.increaseBalance(user, player.price);
         }
