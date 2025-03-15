@@ -246,7 +246,9 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        return Number(user_game.current_round);
+        
+        const round = Number(user_game.current_round);
+        return round; 
     }
 
 
@@ -279,7 +281,7 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not have a game session`);
             return;
         }
-        const new_round = Number(user_round) + 1;
+        const new_round = user_round + 1;
         await user_game.update({ current_round: new_round }); 
     }
 
@@ -299,7 +301,7 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
-    getFirstRoundMatchesStart(start_date: Date) {    // if not used, just remove this 
+    getFirstRoundMatchesStart(start_date: Date) {    
         const end_date = new Date(start_date.getTime() + 8 * 60 * 1000); // Add 8 minutes in milliseconds
         return end_date;
     }

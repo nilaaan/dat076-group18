@@ -71,7 +71,11 @@ export class UserDBService implements IUserService {
         }
 
         if (password) {     // means user just logged in 
-            this.gamesessionService.updateState(username);
+            const game_session_updated = await this.gamesessionService.updateState(username);
+            if (!game_session_updated) {
+                console.error(`Failed to update game session state for user ${username}`);
+                return null;
+            }
         }
 
         // Find the team for the user

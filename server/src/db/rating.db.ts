@@ -28,3 +28,4 @@ RatingModel.init(
         sequelize: conn,
         modelName: 'rating'
 });
+

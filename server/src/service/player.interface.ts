@@ -13,7 +13,7 @@ export interface IPlayerService {
     getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined>
 
 
-    getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> 
+    getNextMatchAvailability(player_id: number, username: string): Promise<boolean | null | undefined> 
 
 
     getRecentForm(player_id: number, username: string): Promise<number | null | undefined>

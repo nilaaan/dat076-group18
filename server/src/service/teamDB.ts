@@ -207,7 +207,6 @@ export class TeamDBService implements ITeamService, ITeamStateService {
     // add methods with common code. Perhaps a query handler too that takes care of communication with the database
 
 
-    // change this method to some other place, does not belong in this class
     async getUserTeam(username: string): Promise<TeamModel | null> {
         const user = await UserModel.findOne({
             where: { username: username }
@@ -262,34 +261,6 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
         return true;
     }
-
-
-   /* async isMatchesInProgress(username: string): Promise<boolean | undefined> {
-        const isGameSession = await this.gamesessionService.isGameSession(username);
-        if (isGameSession === undefined) {
-            console.error(`User ${username} does not exist`);
-            return undefined;
-        }
-
-        if (isGameSession) {
-            const isMatchesInProgress = await this.gamesessionService.isMatchesInProgress(username);
-            if (isMatchesInProgress === undefined) {
-                console.error(`User ${username} does not have a game session`);
-                return undefined;
-            }
-
-            if (isMatchesInProgress) {
-                return true;
-            }
-            else {
-                return false; 
-            }
-
-        } else {
-            return false; 
-        }
-    }*/
-
     
 }
 

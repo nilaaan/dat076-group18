@@ -73,14 +73,19 @@ export class PlayerDBService implements IPlayerService {
     // isPlayerAvailable() called in buy/sell methods of TeamDB (and frontend) to check if existing teamPlayer is unavailable next match 
     
     async getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined> {
-        const round = await this.gamesessionService.getUserRound(username);
-        const current_round = Number(round);
+
+        const isGameSession = await this.gamesessionService.getUserRound(username);
+        if (!isGameSession) {
+            return null; 
+        }
+
+        const current_round = await this.gamesessionService.getUserRound(username);
 
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        const last_round = Number(current_round) - 1;
+        const last_round = current_round - 1;
         if (last_round >= 1) {
             const rating_row = await RatingModel.findOne({
                 where: { player_id: player_id, round: last_round}
@@ -97,9 +102,13 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> {
-        const round = await this.gamesessionService.getUserRound(username);
-        const current_round = Number(round);
+    async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | null | undefined> {
+        const isGameSession = await this.gamesessionService.isGameSession(username);
+        if (!isGameSession) {
+            return null;
+        }
+
+        const current_round = await this.gamesessionService.getUserRound(username);
 
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
@@ -122,14 +131,19 @@ export class PlayerDBService implements IPlayerService {
 
 
     async getRecentForm(player_id: number, username: string): Promise<number | null | undefined> {
-        const round = await this.gamesessionService.getUserRound(username);
-        const current_round = Number(round);
+        const isGameSession = await this.gamesessionService.isGameSession(username);
+        if (!isGameSession) {
+            return null;
+        }
+
+        const current_round = await this.gamesessionService.getUserRound(username);
         
         if (!current_round) {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        return await this.calculateRecentForm(player_id, current_round);
+        const recent_form = await this.calculateRecentForm(player_id, current_round);
+        return recent_form;
     }
 
 
@@ -150,8 +164,8 @@ export class PlayerDBService implements IPlayerService {
             .map(rating => rating.rating)
             .filter(rating => rating !== null)
             .slice(0, 4); // Take the first 4 non-null ratings
-        // return null if there are no available ratings in the season so far
 
+        // return null if there are no available ratings in the season so far
         console.log("nonNullRatings: " + nonNullRatings);
         if (nonNullRatings.length === 0) {
             return null;

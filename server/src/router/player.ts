@@ -79,7 +79,7 @@ export function playerRouter(playerService: IPlayerService): Router {
 
     playerRouter.get("/:id/availability", async (
         req: Request<{ id: string }, {}, {}>,
-        res: Response<boolean | string >
+        res: Response<boolean | null | string >
     ) => {
         try {
             if (!req.session?.user) {
