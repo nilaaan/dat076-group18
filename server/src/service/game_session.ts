@@ -101,7 +101,7 @@ export class GameSessionService implements IGameSessionService {
             console.log("REAL CURRENT ROUND FOR USER " + username + " IS " + current_round);
             let user_round = await this.getUserRound(username);
 
-            if (!current_round|| !user_round) {
+            if (!current_round || !user_round) {
                 console.error(`User ${username} does not have a game session`);
                 return undefined;
             }
