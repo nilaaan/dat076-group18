@@ -15,6 +15,9 @@ import sequelize from "sequelize/types/sequelize";
 import { conn } from "./db/conn";
 import { PlayerDBService } from "./service/playerDB";
 import { ClubModel } from "./db/club.db";
+import { GameSessionService } from "./service/game_session";
+import { PointSystemService } from "./service/pointsystem";
+import { gamesessionRouter } from "./router/game_session";
 
 export const app = express();
 
@@ -36,11 +39,18 @@ app.use(cors({
     credentials: true
 }));
 
-const userService = new UserDBService();
-const playerService = new PlayerDBService();
-const teamService = new TeamDBService(userService);
+const pointSystemService = new PointSystemService();
+const gamesessionService = new GameSessionService();
+const userService = new UserDBService(gamesessionService);
+const playerService = new PlayerDBService(gamesessionService);
+const teamService = new TeamDBService(userService, playerService, pointSystemService, gamesessionService);
+
+gamesessionService.setTeamService(teamService);
+gamesessionService.setUserService(userService);
+
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));
 app.use("/user", authRouter(userService));
+app.use("/gamesession", gamesessionRouter(gamesessionService));
 
 

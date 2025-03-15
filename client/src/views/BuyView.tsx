@@ -32,10 +32,12 @@ const BuyView = () => {
     if (error) return <h1>{error}</h1>;
 
     const isPlayerBought = (playerId: number) => {
+        console.log("from client: ")
+        console.log(teamPlayers)
         return teamPlayers.some(player => player.id === playerId);
     };
 
-    const forwards = players.filter(player => player.position === "attacker");
+    const forwards = players.filter(player => player.position === "forward");
     const midfielders = players.filter(player => player.position === "midfielder");
     const defenders = players.filter(player => player.position === "defender");
     const goalkeepers = players.filter(player => player.position === "goalkeeper");

@@ -13,7 +13,7 @@ export class TeamPlayers extends Model<InferAttributes<TeamPlayers>, InferCreati
 TeamPlayers.init(
     {
         team_id: {
-            type: DataTypes.BIGINT,        // constraint >= 0
+            type: DataTypes.INTEGER,        // constraint >= 0
             primaryKey: true,
             /*references: {
                 model: TeamModel,
@@ -21,7 +21,7 @@ TeamPlayers.init(
             }*/
         },
         player_id: {
-            type: DataTypes.BIGINT,         
+            type: DataTypes.INTEGER,         
             primaryKey: true,
             /*references: {
                 model: PlayerModel,

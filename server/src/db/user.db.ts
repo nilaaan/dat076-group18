@@ -15,7 +15,7 @@ export class UserModel extends Model<InferAttributes<UserModel>, InferCreationAt
 UserModel.init(
     {
         id: {
-            type: DataTypes.BIGINT,        // constraint >= 0
+            type: DataTypes.INTEGER,        // constraint >= 0
             autoIncrement: true,
             primaryKey: true
         },

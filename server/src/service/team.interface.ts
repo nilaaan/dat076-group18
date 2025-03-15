@@ -3,10 +3,6 @@ import { Player } from "../model/player.interface";
 
 export interface ITeamService {
 
-    // returns a specific player from the user's team
-    // returns undefined if no player with that id number exists in the user's team
-    getPlayer(username: string, id : number) : Promise<Player | undefined>;
-
     // returns all players from the user's team 
     getPlayers(username: string) : Promise <Player[] | undefined>;
 
@@ -21,5 +17,10 @@ export interface ITeamService {
     // adds a player to the user's team if the sell is successful
     // and returns a copy of the player sold
     // returns undefined otherwise
-    sellPlayer(username: string, id: number) : Promise<Player | undefined>;
+    sellPlayer(username: string, id: number) : Promise<Player | undefined>;   
+     
+
+    // returns the current points of the user's team
+    getPoints(username: string) : Promise<number | undefined>;
+    
 }

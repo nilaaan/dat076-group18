@@ -2,7 +2,7 @@ import { app } from "./start";
 import { initDB } from "./db/conn";
 import { ClubModel } from "./db/club.db";
 import { fetchPlayersAndInsertToDB } from "./service/api";
-
+import { addPlayers, addRatings } from "./service/addPlayers";
 /**
  * App Variables
  */
@@ -20,6 +20,9 @@ app.listen(PORT, () => {
 initDB(); 
 //fetchPlayersAndInsertToDB();
 
+// for testing: 
+//addPlayers();
+//addRatings(); 
 
 
 

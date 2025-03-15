@@ -15,7 +15,7 @@ export function teamRouter(teamService: ITeamService): Router {
         res: Response<Array<Player> | String>
     ) => {
         try {
-            if (!req.session.user) {
+            if (!req.session?.user) {
                 console.log(req.session.user)
                 res.status(401).send("Not logged in");
                 return;
@@ -38,7 +38,7 @@ export function teamRouter(teamService: ITeamService): Router {
         res: Response<{ balance: Number } | String>
     ) => {
         try {
-            if (!req.session.user) {
+            if (!req.session?.user) {
                 res.status(401).send("Not logged in");
                 return;
             }
@@ -56,16 +56,40 @@ export function teamRouter(teamService: ITeamService): Router {
         }
     });
 
-    teamRouter.post("/:id", async (
+    teamRouter.get("/points", async (
+        req: Request,
+        res: Response<{ points: Number } | String>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+            const points = await teamService.getPoints(req.session.user.username);
+            if (points === undefined) {
+                console.log("user logged in as " + req.session.user.username + " no longer exists");
+                delete req.session.user;
+                res.status(401).send("Not logged in");
+                return;
+            }
+            res.status(200).send({ points });
+        } catch (e: any) {
+            res.status(500).send(e.message);
+            console.error(e.message);
+        }
+    });
+    
+
+    teamRouter.post("/:id", async (    
         req: Request<{ id: string }, {}, { action: string }>,
         res: Response<Player | String>
     ) => {
         try {
-            if (!req.session.user) {
+            if (!req.session?.user) {
                 res.status(401).send("Not logged in");
                 return;
             }
-            if (req.params.id == null) {
+            if (!req.params.id) {
                 res.status(400).send(`Missing id param`);
                 return;
             }
@@ -74,7 +98,7 @@ export function teamRouter(teamService: ITeamService): Router {
                 return;
             }
             const id = parseInt(req.params.id, 10);
-            if (!(id >= 0)) {
+            if (!Number.isInteger(id) || id < 0) {
                 res.status(400).send(`id number must be a non-negative integer`);
                 return;
             }

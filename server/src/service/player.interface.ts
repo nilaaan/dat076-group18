@@ -8,4 +8,14 @@ export interface IPlayerService {
 
     // returns a deep copy of all existing players
     getPlayers() : Promise<Player[]>;
+
+
+    getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined>
+
+
+    getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> 
+
+
+    getRecentForm(player_id: number, username: string): Promise<number | null | undefined>
+
 }

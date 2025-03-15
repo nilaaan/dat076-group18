@@ -1,7 +1,9 @@
 import { Player } from '../model/player.interface';
 import { fetchAllLeaguePlayers } from './api'
+import { IPlayerService } from './player.interface';
 
-export class PlayerService {
+
+export class PlayerService implements IPlayerService {
     private players: Player[] = [];
 
     constructor() {
@@ -83,5 +85,22 @@ export class PlayerService {
     // returns a deep copy of all existing players 
     async getPlayers(): Promise<Player[]> {
         return JSON.parse(JSON.stringify(this.players));
+    }
+
+    async getLastMatchRating(player_id: number, username: string): Promise<number | null | undefined> {
+        // not used before creating playerDB and therefore has no implementation 
+        return undefined;
+    }
+
+
+    async getNextMatchAvailability(player_id: number, username: string): Promise<boolean | undefined> {
+        // not used before creating playerDB and therefore has no implementation 
+        return undefined;
+    }
+
+
+    async getRecentForm(player_id: number, username: string): Promise<number | null | undefined> {
+        // not used before creating playerDB and therefore has no implementation 
+        return undefined;
     }
 }

@@ -36,3 +36,8 @@ export const getTeamBalance = async(): Promise<{ balance: number }> => {
     const res = await axios.get<{ balance: number }>('http://localhost:8080/team/balance');
     return res.data;
 };
+
+export const getTeamPoints = async(): Promise<{ points: number }> => {
+    const res = await axios.get<{ points: number }>('http://localhost:8080/team/points');
+    return res.data;
+};
