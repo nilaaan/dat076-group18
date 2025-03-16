@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
 import { UserRound, Plus, Minus } from 'lucide-react';
-import { getPlayer } from '../api/playerApi.ts';
+import { getForm, getPlayer, getAvailability } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
-import { getAvailability, getForm } from '../api/playerApi.ts';
 import { isGameSession, getCurrentRound } from '../api/gamesessionApi.ts';
 import SellButton from './SellButton.tsx';
 import BuyButton from './BuyButton.tsx';
@@ -78,7 +77,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                             console.error('Error fetching recent form rating:', recentFormRating);
                             return;
                         }
-                        const availability = await getAvailability(id, currentRound);
+                        const availability = await getAvailability(id, currentRound + 1);
                         if (typeof availability === 'string') {
                             console.error('Error fetching next match availability:', availability);
                             return;

@@ -14,10 +14,14 @@ export class PlayerDBService implements IPlayerService {
         this.gamesessionService = gamesessionService;
     }
 
-    // returns a copy of a specific player with the given id number as type Player
-    // returns undefined if there is no such player 
+    // Returns a copy of the player with the given id number as type Player
+    // Returns undefined if there is no such player 
     async getPlayer(player_id: number) : Promise<Player | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
 
+        // look in the player database table 
         const player = await PlayerModel.findOne({
             where: {id : player_id},
             attributes: { exclude: ['createdAt', 'updatedAt'] }
@@ -27,13 +31,13 @@ export class PlayerDBService implements IPlayerService {
             console.error(`Player not found: ${player_id}`);
             return undefined
         }
+
         return player.get({plain: true}) as Player;
     }
     
 
-    // returns a deep copy of all existing players as type Player
+    // Returns a deep copy of all existing players as type Player
     async getPlayers() : Promise<Player[]> {
-
         const players = await PlayerModel.findAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
@@ -41,8 +45,14 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-
+    // Returns the top 10 players with the highest rating from the given round
+    // Returns undefined if there the ratings could not be extracted
     async getTopPerformers(round: number): Promise<Player[] | undefined> {
+        if (round < 1 || round > 38) {
+            throw new Error(`Round ${round} is out of bounds, must be between 1 and 38`);
+        }
+
+        // get the top 10 highest ratings from the given round
         const topPerformers = await RatingModel.findAll({
             where: { round: round, rating: { [Op.ne]: null } },
             order: [['rating', 'DESC']],
@@ -53,7 +63,8 @@ export class PlayerDBService implements IPlayerService {
             console.error(`No ratings found for round: ${round}`);
             return undefined;
         }
-
+        
+        // get the players corresponding to the top 10 ratings
         const playerIds = topPerformers.map(rating_row => rating_row.player_id);
         const players = await PlayerModel.findAll({
             where: { id: playerIds },
@@ -64,14 +75,15 @@ export class PlayerDBService implements IPlayerService {
             console.error(`No players found with the given ids: ${playerIds}`);
             return undefined;
         }
-
+        
         const top_perfomers : Player[] = players.map(player => player.get({ plain: true }) as Player); 
 
         return top_perfomers;
     }
 
 
-
+    // Returns the rating of the given player from the given round
+    // Returns undefined if the rating could not be extracted 
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
         if (round < 1) {
             return null; 

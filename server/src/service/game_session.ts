@@ -112,7 +112,8 @@ export class GameSessionService implements IGameSessionService {
             while (user_round < current_round) {
                 const isTeamPointsUpdated = await this.teamService?.updateTeamPoints(username, user_round);
                 if (!isTeamPointsUpdated) {
-                    throw new Error(`Failed to update team points for user ${username} in round ${user_round}`);   
+                    console.error(`Failed to update team points for user ${username} in round ${user_round}`);   
+                    return undefined; 
                 }
 
                 await this.incrementUserRound(username);

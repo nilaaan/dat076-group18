@@ -16,22 +16,29 @@ export class UserDBService implements IUserService {
         this.gamesessionService = gamesessionService;
     }
 
+    // Registers a user with the given username and password 
+    // Returns the user if the registration was successful
+    // Returns null if the user already exists
     async registerUser(username: string, password: string): Promise<User | null> {
-
-        const user = await this.getUser(username);          // later, when you have separated the db query methods (like getUser) to other classes, 
-        if (user) {                                         // just user this.findUser(username) instead 
+        
+        // check if the username is already taken 
+        const user = await this.getUser(username);          
+        if (user) {                                         
             console.error(`User ${username} already exists`);
             return null;
         }
 
+        // create password hash
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
+        // add the user to the User database table
         const newUser = await UserModel.create({
             username: username,
             password: hashedPassword
         });
 
+        // create a new team for the user and add it to the Team database table
         const newTeam = await TeamModel.create({
             user_id: newUser.id,
             balance: 100000000,
@@ -39,7 +46,7 @@ export class UserDBService implements IUserService {
         });
 
         console.log(`Registered just now User with name ${username}`)
-        // Convert the instance to a plain object and return it
+
         return {
             id: newUser.id,
             username: newUser.username,
@@ -53,48 +60,37 @@ export class UserDBService implements IUserService {
     }
 
 
-    // returns the user with the given username if the user exists and the password is correct if specified
-    // returns null if the user does not exist or the password is incorrect
-
+    // Looks for the user with the given username and password 
+    // Returns the user with the given username if the user exists and the password is correct if specified
+    // Returns null if the user does not exist or the password is incorrect
     async findUser(username: string, password?: string): Promise<User | null> {
 
+        // check if user exists 
         const user = await this.getUser(username);
-
         if (!user) {
             console.error(`User ${username} does not exist`);
             return null;
         }
 
+        // check if the password is correct
         if (password && !await bcrypt.compare(password, user.password)) {
             console.error(`Wrong password`);
             return null;
         }
+        console.log(`User with name ${username} just logged in`) 
 
-        if (password) {     // means user just logged in 
-            const game_session_updated = await this.gamesessionService.updateState(username);
-            if (!game_session_updated) {
-                console.error(`Failed to update game session state for user ${username}`);
-                return null;
-            }
-        }
-
-        // Find the team for the user
+        // extract the user's team information
         const team = await this.getTeam(username);
-
         if (!team) {
             console.error(`Team for user ${username} does not exist`);
             return null;
         }
 
-        // Find the players associated with the user's team
         const teamPlayers = await TeamPlayers.findAll({
             where: { team_id: team.id },
         });
 
-        // Extract the player IDs from the teamPlayers results
         const playerIds = teamPlayers.map(tp =>tp.player_id);
-
-        // Fetch the player details using the player IDs
         const team_players = await PlayerModel.findAll({
             where: { id: playerIds }
         }); 
@@ -113,8 +109,7 @@ export class UserDBService implements IUserService {
             }));
         } 
 
-        console.log(`User with name ${username} logged in just now`) 
-
+        // add the team information to the user object and return the user 
         return {
             id: user.id,
             username: user.username,
@@ -127,18 +122,29 @@ export class UserDBService implements IUserService {
         } as User;
     }
 
-    // EXTRACT DB QUERIES TO A DB COMMUNICATOR OF SOME SORT
-    // returns the team row of the given user in the TeamModel database table 
-    // returns null if the user does not exist
+    // Updates the user's gamesession state
+    // Returns true if the state was successfully updated
+    // Returns null if the state could not be updated
+    async updateGamesessionState(username: string): Promise<boolean | null>  { 
+        const is_game_session_updated = await this.gamesessionService.updateState(username);
+        if (!is_game_session_updated) {
+            console.error(`Failed to update game session state for user ${username}`);
+            return null;
+        }
+        return is_game_session_updated; 
+    }
+
+ 
+    // Returns the team row of the given user from the Team database table 
+    // Returns null if the user does not exist
     async getTeam(username: string): Promise<TeamModel | null> {
         const user = await this.getUser(username);
-
         if (!user) {
             console.error(`User ${username} does not exist`);
             return null;
         }
 
-        // Find the team for the user
+        // find the team for the user
         const team = await TeamModel.findOne({
             where: { user_id: user.id }
         });
@@ -147,8 +153,8 @@ export class UserDBService implements IUserService {
     }
 
 
-    // returns the user row of the given user in the UserModel database table
-    // returns null if the user does not exist
+    // Returns the user row of the given user from the User database table
+    // Returns null if the user does not exist
     async getUser(username: string): Promise<UserModel | null> {
         const user = await UserModel.findOne({
             where: { username: username },

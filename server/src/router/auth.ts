@@ -6,8 +6,9 @@ import { User } from "../model/user.interface";
 
 export function authRouter(userService: IUserService): Router {
     const authRouter = express.Router();
-    // Register user
-
+    
+    // Registers a user with the given username and password
+    // Sends the user if the registration was successful
     authRouter.post("/", async (
         req: Request<{}, {}, { username: string, password: string }>,
         res: Response<User | string>
@@ -37,7 +38,8 @@ export function authRouter(userService: IUserService): Router {
         }
     });
 
-    // Login user
+    // Logs the user in with the given username and password 
+    // Updates the user's gamesession state and sneds the user if the user exists and the password is correct
     authRouter.post("/login", async (
         req: Request<{}, {}, { username: string, password: string }>,
         res: Response<string>
@@ -65,6 +67,11 @@ export function authRouter(userService: IUserService): Router {
                 res.status(401).send("Invalid username or password");
                 return;
             }
+            const is_game_session_updated = await userService.updateGamesessionState(username);
+            if (!is_game_session_updated) {
+                res.status(404).send("Failed to update game session state");
+                return;
+            }
 
             req.session.user = { username };
             res.status(200).send(`Logged in as ${username}`);
@@ -74,7 +81,8 @@ export function authRouter(userService: IUserService): Router {
         }
     });
 
-    // Logout user
+    // Logs the current user out 
+    // Sends a 200 status if the user is logged out successfully
     authRouter.post("/logout", (
         req: Request,
         res: Response<string>
