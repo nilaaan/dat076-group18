@@ -46,7 +46,7 @@ export const getLeaderboard = async(): Promise<[string, number][] | string> => {
 
 export const updateGameState = async(): Promise<string> => {
     try {
-        const res = await axios.put<string>(`http://localhost:8080/gamesession/state`);
+        const res = await axios.patch<string>(`http://localhost:8080/gamesession/state`);
         return res.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
