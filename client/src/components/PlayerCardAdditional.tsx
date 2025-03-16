@@ -3,6 +3,8 @@ import { Player } from '../Types.ts';
 import { UserRound, Plus, Minus } from 'lucide-react';
 import { getPlayer } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
+import { getAvailability, getForm } from '../api/playerApi.ts';
+import { isGameSession, getCurrentRound } from '../api/gamesessionApi.ts';
 import SellButton from './SellButton.tsx';
 import BuyButton from './BuyButton.tsx';
 
@@ -16,6 +18,9 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
     const [loading, setLoading] = useState<boolean>(true);
     const [player, setPlayer] = useState<Player | null>(null);
     const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
+    const [recentForm, setRecentForm] = useState<number | null>(null);
+    const [nextMatchAvailability, setNextMatchAvailability] = useState<boolean | null>(null);
+    const [gameSessionActive, setGameSessionActive] = useState<boolean>(false);
     //const [error, setError] = useState<string | null>(null);
     
 
@@ -51,6 +56,44 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
     
             fetchPlayers();
         }, []);
+
+        useEffect(() => {
+            const fetchGameSessionData = async () => {
+                try {
+                    const gameSessionStatus = await isGameSession();
+                    if (typeof gameSessionStatus === 'string') {
+                        console.error('Error checking game session:', gameSessionStatus);
+                        return;
+                    }
+                    setGameSessionActive(gameSessionStatus);
+    
+                    if (gameSessionStatus) {
+                        const currentRound = await getCurrentRound();
+                        if (typeof currentRound === 'string') {
+                            console.error('Error fetching current round:', currentRound);
+                            return;
+                        }
+                        const recentFormRating = await getForm(id, currentRound);
+                        if (typeof recentFormRating === 'string') {
+                            console.error('Error fetching recent form rating:', recentFormRating);
+                            return;
+                        }
+                        const availability = await getAvailability(id, currentRound);
+                        if (typeof availability === 'string') {
+                            console.error('Error fetching next match availability:', availability);
+                            return;
+                        }
+    
+                        setRecentForm(recentFormRating);
+                        setNextMatchAvailability(availability);
+                    }
+                } catch (error) {
+                    console.error('Error fetching game session data:', error);
+                }
+            };
+    
+            fetchGameSessionData();
+        }, [id]);
 
         const isPlayerBought = (playerId: number) => {
             return teamPlayers.some(player => player.id === playerId);
@@ -94,6 +137,13 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                 <p>Number: {player.number}</p>
                 <p>Club: {player.club}</p>
                 <p>Price: ${player.price}</p>
+                <div style={{ height: '2rem' }}></div> 
+                {gameSessionActive && (
+                    <>
+                        <p>Recent Form: {recentForm !== null ? recentForm : 'N/A'}</p>
+                        <p>Playing: {nextMatchAvailability !== null ? (nextMatchAvailability ? 'YES' : 'NO') : 'N/A'}</p>
+                    </>
+                )}
 
                 {/* Buy and Sell Buttons */}
                 {isPlayerBought(player.id) ? (

@@ -256,8 +256,9 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         }
 
         const updatedPoints = Number(team.points) + roundPoints;
+        const teamPoints = parseFloat(updatedPoints.toFixed(2));
 
-        await team.update({ points: updatedPoints });
+        await team.update({ points: teamPoints });
 
         return true;
     }

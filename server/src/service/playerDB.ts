@@ -164,7 +164,7 @@ export class PlayerDBService implements IPlayerService {
         }
         const averageRating = sum / nonNullRatings.length;
         
-        return averageRating;
+        return parseFloat(averageRating.toFixed(1));
     } 
 }
 

@@ -6,7 +6,8 @@ const clubs = Array.from({ length: 20 }, (_, i) => `testClub${i + 1}`);
 
 const getRandomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 const getRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-const getRandomRating = () => (Math.random() < 0.2 ? null : getRandomNumber(1, 10)); // 20% chance of null
+const getRandomFloat = (min: number, max: number) => (Math.random() * (max - min) + min).toFixed(1);
+const getRandomRating = () => (Math.random() < 0.2 ? null : parseFloat(getRandomFloat(1, 10))); // 20% chance of null
 
 const addPlayers = async () => {
     // Delete all existing entries in the PlayerModel table
@@ -26,7 +27,6 @@ const addPlayers = async () => {
 
     console.log("20 players added to the PlayerModel table.");
 };
-
 
 const addRatings = async () => {
     // Delete all existing entries in the RatingModel table
