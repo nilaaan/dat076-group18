@@ -7,13 +7,14 @@ import { getCurrentRound } from '../api/gamesessionApi';
 import { updateGameState as updateGame } from '../api/gamesessionApi';
 import { startGameSession } from '../api/gamesessionApi';
 import TeamPoints from '../components/TeamPoints';
+import TopPerformers from '../components/TopPerfomers';
 
 
 const MatchesView: React.FC = () => {
     const [isGameSession, setIsGameSession] = useState<boolean>(false);
     const [isGameSessionFinished, setIsGameSessionFinished] = useState<boolean>(false);
     const [isMatchesInProgress, setIsMatchesInProgress] = useState<boolean>(false);
-    const [userRound, setUserRound] = useState<number | null>(null);
+    const [userRound, setUserRound] = useState<number>(1);
 
 
     const updateGameState = async () => {
@@ -82,7 +83,7 @@ const MatchesView: React.FC = () => {
         }
     };
 
-    
+
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             {!isGameSession ? (
@@ -90,14 +91,24 @@ const MatchesView: React.FC = () => {
                     Start Fantasy League
                 </button>
             ) : isGameSessionFinished ? (
-                <p>League is over! Check your final position in the Leaderboard!<TeamPoints/></p>
+                <>
+                    <p>League is over! Check your final position in the Leaderboard!</p>
+                    {userRound >= 2 && <TopPerformers round={userRound - 1} />}
+                </>
             ) : isMatchesInProgress ? (
-                <p>Round: {userRound} Matches in progress...</p>
+                <>
+                    <p>Round: {userRound} Matches in progress...</p>
+                    {userRound >= 2 && <TopPerformers round={userRound - 1} />}
+                </>
             ) : (
-                <p>Round: {userRound} Matches will be played tonight at 8:45. Form your team!<TeamPoints/></p>
+                <>
+                    <p>Round: {userRound} Matches will be played tonight at 8:45. Form your team!</p>
+                    {userRound >= 2 && <TopPerformers round={userRound - 1} />}
+                </>
             )}
         </div>
     );
 };
+
 
 export default MatchesView;

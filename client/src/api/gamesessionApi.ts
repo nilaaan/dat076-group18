@@ -38,6 +38,12 @@ export const getCurrentRound = async(): Promise<number | string> => {
 };
 
 
+export const getLeaderboard = async(): Promise<[string, number][] | string> => {
+    const res = await axios.get<[string, number][] | string>('http://localhost:8080/gamesession/leaderboard');
+    return res.data;
+};
+
+
 export const updateGameState = async(): Promise<string> => {
     try {
         const res = await axios.put<string>(`http://localhost:8080/gamesession/state`);

@@ -76,7 +76,7 @@ export function playerRouter(playerService: IPlayerService): Router {
                 res.status(404).send(`Rating not found for player: ${id} in round: ${round}`);
                 return;
             }
-            res.status(200).send(round_rating);
+            res.status(200).json(round_rating);
         } catch (e: any) {
             res.status(500).send(e.message);
         }
@@ -150,7 +150,7 @@ export function playerRouter(playerService: IPlayerService): Router {
                 res.status(404).send(`Rating not found for player: ${id} in round: ${round}`);
                 return;
             }
-            res.status(200).send(recent_form);
+            res.status(200).json(recent_form);
         } catch (e: any) {
             res.status(500).send(e.message);
         }
@@ -159,7 +159,7 @@ export function playerRouter(playerService: IPlayerService): Router {
     
     playerRouter.get("/performance/:round", async (
         req: Request<{ round: string }, {}, {}>,
-        res: Response<Player[] | string | null>
+        res: Response<Player[] | string >
     ) => {
         try {
 
@@ -169,7 +169,7 @@ export function playerRouter(playerService: IPlayerService): Router {
             }
 
             const round = parseInt(req.params.round, 10);
-            if (!Number.isInteger(round) || round < 0 || round > 38) {
+            if (!Number.isInteger(round) || round < 1 || round > 38) {
                 res.status(400).send(`round number must be a non-negative integer between 0 and 38`);
                 return;
             }

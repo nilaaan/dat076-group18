@@ -3,6 +3,7 @@ import { Player } from '../Types.ts';
 import PlayerSlot from '../components/PlayerSlot.tsx';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
+import TeamPoints from '../components/TeamPoints.tsx';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -64,6 +65,7 @@ const FieldView = () => {
     return (
         <div className="flex justify-center pb-20 overflow-hidden">
             <div className="relative w-full">
+            <TeamPoints/>
                 <svg xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 1000" className="absolute">
                     <defs>
                         <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="200" height="50">

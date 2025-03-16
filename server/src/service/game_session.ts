@@ -377,6 +377,9 @@ export class GameSessionService implements IGameSessionService {
             leaderboard.push([user.username, points]);
         }
 
+        // Sort the leaderboard by points in descending order
+        leaderboard.sort((a, b) => b[1] - a[1]);
+
         return leaderboard; 
     }
     

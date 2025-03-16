@@ -25,6 +25,7 @@ const LoginView: React.FC = () => {
     try {
         if (!isAuthenticated) {
             await testLogin(tempUsername, password);
+            sessionStorage.setItem('username', tempUsername);
             window.location.reload();
         }
     } catch (error) {

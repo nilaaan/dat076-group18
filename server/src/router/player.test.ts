@@ -2,6 +2,7 @@ import * as SuperTest from "supertest";
 import { app } from "../start";
 import { PlayerService } from "../service/player";
 import { PlayerModel } from "../db/player.db";
+import { addPlayers, addRatings } from "../service/addPlayers";
 
 
 const request = SuperTest.default(app);
@@ -15,6 +16,7 @@ export const addAllPlayers = async () => {
         await PlayerModel.create(player);
     }
 }
+
 
 test("if all players are requested then all players should be returned", async () => {
     
@@ -96,7 +98,19 @@ test("If a specific player is requested with an invalid id then an error should 
     expect(res.statusCode).toEqual(400);
 });
 
+
 test("If a player that does not exist is requested then an error should be returned", async () => {
     const res = await request.get("/player/100");
     expect(res.statusCode).toEqual(404);
 }); 
+
+
+test("top performers should be returned", async () => {
+    await addPlayers();
+    await addRatings();
+
+    const res = await request.get("/player/performance/1");
+    expect(res.statusCode).toEqual(200);
+    console.log(res.body);
+    console.log(typeof(res.body));
+});

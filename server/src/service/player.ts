@@ -4,7 +4,7 @@ import { IPlayerService } from './player.interface';
 
 
 export class PlayerService implements IPlayerService {
-    private players: Player[] = [];
+    /*private players: Player[] = [];
 
     constructor() {
         this.loadPlayers();
@@ -17,9 +17,9 @@ export class PlayerService implements IPlayerService {
         } catch (error) {
             console.error("Failed to fetch players:", error);
         }
-    }
+    }*/
 
-    private playersOld: Player[] = [ 
+    private players: Player[] = [ 
         {
             id: 1, 
             name: "Test player1",

@@ -22,7 +22,7 @@ const TeamPoints: React.FC = () => {
 
     return (
         <div style={{ marginTop: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
-            <h3>Your Current Points:</h3>
+            <h3>Points:</h3>
             <p>{teamPoints !== null ? teamPoints : 'Loading...'}</p>
         </div>
     );

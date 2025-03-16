@@ -15,6 +15,7 @@ import { AuthProvider } from './components/AuthProvider.tsx';
 import StartPageTest from './views/PlayerView.tsx';
 import StartView from './views/StartPage.tsx';
 import MatchesView from './views/MatchesView.tsx';
+import LeaderboardView from './views/LeaderboardView.tsx';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -44,8 +45,9 @@ function App() {
             </AppBar.ToolbarLead>
             <AppBar.ToolbarCenter classes="!grow-0">
               <div className="flex gap-4 h-full">
+                <NavLink to="/leaderboard">Leaderboard</NavLink>
                 <NavLink to="/team">Team</NavLink>
-                <NavLink to="/player">Player</NavLink>
+                <NavLink to="/player">Explore Players</NavLink>
                 <NavLink to="/buy">Buy/Sell</NavLink>
                 <NavLink to="/matches">Matches</NavLink>
               </div>
@@ -63,13 +65,14 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<StartView />}></Route>
+            <Route path="/leaderboard" element={<ProtectedComponent> <LeaderboardView /> </ProtectedComponent>}></Route>
             <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
             <Route path="/player" element={<StartPageTest />}></Route>
             <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
             <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
             <Route path="/login" element={<LoginView />}></Route>
             <Route path="/register" element={<RegisterView />}></Route>
-            <Route path="/matches" element={<ProtectedComponent> <MatchesView /> </ProtectedComponent>}></Route>
+            <Route path="/matches" element={<ProtectedComponent> <MatchesView /> </ProtectedComponent>}></Route>         
           </Routes>
         </main>
       </Router>
