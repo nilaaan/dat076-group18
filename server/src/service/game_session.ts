@@ -330,7 +330,7 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
-    async getLeaderboard(username: string): Promise<[string, number][] | undefined> {
+    async getGamesessionUsernames(username: string): Promise<string[] | undefined> {
         const isGameSession = await this.isGameSession(username);
         if (!isGameSession) {
             return [];  
@@ -341,15 +341,14 @@ export class GameSessionService implements IGameSessionService {
             return undefined;  
         }
 
-        // Get all users in the game session
+        // get all users in the game session
         const user_games = await User_games.findAll({
             where: {
                 game_id: game_id
             }
         });
 
-        let users : User[]  = [];
-
+        let usernames : string[] = [];
         for (const user_game of user_games) {
 
             const userrow = await UserModel.findOne({
@@ -363,9 +362,25 @@ export class GameSessionService implements IGameSessionService {
             }
 
             const gamesession_username = userrow.username
-            const user = await this.userService?.findUser(gamesession_username);
+            usernames.push(gamesession_username);
+        }
+        return usernames; 
+    }
+
+
+    async getLeaderboard(username: string): Promise<[string, number][] | undefined> {
+        const usernames = await this.getGamesessionUsernames(username);
+        if (!usernames) {
+            console.error("No usernames found");
+            return undefined;  
+        }
+
+        let users : User[]  = [];
+
+        for (const username of usernames) {
+            const user = await this.userService?.findUser(username);
             if (!user) {
-                console.error("No user found with username: " + gamesession_username);
+                console.error("No user found with username: " + username);
                 return undefined;  
             }
             users.push(user);

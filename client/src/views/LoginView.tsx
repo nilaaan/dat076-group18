@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
+import { updateGameState, getGamesessionUsernames } from '../api/gamesessionApi';
 import { useAuth } from '../contexts/authContext';
 
 /**
@@ -26,7 +27,24 @@ const LoginView: React.FC = () => {
         if (!isAuthenticated) {
             await testLogin(tempUsername, password);
             sessionStorage.setItem('username', tempUsername);
-            window.location.reload();
+            // Call the async method to update the game session for all users except the current user
+            setTimeout(async () => {
+              try {
+                const usernames = await getGamesessionUsernames();
+                if (typeof usernames === 'string') {
+                  console.error('Error getting game session usernames:', usernames);
+                }
+                else if (usernames) {
+                  const updatePromises = usernames
+                    .filter((uname) => uname !== tempUsername)
+                    .map((uname) => updateGameState(uname));
+                  await Promise.all(updatePromises);
+                }
+              } catch (error) {
+                console.error('Error updating game session for all users:', error);
+              }
+          }, 0);
+          window.location.reload();
         }
     } catch (error) {
         console.log("Error logging in:", error);

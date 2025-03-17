@@ -138,6 +138,55 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
     });
 
 
+    gamesessionRouter.patch("/:username/state", async (
+        req: Request,
+        res: Response<string>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+            const { username } = req.params;
+            if (!username) {
+                res.status(400).send(`Missing username param`);
+                return;
+            }
+            const isUpdated = await gameSessionService.updateState(username);
+            console.log("UPDATED FOR : " + username);
+            if (isUpdated === undefined){
+                res.status(404).send(`No game session found for user ${username}`);
+                return;
+            }
+            res.status(200).send("Game session state updated");
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    });
+
+
+    gamesessionRouter.get("/usernames", async (
+        req: Request,
+        res: Response<string[] | string>
+    ) => {
+        try {
+            if (!req.session?.user) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+
+            const usernames = await gameSessionService.getGamesessionUsernames(req.session.user.username);
+            if (!usernames) {
+                res.status(404).send(`Couldn't get usernames of gamesession for user: ${req.session.user.username}`);
+                return;
+            }
+            res.status(200).send(usernames);
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    });
+
+
     gamesessionRouter.get("/leaderboard", async (
         req: Request,
         res: Response<[string, number][] | string>
