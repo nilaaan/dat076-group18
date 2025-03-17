@@ -85,11 +85,8 @@ export class PlayerDBService implements IPlayerService {
     // Returns the rating of the given player from the given round
     // Returns undefined if the rating could not be extracted 
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
-        if (round < 1) {
-            return null; 
-        }
-        if (round > 38) {
-            console.error(`Round ${round} is out of bounds`);
+        if (round > 1 || round > 38) {
+            console.error(`Round ${round} is out of bounds, must be between 1 and 38`);
             return undefined;
         }
 
@@ -108,7 +105,6 @@ export class PlayerDBService implements IPlayerService {
         }
     }
     
-
 
     async getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> {
         if (round < 1) {
