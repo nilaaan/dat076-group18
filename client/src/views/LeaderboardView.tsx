@@ -46,7 +46,7 @@ const LeaderboardView: React.FC = () => {
         };
 
         checkGameSession();
-    }, [leaderboard]);
+    }, []);
 
     if (loading) {
         return <div>Loading...</div>;
