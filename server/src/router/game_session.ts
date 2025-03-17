@@ -116,7 +116,7 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
     });
 
 
-    gamesessionRouter.put("/state", async (
+    gamesessionRouter.patch("/state", async (
         req: Request,
         res: Response<string>
     ) => {
