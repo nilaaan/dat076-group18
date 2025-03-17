@@ -54,14 +54,6 @@ const FieldView = () => {
         return players[index] || undefined;
     }
 
-    function setPlayerAvailable(playerId: number, available: boolean) {
-        setPlayers((ps: Player[]) =>
-            ps.map((p) =>
-                p.id === playerId ? { ...p, available } : p
-            )
-        );
-    }
-
     return (
         <div className="flex justify-center pb-20 overflow-hidden">
             <div className="relative w-full">
@@ -101,21 +93,21 @@ const FieldView = () => {
                 </div>
                 <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
-                        <PlayerSlot setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)} onInfoClick={() => handlePlayerClick(getPlayer(0))}></PlayerSlot>
+                        <PlayerSlot initialPlayer={getPlayer(0)} onInfoClick={() => handlePlayerClick(getPlayer(0))}></PlayerSlot>
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numAttackers }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + index))}></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + index))}></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numMidfielders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers +  + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numAttackers +  + index))} ></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + numAttackers +  + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numAttackers +  + index))} ></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numDefenders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numMidfielders +  + index))}></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numMidfielders +  + index))}></PlayerSlot>
                         )}
                     </div>
                 </div>
