@@ -4,6 +4,7 @@ import { getPlayers } from '../api/playerApi';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import BuyButton from '../components/BuyButton';
 import SellButton from '../components/SellButton.tsx';
+import { toast } from 'react-hot-toast';
 
 const BuyView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -19,6 +20,7 @@ const BuyView = () => {
                 const teamPlayersData = await getTeamPlayers();
                 setTeamPlayers(teamPlayersData);
             } catch {
+                toast.error('Failed to fetch players')
                 setError('Failed to fetch players');
             } finally {
                 setLoading(false);
@@ -68,7 +70,7 @@ const BuyView = () => {
                                     <div className="w-full h-full preset-outlined-error-500 hover:preset-filled-error-300-700">
                                         <SellButton playerId={player.id}></SellButton>
                                     </div>
-                                ): (
+                                ) : (
                                     <div className="w-full h-full preset-outlined-success-500 hover:preset-filled-success-300-700">
                                         <BuyButton playerId={player.id} completed={false}></BuyButton>
                                     </div>
@@ -92,7 +94,7 @@ const BuyView = () => {
                                     <div className="w-full h-full preset-outlined-error-500 hover:preset-filled-error-300-700">
                                         <SellButton playerId={player.id}></SellButton>
                                     </div>
-                                ): (
+                                ) : (
                                     <div className="w-full h-full preset-outlined-success-500 hover:preset-filled-success-300-700">
                                         <BuyButton playerId={player.id} completed={false}></BuyButton>
                                     </div>
@@ -116,7 +118,7 @@ const BuyView = () => {
                                     <div className="w-full h-full preset-outlined-error-500 hover:preset-filled-error-300-700">
                                         <SellButton playerId={player.id}></SellButton>
                                     </div>
-                                ): (
+                                ) : (
                                     <div className="w-full h-full preset-outlined-success-500 hover:preset-filled-success-300-700">
                                         <BuyButton playerId={player.id} completed={false}></BuyButton>
                                     </div>
@@ -140,7 +142,7 @@ const BuyView = () => {
                                     <div className="w-full h-full preset-outlined-error-500 hover:preset-filled-error-300-700">
                                         <SellButton playerId={player.id}></SellButton>
                                     </div>
-                                ): (
+                                ) : (
                                     <div className="w-full h-full preset-outlined-success-500 hover:preset-filled-success-300-700">
                                         <BuyButton playerId={player.id} completed={false}></BuyButton>
                                     </div>

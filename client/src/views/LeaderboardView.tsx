@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getLeaderboard, isGameSession } from "../api/gamesessionApi";
+import { toast } from 'react-hot-toast';
 
 interface LeaderboardEntry {
     username: string;
@@ -39,7 +40,8 @@ const LeaderboardView: React.FC = () => {
                     }
                 }
             } catch (error) {
-                console.error('Leaderboard error: ', error);
+                toast.error('Leaderboard error: ' + error);
+                console.error('Leaderboard error');
             } finally {
                 setLoading(false);
             }

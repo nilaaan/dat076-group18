@@ -7,6 +7,7 @@ import { updateGameState as updateGame } from '../api/gamesessionApi';
 import { startGameSession } from '../api/gamesessionApi';
 import TopPerformers from '../components/TopPerfomers';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 
 const MatchesView: React.FC = () => {
@@ -23,21 +24,25 @@ const MatchesView: React.FC = () => {
             if (typeof finishedResponse === 'boolean') {
                 setIsGameSessionFinished(finishedResponse);
             } else {
+                toast.error("Error checking if game session is finished");
                 console.error('Error checking if game session is finished:', finishedResponse);
             }
             const inProgressResponse = await checkMatchesInProgress();
             if (typeof inProgressResponse === 'boolean') {
                 setIsMatchesInProgress(inProgressResponse);
             } else {
+                toast.error("Error checking if matches are in progress");
                 console.error('Error checking if matches are in progress:', inProgressResponse);
             }
             const roundResponse = await getCurrentRound();
             if (typeof roundResponse === 'number') {
                 setUserRound(roundResponse);
             } else {
+                toast.error("Error getting current round");
                 console.error('Error getting current round:', roundResponse);
             }
         } catch (error) {
+            toast.error("Error updating game state");
             console.error('Error updating game state:', error);
         }
     };
@@ -69,6 +74,7 @@ const MatchesView: React.FC = () => {
             if (typeof response === 'boolean') {
                 if (response) {
                     setIsGameSession(true);
+                    toast.success("Season has started");
                     await updateGameState();
                 } else {
                     console.error('Could not start fantasy league:'); // impossible to get here since only possible boolean response value is true
@@ -78,6 +84,7 @@ const MatchesView: React.FC = () => {
                 console.error('Error starting fantasy league:', response);
             }
         } catch (error) {
+            toast.error("Error starting fantasy league");
             console.error('Error starting fantasy league:', error);
         }
     };
@@ -116,7 +123,7 @@ const MatchesView: React.FC = () => {
                         </Link>
                     </div>
                 )}
-                {isGameSession ? 
+                {isGameSession ?
                     <div className="preset-filled-surface-100-900 card p-6 flex flex-col items-center">
                         {userRound >= 2 && <TopPerformers round={userRound - 1} />}
                     </div> : null

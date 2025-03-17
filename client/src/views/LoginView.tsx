@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
 import { useAuth } from '../contexts/authContext';
+import { toast } from 'react-hot-toast';
 
 /**
  * Data Flow:
@@ -23,48 +24,50 @@ const LoginView: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-        if (!isAuthenticated) {
-            await testLogin(tempUsername, password);
-            sessionStorage.setItem('username', tempUsername);
-            window.location.reload();
-        }
+      if (!isAuthenticated) {
+        await testLogin(tempUsername, password);
+        sessionStorage.setItem('username', tempUsername);
+        window.location.reload();
+      }
     } catch (error) {
-        console.log("Error logging in:", error);
+      toast.error("Error logging in");
+      console.log("Error logging in:", error);
     }
   };
 
   const handleLogout = async () => {
     try {
-        if (isAuthenticated) {
-            await testLogout();
-            window.location.reload();
-        }
+      if (isAuthenticated) {
+        await testLogout();
+        window.location.reload();
+      }
     } catch (error) {
-        console.log("Error logging out:", error);
+      toast.error("Error logging out");
+      console.log("Error logging out:", error);
     }
   };
 
 
-  if(isAuthenticated){
-    return(
+  if (isAuthenticated) {
+    return (
       <div className="flex items-center justify-center min-h-screen">
-          <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
-            <h2 className="text-center text-2xl font-semibold">Welcome back, {username}!</h2>
-            <div className="mt-4 space-y-4">
-              <button
-                className="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-    
-            </div>
+        <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
+          <h2 className="text-center text-2xl font-semibold">Welcome back, {username}!</h2>
+          <div className="mt-4 space-y-4">
+            <button
+              className="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+
           </div>
         </div>
-      );
+      </div>
+    );
   }
 
-  if(!isAuthenticated){
+  if (!isAuthenticated) {
 
     return (
       <div className="flex items-center justify-center min-h-screen">

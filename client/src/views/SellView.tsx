@@ -3,6 +3,7 @@ import { Player } from '../Types.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
 import PlayerCard from '../components/PlayerCard';
 import SellButton from '../components/SellButton';
+import { toast } from 'react-hot-toast';
 
 const SellView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -15,6 +16,7 @@ const SellView = () => {
                 const data = await getTeamPlayers();
                 setPlayers(data);
             } catch (error) {
+                toast.error('Failed to fetch players');
                 setError('Failed to fetch players');
             } finally {
                 setLoading(false);

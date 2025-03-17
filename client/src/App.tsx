@@ -16,6 +16,7 @@ import StartPageTest from './views/PlayerView.tsx';
 import StartView from './views/StartPage.tsx';
 import MatchesView from './views/MatchesView.tsx';
 import LeaderboardView from './views/LeaderboardView.tsx';
+import { Toaster } from 'react-hot-toast';
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -62,6 +63,7 @@ function App() {
             </AppBar.ToolbarTrail>
           </AppBar.Toolbar>
         </AppBar>
+        <Toaster position="bottom-right" />
         <main>
           <Routes>
             <Route path="/" element={<StartView />}></Route>
