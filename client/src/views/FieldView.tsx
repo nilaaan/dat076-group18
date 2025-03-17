@@ -4,6 +4,8 @@ import PlayerSlot from '../components/PlayerSlot.tsx';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import TeamPoints from '../components/TeamPoints.tsx';
+import { getSession } from '../api/tempAuthAPI.ts';
+import { useAuth } from '../contexts/authContext.ts';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -55,9 +57,12 @@ const FieldView = () => {
     }
 
     return (
-        <div className="flex justify-center pb-20 overflow-hidden">
+        <div className="flex items-center pb-20 overflow-hidden flex-col">
+            <div className="pb-5 p-10 flex items-end justify-around w-full">
+                <h1 className="h1">{useAuth().username}'s team</h1>
+                <h3 className="h3"><TeamPoints /> Points</h3>
+            </div>
             <div className="relative w-full">
-            <TeamPoints/>
                 <svg xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 1000" className="absolute">
                     <defs>
                         <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="200" height="50">
