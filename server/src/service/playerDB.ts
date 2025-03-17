@@ -85,6 +85,9 @@ export class PlayerDBService implements IPlayerService {
     // Returns the rating of the given player from the given round
     // Returns undefined if the rating could not be extracted 
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
         if (round > 1 || round > 38) {
             console.error(`Round ${round} is out of bounds, must be between 1 and 38`);
             return undefined;
@@ -104,15 +107,17 @@ export class PlayerDBService implements IPlayerService {
             return parseFloat(rating_row.rating.toFixed(1));
         }
     }
-    
+        
 
+    // Returns true if the given player will play in the given round
+    // Returns false if the given player will not play in the given round
+    // Returns undefined if the availability could not be extracted
     async getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> {
-        if (round < 1) {
-            return null; 
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 38) {
-            console.error(`Round ${round} is out of bounds`);
-            return undefined;
+        if (round < 1 || round > 38) {
+            throw new Error(`Round ${round} is out of bounds, must be between 1 and 38`);
         }
         const rating = await this.getRoundRating(player_id, round);
 
@@ -128,13 +133,15 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
+    // Returns the recent form of the given player as the average rating of the last 4 played games
+    // Returns null if there are no available ratings in the season so far
+    // Returns undefined if the recent form could not be extracted
     async getRecentForm(player_id: number, round: number): Promise<number | null | undefined> {
-        if (round <= 1) {
-            return null;
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 39) {
-            console.error(`Round ${round} is out of bounds`);
-            return undefined;
+        if (round > 2 || round > 39) {
+            throw new Error(`Round ${round} is out of bounds, must be between 2 and 39`);
         }
 
         const recent_form = await this.calculateRecentForm(player_id, round);
@@ -142,8 +149,14 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    // returns the average rating of the last 4 played games pf the given player as recent form
+    // Returns the average rating of the last 4 played games for the given player as recent form
+    // If the player has played less than 4 games in the season so far, the average of the available ratings is returned
+    // Returns null if there are no available ratings 
+    // Returns undefined if the recent form could not be calculated
     async calculateRecentForm(player_id: number, round: number): Promise <number | null | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
         const ratings = await RatingModel.findAll({
             where: {
                 player_id: player_id,
