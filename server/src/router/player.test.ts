@@ -114,3 +114,77 @@ test("top performers should be returned", async () => {
     console.log(res.body);
     console.log(typeof(res.body));
 });
+
+test("No top performers for round 100", async () => {
+
+
+    const res = await request.get("/player/performance/100");
+    expect(res.statusCode).toEqual(400);
+
+});
+
+
+test("Rating of specified player should be returned", async () => {
+
+    const res = await request.get("/player/1/rating/1");
+    expect(res.statusCode).toEqual(200);
+    console.log(res.body);
+    console.log(typeof(res.body));
+});
+
+test("Rating of non-existing player should return 404", async () => {
+
+    const res = await request.get("/player/100/rating/1");
+    expect(res.statusCode).toEqual(404);
+
+});
+
+test("Rating of existing player for non-existing round should return 400", async () => {
+
+    const res = await request.get("/player/1/rating/100");
+    expect(res.statusCode).toEqual(400);
+
+});
+
+test("Availability of existing player for existing round should return 200", async () => {
+
+    const res = await request.get("/player/1/availability/1");
+    expect(res.statusCode).toEqual(200);
+
+});
+
+test("Availability of non-existing player for existing round should return 404", async () => {
+
+    const res = await request.get("/player/100/availability/1");
+    expect(res.statusCode).toEqual(404);
+
+});
+
+test("Availability of existing player for non-existing round should return 400", async () => {
+
+    const res = await request.get("/player/1/availability/100");
+    expect(res.statusCode).toEqual(400);
+
+});
+
+test("Form of existing player for existing round should return 200", async () => {
+
+    const res = await request.get("/player/1/form/1");
+    console.log("res", res.body);
+    expect(res.statusCode).toEqual(200);
+
+});
+
+test("Form of non-existing player for existing round should return 404", async () => {
+
+    const res = await request.get("/player/100/form/2");
+    expect(res.statusCode).toEqual(404);
+
+});
+
+test("Form of existing player for non-existing round should return 400", async () => {
+
+    const res = await request.get("/player/1/form/100");
+    expect(res.statusCode).toEqual(400);
+
+});

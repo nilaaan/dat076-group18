@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === "test") {
     conn = new Sequelize({
         dialect: 'sqlite',
         storage: ':memory:',
+        logging: false,
     });
 } else { 
     conn = new Sequelize('postgres://postgres@localhost:5432');
