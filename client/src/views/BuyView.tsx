@@ -124,13 +124,13 @@ const BuyView = () => {
                             </td>
                         </tr>
                     ))}
-                    <tr className="bg-red-500">
+                    <tr>
                         <th className="preset-filled-success-200-800 sticky top-0 !font-bold !p-4">Goalkeepers</th>
                         <td className="preset-filled-surface-200-800" colSpan={5}></td>
                     </tr>
                     {goalkeepers.map((player) => (
                         <tr key={player.id} className="preset-filled-surface-100-900">
-                            <td>{player.name}</td>
+                            <td className="!p-4">{player.name}</td>
                             <td>{player.number}</td>
                             <td>{player.club}</td>
                             <td>£ {player.price}</td>

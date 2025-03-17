@@ -20,12 +20,7 @@ const TeamPoints: React.FC = () => {
         fetchTeamPoints();
     }, []);
 
-    return (
-        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
-            <h3>Points:</h3>
-            <p>{teamPoints !== null ? teamPoints : 'Loading...'}</p>
-        </div>
-    );
+    return teamPoints !== null ? teamPoints : 'Loading...';
 };
 
 export default TeamPoints;

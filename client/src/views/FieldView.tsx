@@ -4,6 +4,7 @@ import PlayerSlot from '../components/PlayerSlot.tsx';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import TeamPoints from '../components/TeamPoints.tsx';
+import { useAuth } from '../contexts/authContext.ts';
 
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -54,18 +55,13 @@ const FieldView = () => {
         return players[index] || undefined;
     }
 
-    function setPlayerAvailable(playerId: number, available: boolean) {
-        setPlayers((ps: Player[]) =>
-            ps.map((p) =>
-                p.id === playerId ? { ...p, available } : p
-            )
-        );
-    }
-
     return (
-        <div className="flex justify-center pb-20 overflow-hidden">
+        <div className="flex items-center pb-20 overflow-hidden flex-col">
+            <div className="pb-5 p-10 flex items-end justify-around w-full">
+                <h1 className="h1">{useAuth().username}'s team</h1>
+                <h3 className="h3"><TeamPoints /> Points</h3>
+            </div>
             <div className="relative w-full">
-            <TeamPoints/>
                 <svg xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 1000" className="absolute">
                     <defs>
                         <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="200" height="50">
@@ -101,21 +97,21 @@ const FieldView = () => {
                 </div>
                 <div className="w-full flex flex-col gap-2 p-5">
                     <div className="flex justify-evenly">
-                        <PlayerSlot setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(0)} onInfoClick={() => handlePlayerClick(getPlayer(0))}></PlayerSlot>
+                        <PlayerSlot initialPlayer={getPlayer(0)} onInfoClick={() => handlePlayerClick(getPlayer(0))}></PlayerSlot>
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numAttackers }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + index))}></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + index))}></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numMidfielders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers +  + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numAttackers +  + index))} ></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + numAttackers +  + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numAttackers +  + index))} ></PlayerSlot>
                         )}
                     </div>
                     <div className="flex justify-evenly">
                         {Array.from({ length: numDefenders }, (_, index) => 
-                            <PlayerSlot key={index} setPlayerAvailable={setPlayerAvailable} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numMidfielders +  + index))}></PlayerSlot>
+                            <PlayerSlot key={index} initialPlayer={getPlayer(1 + numAttackers + numMidfielders + index)} onInfoClick={() => handlePlayerClick(getPlayer(1 + numMidfielders +  + index))}></PlayerSlot>
                         )}
                     </div>
                 </div>
