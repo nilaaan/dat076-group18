@@ -40,3 +40,40 @@ test("if a user registers with an already existing username then no user should 
     
 }); 
 
+test("If a user logs in then the corresponding user object should be returned", async () => {
+    const gameSessionService = new GameSessionService();
+    const userDBService = new UserDBService(gameSessionService);
+    const user2 = await userDBService.registerUser("testUser2", "testPassword2");
+    const expectedUser = await userDBService.findUser("testUser2");
+    
+    expect(expectedUser).toEqual(user2);
+
+});
+
+
+test("if a user logs in with a non-existing username then no user should be returned", async () => {
+    const gameSessionService = new GameSessionService();
+    const userDBService = new UserDBService(gameSessionService);
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const expectedUser = await userDBService.findUser("testUser3");
+
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
+    expect(expectedUser).toBeNull();
+});
+
+
+test("if a user logs in with a wrong password then no user should be returned", async () => {
+    const gameSessionService = new GameSessionService();
+    const userDBService = new UserDBService(gameSessionService);
+    const expectedUser = await userDBService.findUser("testUser2");
+    expect(expectedUser).not.toBeNull();
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const wrongLogin = await userDBService.findUser("testUser2", "wrongpwd");
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
+    expect(wrongLogin).toBeNull();;
+}); 
+
+

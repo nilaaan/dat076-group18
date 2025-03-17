@@ -164,6 +164,13 @@ test("No players available in round 2, so no top performers", async () => {
     expect(expectedPlayersCopy).toEqual(undefined);
 });
 
+test("Round id is out of bounds, so no top performers", async () => {
+
+    const playerDBService = new PlayerDBService(new GameSessionService());
+    const expectedPlayersCopy = await playerDBService.getTopPerformers(39);
+    expect(expectedPlayersCopy).toEqual(undefined);
+});
+
 test("Get round rating for available player", async () => {
 
 
@@ -180,6 +187,15 @@ test("Get round rating for unavailable player", async () => {
     const player1Rating = await playerDBService.getRoundRating(1,1);
 
     expect(player1Rating).toEqual(null);
+});
+
+test("Get round rating for non-existing player", async () => {
+
+
+    const playerDBService = new PlayerDBService(new GameSessionService());
+    const player1Rating = await playerDBService.getRoundRating(0,1);
+
+    expect(player1Rating).toEqual(undefined);
 });
 
 test("Get round availability for player2 should be true", async () => {
