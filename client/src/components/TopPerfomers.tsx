@@ -59,26 +59,28 @@ const TopPerformers: React.FC<TopPerformersProps> = ({ round }) => {
     const sortedPlayers = players.sort((a, b) => (ratings[b.id] ?? -Infinity) - (ratings[a.id] ?? -Infinity));
 
     return (
-        <div>
-            <h2>Top Performing Players From Last Round ({round})</h2>
-            <table>
+        <div className="w-full flex flex-col items-center space-y-4">
+            <h2 className="h4">Top Performing Players from Round {round}</h2>
+            <table className="table border-spacing-2 border-collapse">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Club</th>
-                        <th>Rating</th>
+                    <tr className="border-b border-b-surface-400-600">
+                        <th className="!py-3"><b>#</b></th>
+                        <th><b>Name</b></th>
+                        <th><b>Club</b></th>
+                        <th><b>Rating</b></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedPlayers.map((player, index) => (
-                        <tr key={player.id}>
-                            <td>{index + 1}</td>
-                            <td>{player.name}</td>
-                            <td>{player.club}</td>
-                            <td>{ratings[player.id] !== null ? ratings[player.id] : 'N/A'}</td>
-                        </tr>
-                    ))}
+                    {
+                        sortedPlayers.map((player, index) => (
+                            <tr key={player.id}>
+                                <td className="!py-3">#{index + 1}</td>
+                                <td>{player.name}</td>
+                                <td>{player.club}</td>
+                                <td>{ratings[player.id] !== null ? ratings[player.id] : 'N/A'}</td>
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
