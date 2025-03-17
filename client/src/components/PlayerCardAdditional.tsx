@@ -21,6 +21,7 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
     const [recentForm, setRecentForm] = useState<number | null>(null);
     const [nextMatchAvailability, setNextMatchAvailability] = useState<boolean | null>(null);
     const [gameSessionActive, setGameSessionActive] = useState<boolean>(false);
+    const [currentRound, setCurrentRound] = useState<number>(0);
     //const [error, setError] = useState<string | null>(null);
     
 
@@ -68,24 +69,28 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                     setGameSessionActive(gameSessionStatus);
     
                     if (gameSessionStatus) {
-                        const currentRound = await getCurrentRound();
-                        if (typeof currentRound === 'string') {
+                        const round = await getCurrentRound();
+                        if (typeof round === 'string') {
                             console.error('Error fetching current round:', currentRound);
                             return;
                         }
-                        const recentFormRating = await getForm(id, currentRound);
+                        setCurrentRound(round);
+
+                        const recentFormRating = await getForm(id, round);
                         if (typeof recentFormRating === 'string') {
                             console.error('Error fetching recent form rating:', recentFormRating);
                             return;
                         }
-                        const availability = await getAvailability(id, currentRound);
-                        if (typeof availability === 'string') {
+                        setRecentForm(recentFormRating);
+
+                        if (round < 39) {
+                            const availability = await getAvailability(id, round);
+                            if (typeof availability === 'string') {
                             console.error('Error fetching next match availability:', availability);
                             return;
+                            }
+                            setNextMatchAvailability(availability);
                         }
-    
-                        setRecentForm(recentFormRating);
-                        setNextMatchAvailability(availability);
                     }
                 } catch (error) {
                     console.error('Error fetching game session data:', error);
@@ -140,8 +145,12 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                 <div style={{ height: '2rem' }}></div> 
                 {gameSessionActive && (
                     <>
-                        <p>Recent Form: {recentForm !== null ? recentForm : 'N/A'}</p>
-                        <p>Playing: {nextMatchAvailability !== null ? (nextMatchAvailability ? 'YES' : 'NO') : 'N/A'}</p>
+                        {currentRound >= 2 && (
+                            <p>Recent Form: {recentForm !== null ? recentForm : 'N/A'}</p>
+                        )}
+                        {currentRound < 39 && (
+                            <p>Playing: {nextMatchAvailability !== null ? (nextMatchAvailability ? 'YES' : 'NO') : 'N/A'}</p>
+                        )}
                     </>
                 )}
 

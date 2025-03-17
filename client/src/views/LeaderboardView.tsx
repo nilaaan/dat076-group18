@@ -64,17 +64,11 @@ const LeaderboardView: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentUserIndex !== -1 ?
-                        <tr className="preset-filled-primary-200-800 rounded-full">
-                            <td className="!p-4">#{currentUserIndex + 1}</td>
-                            <td className="!p-4">{leaderboard[currentUserIndex].username}</td>
-                            <td className="!p-4">{leaderboard[currentUserIndex].points}</td>
-                        </tr>
-                        : null
-                    }
-                    <tr />
                     {leaderboard.map((entry, index) => (
-                        <tr className="preset-filled-surface-200-800" key={index}>
+                        <tr
+                            className={index === currentUserIndex ? "preset-filled-primary-200-800 rounded-full" : "preset-filled-surface-200-800"}
+                            key={index}
+                        >
                             <td className="!p-4">#{index + 1}</td>
                             <td className="!p-4">{entry.username}</td>
                             <td className="!p-4">{entry.points}</td>
