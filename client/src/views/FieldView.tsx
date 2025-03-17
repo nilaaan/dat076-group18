@@ -4,7 +4,6 @@ import PlayerSlot from '../components/PlayerSlot.tsx';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import TeamPoints from '../components/TeamPoints.tsx';
-import { getSession } from '../api/tempAuthAPI.ts';
 import { useAuth } from '../contexts/authContext.ts';
 
 const FieldView = () => {
