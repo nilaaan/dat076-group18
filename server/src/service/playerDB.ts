@@ -41,7 +41,8 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-
+    // returns the top performers (players) in an array
+    // return undefined if the ratings are not found
     async getTopPerformers(round: number): Promise<Player[] | undefined> {
         const topPerformers = await RatingModel.findAll({
             where: { round: round, rating: { [Op.ne]: null } },
@@ -71,7 +72,8 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-
+    // returns the rating for the given player in the given round
+    // return undefined if the ratings are not found
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
         if (round < 1) {
             return null; 
@@ -92,7 +94,8 @@ export class PlayerDBService implements IPlayerService {
     }
     
 
-
+    // returns the availability of the given player in the given round
+    // return undefined if the availability was not found
     async getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> {
         if (round < 1) {
             return null; 
@@ -104,7 +107,7 @@ export class PlayerDBService implements IPlayerService {
         const rating = await this.getRoundRating(player_id, round);
 
         if (rating === undefined) {
-            console.error(`Rating not found for player: ${player_id} in round: ${round}`);
+            console.error(`Availability not found for player: ${player_id} in round: ${round}`);
             return undefined;
         }
 
@@ -115,6 +118,8 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
+    // returns the recent form of the given player in the given round
+    // return undefined if the round is out of bounds
     async getRecentForm(player_id: number, round: number): Promise<number | null | undefined> {
         if (round <= 1) {
             return null;
