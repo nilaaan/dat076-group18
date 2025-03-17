@@ -153,7 +153,9 @@ export function gamesessionRouter(gameSessionService: IGameSessionService): Rout
                 return;
             }
             const isUpdated = await gameSessionService.updateState(username);
-            console.log("UPDATED FOR : " + username);
+            if (isUpdated) {
+                console.log("UPDATED FOR : " + username);
+            }
             if (isUpdated === undefined){
                 res.status(404).send(`No game session found for user ${username}`);
                 return;

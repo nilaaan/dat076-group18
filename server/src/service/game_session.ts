@@ -18,7 +18,7 @@ export class GameSessionService implements IGameSessionService {
     // window where the user can form team/change players, the 2 last minutes is when 
     // the matches are being played and the user can't change players)
 
-    private test_round_time = 10;   // in minutes 
+    private test_round_time = 2;   // in minutes 
 
     private teamService: ITeamStateService | null = null;
     private userService: IUserService | null = null;
@@ -54,17 +54,21 @@ export class GameSessionService implements IGameSessionService {
             return undefined;
         }
 
-
         const game_sessions = await Game_sessionModel.findAll();
         const current_date = new Date();
         for (const game_session of game_sessions) {
-            const round1matchestime = this.getFirstRoundMatchesStart(game_session.start_date);
-            if (current_date.getTime() < round1matchestime.getTime()) {
-                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: 1 });
+            const game_session_round = await this.getGamesessionRound(game_session.id);
+            if (!game_session_round) {
+                console.error(`Game session with id ${game_session.id} does not exist`);
+                return undefined;
+            }
+            const current_round = Number(game_session_round);
+            if (current_round < 39) {
+                await User_games.create({ user_id: user_id, game_id: game_session.id, current_round: current_round });
                 return true; 
             }
         }
-        const newGameSession = await Game_sessionModel.create({ start_date: current_date });
+        const newGameSession = await Game_sessionModel.create({ start_date: current_date, current_round: 1 });
         await User_games.create({ user_id: user_id, game_id: newGameSession.id, current_round: 1 });
         return true;
     }
@@ -89,6 +93,7 @@ export class GameSessionService implements IGameSessionService {
 
     // updates the state of the user's game session
     async updateState(username: string): Promise<boolean | undefined> {
+        console.log("ABOUT TO UPDATE FOR " + username);
         const isGameSession = await this.isGameSession(username);
 
         if (!isGameSession) {
@@ -98,17 +103,21 @@ export class GameSessionService implements IGameSessionService {
         const isAfterMatches = await this.isAfterMatches(username);
 
         if (isAfterMatches) {
-            
             const current_round= await this.getCurrentRound(username);
-            console.log("REAL CURRENT ROUND FOR USER " + username + " IS " + current_round);
             let user_round = await this.getRound(username);
 
             if (!current_round || !user_round) {
                 console.error(`User ${username} does not have a game session`);
                 return undefined;
             }
-            
-            // updates state one round at a time until the user's gamesession round reaches the current round 
+
+            const isGameSessionRoundUpdated = await this.updateGamesessionRound(username, current_round);
+            if (!isGameSessionRoundUpdated) {
+                console.error(`Failed to update game session round for user ${username}`);
+                return undefined;
+            }
+
+            // updates state one round at a time until the user's gamesession round reaches the gamesession's current round 
             while (user_round < current_round) {
                 const isTeamPointsUpdated = await this.teamService?.updateTeamPoints(username, user_round);
                 if (!isTeamPointsUpdated) {
@@ -198,6 +207,41 @@ export class GameSessionService implements IGameSessionService {
         }
     };
 
+
+    async getGamesessionRound(game_id: number): Promise<number | undefined> {
+        const game_session = await Game_sessionModel.findOne({ where: { id: game_id } });
+        if (!game_session) {
+            console.error(`Game session with id ${game_id} does not exist`);
+            return undefined;
+        }
+        return game_session.current_round;
+    }
+
+    async setGamesessionRound(game_id: number, round: number): Promise<boolean | undefined> {
+        const game_session = await Game_sessionModel.findOne({ where: { id: game_id } });
+        if (!game_session) {
+            console.error(`Game session with id ${game_id} does not exist`);
+            return undefined;
+        }
+        await game_session.update({ current_round: round });
+        return true; 
+    }
+
+
+    async updateGamesessionRound(username: string, round: number): Promise<boolean | undefined> {
+        const game_session_id = await this.getGameSessionId(username);
+        if (!game_session_id) {
+            console.error(`User ${username} does not have a game session`);
+            return undefined;
+        }
+
+        const isGameSessionRoundUpdated = await this.setGamesessionRound(game_session_id, round);
+        if (!isGameSessionRoundUpdated) {
+            console.error(`Failed to update game session round for gamession with id ${game_session_id}`);
+            return undefined;
+        }
+        return true; 
+    }
 
 
     // if getRound is greater than current round in table then return true
@@ -289,13 +333,12 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
-
     // getMatchDate()
     // returns the date of the match in the current round (for matches will be player the 12/3 20.45.... )
     // assumes that current round is updated to its correct value
 
 
-    // returns the time difference between the current date and the given start date in minutes
+    // returns the time difference between the current date and the given start date in minutes REMOVE
     getTimeDifferenceFromStart(start_date: Date) {  // will probably change to hours when implementing real version
         const current_date = new Date();
         const difference_in_ms = current_date.getTime() - start_date.getTime();
@@ -304,8 +347,8 @@ export class GameSessionService implements IGameSessionService {
     }
 
 
-    getFirstRoundMatchesStart(start_date: Date) {    
-        const end_date = new Date(start_date.getTime() + 8 * 60 * 1000); // Add 8 minutes in milliseconds
+    getLastRoundMatchesStart(start_date: Date) {    
+        const end_date = new Date(start_date.getTime() + 38 * 8 * 60 * 1000); // Add 8 minutes in milliseconds
         return end_date;
     }
 
@@ -326,7 +369,8 @@ export class GameSessionService implements IGameSessionService {
             console.error(`User ${username} does not have a game session`);
             return undefined;
         }
-        return user_game.game_id;
+        const game_id = Number(user_game.game_id);
+        return game_id; 
     }
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLeaderboard, isGameSession } from "../api/gamesessionApi";
+import { getLeaderboard, isGameSession, getGamesessionUsernames, updateGameState } from "../api/gamesessionApi";
 import LeaderboardCard from '../components/LeaderboardCard';
 
 interface LeaderboardEntry {
@@ -23,7 +23,20 @@ const LeaderboardView: React.FC = () => {
                     return;
                 }
                 setGameSessionActive(gameSessionStatus);
+                
                 if (gameSessionStatus) {
+                    // Update game state for all users except the current user sequentially
+                    /*const usernames = await getGamesessionUsernames();
+                    if (typeof usernames === 'string') {
+                        console.error('Error getting game session usernames:', usernames);
+                    } else if (usernames) {
+                        for (const uname of usernames) {
+                            if (uname !== currentUser) {
+                                await updateGameState(uname);
+                            }
+                        }
+                        console.log("Game session state updated for all users except the current user");
+                    }*/
                     const leaderboardData = await getLeaderboard();
                     if (typeof leaderboardData === 'string') {
                         console.error('Error fetching leaderboard:', leaderboardData);
@@ -35,19 +48,18 @@ const LeaderboardView: React.FC = () => {
                             points
                         }));
                         setLeaderboard(formattedLeaderboard);
-                        setLoading(false);
                     }
-                } else {
-                    setLoading(false);
+
                 }
             } catch (error) {
                 console.error('Error checking game session or fetching leaderboard:', error);
+            } finally {
                 setLoading(false);
             }
         };
 
         checkGameSession();
-    }, []);
+    }, [currentUser]);
 
     if (loading) {
         return <div>Loading...</div>;

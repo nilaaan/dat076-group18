@@ -100,7 +100,12 @@ export class PlayerDBService implements IPlayerService {
             console.error(`Rating not found for player: ${player_id} in round: ${round}`);
             return undefined;
         }
-        return rating_row.rating;
+        if (rating_row.rating === null) {
+            return null;
+        }
+        else {
+            return parseFloat(rating_row.rating.toFixed(1));
+        }
     }
     
 
