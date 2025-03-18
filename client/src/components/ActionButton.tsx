@@ -25,7 +25,7 @@ function ActionButton({playerId, onAction, buttonText, successText, completed}: 
                     setSuccess(true);
                 }
             } catch (error) {
-                console.error('Could not complete action', error);
+                console.error(`Could not complete action ${error}`);
                 toast.error(`${error}`);
             } finally {
                 setLoading(false);

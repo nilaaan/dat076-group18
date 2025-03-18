@@ -1,51 +1,48 @@
-import { render, waitFor, fireEvent } from '@testing-library/react';
-import axios, { AxiosError } from 'axios';
+import { render, waitFor } from '@testing-library/react';
 import PlayerView from './PlayerView';
+import { getPlayers } from '../api/playerApi';
+import { Player } from '../Types';
 
-jest.mock('axios');
+jest.mock('../api/playerApi', () => {
+    getPlayers: jest.fn()
+});
+const mockGetPlayers = getPlayers as jest.Mock;
 
-const mockAxios = axios.get as jest.Mock;
+describe('PlayerView', () => {
+    test('Displays all player names', async () => {
+        const mockPlayers: Player[] = [
+            {
+                id: 0,
+                name: 'Player 0',
+                position: 'Forward',
+                number: 0,
+                club: 'Club 0',
+                price: 0,
+                available: true,
+                points: 0,
+                image: ''
+            },
+            {
+                id: 1,
+                name: 'Player 1',
+                position: 'Midfielder',
+                number: 1,
+                club: 'Club 1',
+                price: 0,
+                available: true,
+                points: 0,
+                image: ''
+            }
+        ];
 
-test('Displays ChoiceBox initially', async () => {
+        mockGetPlayers.mockResolvedValueOnce(mockPlayers);
+
+        const { getByText } = render(<PlayerView />);
     
-    const { getByText} = render(<PlayerView />);
-
-    await waitFor(() => {
-        expect(getByText(/Select a player/i)).toBeInTheDocument();
+        await waitFor(() => {          
+            expect(getByText(mockPlayers[0].name)).toBeInTheDocument();
+            expect(getByText(mockPlayers[1].name)).toBeInTheDocument();
+        });
     });
-});
+})
 
-test('Displays error message if player data cannot be loaded', async () => {
-    mockAxios.mockRejectedValueOnce(new AxiosError());
-    
-    const { getByRole, getByText } = render(<PlayerView />);
-
-    fireEvent.change(getByRole('combobox'), { target: { value: '1' } });
-
-    await waitFor(() => {
-        expect(getByText(/Error loading player/i)).toBeInTheDocument();
-    });
-});
-
-test('Displays player information when data is successfully loaded', async () => {
-    const mockPlayer = {
-        id: '1',
-        name: 'Mock Player',
-        price: 10,
-        position: 'Forward',
-        number: 9,
-        club: 'Mock Club',
-    };
-
-    mockAxios.mockResolvedValueOnce({ data: mockPlayer });
-
-    const { getByRole, getByText } = render(<PlayerView />);
-
-    fireEvent.change(getByRole('combobox'), { target: { value: '1' } });
-
-    await waitFor(() => {
-        expect(getByText(/Mock Player/i)).toBeInTheDocument();
-        expect(getByText(/Mock Club/i)).toBeInTheDocument();
-
-    });
-});
