@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { getTopPerformers, getRating } from "../api/playerApi";
 import { Player } from "../Types";
 import React, { useEffect, useState } from 'react';
@@ -41,9 +42,10 @@ const TopPerformers: React.FC<TopPerformersProps> = ({ round }) => {
                 });
 
                 setRatings(ratingsMap);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching top performers or ratings:', error);
+                toast.error('Could not fetch top performers');
+            } finally {
                 setLoading(false);
             }
         };

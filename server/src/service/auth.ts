@@ -1,12 +1,19 @@
 import { User } from "../model/user.interface";
 import bcrypt from "bcrypt";
 import { IUserService } from "./user.interface";
+import { UserModel } from "../db/user.db";
 
+
+// Takes care of all user related operations
+// Stores all users in memory
 export class AuthService implements IUserService {
 
    users: User[] = [];
    private currentId: number = 1;
 
+
+   // registers a new user with the given username and password
+   // returns the new user if successful, otherwise null
    async registerUser(username: string, password: string) : Promise <User | null> {
       // For the hashed password
       const salt = bcrypt.genSaltSync(10);
@@ -26,19 +33,16 @@ export class AuthService implements IUserService {
             points: 0
          }
       }
-      // TODO Database
       this.users.push(newUser);
 
       console.log(`Successfully registered user with name ${username}`)
       return (newUser);
    }
 
+   // finds a user with the given username and password
+   // returns the user if successful, otherwise null
    async findUser(username: string, password ?: string) : Promise <User | null> {
 
-      // maybe more secure to not tell wheter name or pass is wrong
-      // users.find((user) => user.username === username && bcrypt.compare(password, user.password))
-
-      // TODO Database
       const user = this.users.find(u => u.username === username);
 
       if (!user) {
@@ -60,4 +64,17 @@ export class AuthService implements IUserService {
       console.log(`Logged in as ${username}`);
       return user;
       };
+
+
+      getUser(username: string): Promise<UserModel | null> {
+         // not used before creating UserDB and therefore has no implementation
+         throw new Error("Method not implemented.");
+      }
+
+
+      getUserById(id: number): Promise<UserModel | null> {
+         // not used before creating UserDB and therefore has no implementation
+         throw new Error("Method not implemented.");
+      }
+   
 };

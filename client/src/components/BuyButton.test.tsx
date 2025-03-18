@@ -6,6 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { AuthProvider } from './AuthProvider';
 import { getSession } from '../api/tempAuthAPI';
 
+
 jest.mock('axios');
 jest.mock('../api/tempAuthAPI', () => ({
     getSession: jest.fn()
@@ -61,6 +62,8 @@ describe("BuyButton", () => {
     });
 
     test("displays error message if some unexcpected error occurred with the request", async () => {
+        const consoleSpy = jest.spyOn(console, 'error');
+
         mockAxios.mockRejectedValueOnce(new AxiosError());
 
         await act(async () => {
@@ -73,11 +76,13 @@ describe("BuyButton", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText("An unexpected error occurred")).toBeInTheDocument();
+            expect(consoleSpy).toHaveBeenCalledWith("Could not complete action Error: An unexpected error occurred");
         });
     });
 
     test("displays specific error message if player cannot be bought because of the current model state", async () => {
+        const consoleSpy = jest.spyOn(console, 'error');
+        
         mockAxios.mockResolvedValueOnce({ data: "Player unavailable, too expensive, already bought, or not found" });
 
         await act(async () => {
@@ -90,7 +95,7 @@ describe("BuyButton", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText("Player unavailable, too expensive, already bought, or not found")).toBeInTheDocument();
+            expect(consoleSpy).toHaveBeenCalledWith("Could not complete action Error: Player unavailable, too expensive, already bought, or not found");
         });
     }); 
 }); 

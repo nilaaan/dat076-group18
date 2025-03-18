@@ -35,7 +35,7 @@ test("if all players of the user's team are requested then all players should be
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -79,7 +79,7 @@ test("if a request to buy a player is made then the player should be added to th
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -131,7 +131,7 @@ test("if a request to sell a player is made then the player  should be removed f
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -174,7 +174,6 @@ test("if a request to buy/sell a player is made with a missing or invalid action
     expect(res3.statusCode).toEqual(400);
 }); 
 
-
 test("if a request to buy or sell a player is not possible because of the model state then an error should be retuernd", async () => {
     const res = await request.post("/team/5").send({action: "buy"});    // e.g. insufficient balance
     expect(res.statusCode).toEqual(404);
@@ -182,5 +181,7 @@ test("if a request to buy or sell a player is not possible because of the model 
     const res2 = await request.post("/team/5000").send({action: "sell"});   // e.g. player not in team
     expect(res2.statusCode).toEqual(404);
 });
+
+
 
 

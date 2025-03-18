@@ -17,16 +17,25 @@ Game_sessionModel.init(
             type: DataTypes.INTEGER,
             autoIncrement: true,        
             primaryKey: true,
+            validate: {
+                min: 0, // Ensures id is >= 0
+            }
         },
         start_date: {
             type: DataTypes.DATE,         
             allowNull: false,
         },
         current_round: {
-            type: DataTypes.INTEGER,        // constraint: value in (1-38)
+            type: DataTypes.INTEGER,
             allowNull: false,
+            validate: {
+                min: 1, // constraint: value in (1-39)
+                max: 39
+            }
         }
-    }, {
+    },
+    {
         sequelize: conn,
         modelName: 'game_session'
-});
+    }
+);

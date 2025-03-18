@@ -7,8 +7,6 @@ export class PointSystemService implements IPointSystemService {
     
     calculatePoints(rating: number | null) : number | undefined {
         if (rating === null) {
-            console.log("got heere");
-            console.log("rating is: " + rating);
             return 0;
         }
         if (rating < 0 || rating > 10) {

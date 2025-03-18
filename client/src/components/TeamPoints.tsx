@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getTeamPoints } from '../api/teamPlayersApi'; // Import the getTeamPoints method
+import toast from 'react-hot-toast';
 
 const TeamPoints: React.FC = () => {
     const [teamPoints, setTeamPoints] = useState<number | null>(null);
@@ -14,6 +15,7 @@ const TeamPoints: React.FC = () => {
                 setTeamPoints(points);
             } catch (error) {
                 console.error('Error fetching team points:', error);
+                toast.error('Error fetching teamp points')
             }
         };
 

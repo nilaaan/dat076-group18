@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Player } from '../Types.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCard from '../components/PlayerCard.tsx';
+import toast from 'react-hot-toast';
 
 /**
  * Data Flow:
@@ -19,8 +20,10 @@ const TeamView = () => {
     useEffect(() => {
         getTeamPlayers().then((data) => {
             setTeamPlayers(data);
-            setLoading(false);
-        }).catch(() => {
+        }).catch((error) => {
+            console.error('Could not get team', error);
+            toast.error('Could not get team')
+        }).finally(() => {
             setLoading(false);
         });
     }, []);

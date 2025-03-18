@@ -1,30 +1,15 @@
 import { Player } from '../model/player.interface';
 import { IPlayerService } from './player.interface';
 
-
+// Takes care of all player related operations
+// Stores all players in memory 
 export class PlayerService implements IPlayerService {
-
-
-    /*private players: Player[] = [];
-
-    constructor() {
-        this.loadPlayers();
-    }
-
-    private async loadPlayers() {
-        try {
-            this.players = await fetchAllLeaguePlayers(39, 2022); // 39 = Premier League
-            //console.log("Players loaded:", this.players);
-        } catch (error) {
-            console.error("Failed to fetch players:", error);
-        }
-    }*/
 
     private players: Player[] = [ 
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -33,7 +18,7 @@ export class PlayerService implements IPlayerService {
         {
             id: 2, 
             name: "Test player2",
-            position: "Forward",
+            position: "Attacker",
             number: 9,
             club: "Test Club",
             price: 10,
@@ -70,6 +55,9 @@ export class PlayerService implements IPlayerService {
 
     // returns a copy of a specific player 
     async getPlayer(id: number): Promise<Player | undefined> {
+        if (id < 0) {
+            throw new Error('Invalid id, must be positive integer');
+        }
         const player = this.players.find((player) => player.id === id);
         if (!player) {
             return undefined;
@@ -80,13 +68,19 @@ export class PlayerService implements IPlayerService {
     // returns a specific player by reference
     // returns undefined if no player with that id number exists
     getPlayerObject(id: number): Player | undefined {
+        if (id < 0) {
+            console.error('Invalid id, must be positive integer');
+            return undefined;
+        }
         return this.players.find((player) => player.id === id);
     }
+
 
     // returns a deep copy of all existing players 
     async getPlayers(): Promise<Player[]> {
         return JSON.parse(JSON.stringify(this.players));
     }
+
 
     getPlayerByIds(ids: number[]): Promise<Player[] | undefined> {
         // not used before creating playerDB and therefore has no implementation

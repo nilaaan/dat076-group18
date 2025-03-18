@@ -5,16 +5,9 @@ import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import { authRouter } from "./router/auth";
-import { AuthService } from "./service/auth";
-import { PlayerService } from "./service/player";
-import { TeamService } from "./service/team";
 import { UserDBService } from "./service/userDB";
 import { TeamDBService } from "./service/teamDB";
-import { PlayerModel } from "./db/player.db";
-import sequelize from "sequelize/types/sequelize";
-import { conn } from "./db/conn";
 import { PlayerDBService } from "./service/playerDB";
-import { ClubModel } from "./db/club.db";
 import { GameSessionService } from "./service/game_session";
 import { PointSystemService } from "./service/pointsystem";
 import { gamesessionRouter } from "./router/game_session";
@@ -49,6 +42,8 @@ userService.setTeamService(teamService);
 userService.setPlayerService(playerService);
 gamesessionService.setTeamService(teamService);
 gamesessionService.setUserService(userService);
+
+
 
 app.use("/player", playerRouter(playerService));
 app.use("/team", teamRouter(teamService));

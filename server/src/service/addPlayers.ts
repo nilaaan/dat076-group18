@@ -1,7 +1,7 @@
 import { PlayerModel } from "../db/player.db";
 import { RatingModel } from "../db/rating.db";
 
-const positions = ["goalkeeper", "defender", "midfielder", "attacker"];
+const positions = ["Goalkeeper", "Defender", "Midfielder", "Attacker"];
 const clubs = Array.from({ length: 20 }, (_, i) => `testClub${i + 1}`);
 
 const getRandomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];

@@ -5,6 +5,7 @@ import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import TeamPoints from '../components/TeamPoints.tsx';
 import { useAuth } from '../contexts/authContext.ts';
+import { toast } from 'react-hot-toast';
 
 
 const FieldView = () => {
@@ -20,9 +21,9 @@ const FieldView = () => {
     useEffect(() => {
         getTeamPlayers().then((data) => {
             setPlayers(data);
-            //setLoading(false);
-        }).catch(() => {
-            //setLoading(false);
+        }).catch((error) => {
+            console.error('Could not load team', error);
+            toast.error('Could not load team');
         });
     }, []);
 

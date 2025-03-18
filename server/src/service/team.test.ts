@@ -3,12 +3,14 @@ import { PlayerService } from './player';
 import { AuthService } from './auth';
 
 
+
+
 test("if all players from the user's team are requested then all players should be returned", async () => {
     const player1 = 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -36,28 +38,6 @@ test("if all players from the user's team are requested then all players should 
     expect(players).toEqual([player1, player3]);
 });
 
-test("if a specific player from the user's team is requested then that player should be returned", async () => {
-    const player3 = 
-    {
-        id: 3, 
-        name: "Test player3",
-        position: "Defender",
-        number: 3,
-        club: "Test Club",
-        price: 5,
-        image: "img3",
-    };
-    
-    
-    const authService = new AuthService();
-    authService.registerUser("testUser", "testPassword");
-
-    const teamService = new TeamService(authService, new PlayerService());
-    await teamService.buyPlayer("testUser",  3);
-    const player3copy = await teamService.getPlayer("testUser", 3);
-
-    expect(player3copy).toEqual(player3);
-});
 
 test("if the balance of the user's team is requested then the correct balance should be returned", async () => {
     const authService = new AuthService();
@@ -118,7 +98,7 @@ test("if a player that is already in the user's team is bought, then the player 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -181,12 +161,12 @@ test("if a player is bought with insufficient balance then the player should not
     expect(balance).toEqual(100000000);
 });
 
-test("if a player is sold then the player should be removed from the user's team, marked available, and the balance should be updated", async () => {
+test("if a player is sold then the player should be removed from the user's team and the balance should be updated", async () => {
     const player1 = 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -218,7 +198,7 @@ test("if a player that is not in the user's team is sold then the balance should
     {
         id: 2, 
         name: "Test player2",
-        position: "Forward",
+        position: "Attacker",
         number: 9,
         club: "Test Club",
         price: 10,

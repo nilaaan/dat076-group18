@@ -15,9 +15,12 @@ export class UserModel extends Model<InferAttributes<UserModel>, InferCreationAt
 UserModel.init(
     {
         id: {
-            type: DataTypes.INTEGER,        // constraint >= 0
+            type: DataTypes.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            validate: {
+                min: 0, // Ensure id is >= 0
+            },
         },
         username: {
             type: DataTypes.STRING,         
@@ -28,10 +31,12 @@ UserModel.init(
             type: DataTypes.STRING,
             allowNull: false
         }
-    }, {
+    },
+    {
         sequelize: conn,
         modelName: 'user'
-});
+    }
+);
 
 //UserModel.hasOne(TeamModel, { sourceKey: "id", foreignKey: "user_id", as: "team" });
 

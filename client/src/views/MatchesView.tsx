@@ -58,10 +58,11 @@ const MatchesView: React.FC = () => {
                         await updateGameState();
                     }
                 } else {
-                    console.error('Error checking game session:', response);
+                    throw new Error(`Response: ${response}`);
                 }
             } catch (error) {
                 console.error('Error checking game session:', error);
+                toast.error('Error checking game session');
             }
         };
 
@@ -71,17 +72,12 @@ const MatchesView: React.FC = () => {
     const handleStartFantasyLeague = async () => {
         try {
             const response = await startGameSession();
-            if (typeof response === 'boolean') {
-                if (response) {
-                    setIsGameSession(true);
-                    toast.success("Season has started");
-                    await updateGameState();
-                } else {
-                    console.error('Could not start fantasy league:'); 
-                }
-
+            if (response && (typeof response === 'boolean')) {
+                setIsGameSession(true);
+                toast.success("Season has started");
+                await updateGameState();
             } else {
-                console.error('Error starting fantasy league:', response);
+                throw new Error(`Response: ${response}`);
             }
         } catch (error) {
             toast.error("Error starting fantasy league");
@@ -118,7 +114,7 @@ const MatchesView: React.FC = () => {
                     <div className="preset-filled-surface-100-900 card p-6 flex flex-col items-center">
                         <h1 className="h1">Matches Starting at 8:45</h1>
                         <p>Round {userRound}</p>
-                        <Link to="/player">
+                        <Link to="/team">
                             <button className="btn preset-filled-success-600-400 py-6 px-12 mt-8">Build Your Team &gt;</button>
                         </Link>
                     </div>

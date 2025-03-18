@@ -42,7 +42,7 @@ export const addAllPlayers = async () => {
 };
 
 test("Retrieving the recent form of an available player", async () => {
-    
+        await addAllPlayers();
         await addAllRatings();
     
         const playerDBService = new PlayerDBService();
@@ -58,13 +58,11 @@ test("Retrieving the recent form of an available player", async () => {
 
 test("If a specific player is requested then it should be returned", async () => {
 
-    await addAllPlayers();
-
     const player1 = 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -88,7 +86,7 @@ test("All players should be returned", async () => {
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -97,7 +95,7 @@ test("All players should be returned", async () => {
         {
             id: 2, 
             name: "Test player2",
-            position: "Forward",
+            position: "Attacker",
             number: 9,
             club: "Test Club",
             price: 10,
@@ -143,7 +141,7 @@ test("All top performers should be returned", async () => {
     const expectedPlayers = [{
         id: 2, 
         name: "Test player2",
-        position: "Forward",
+        position: "Attacker",
         number: 9,
         club: "Test Club",
         price: 10,
@@ -163,6 +161,21 @@ test("No players available in round 2, so no top performers", async () => {
     expect(expectedPlayersCopy).toEqual(undefined);
 });
 
+test("Round id is out of bounds, so no top performers", async () => {
+
+    const playerDBService = new PlayerDBService();
+    try {
+        const expectedPlayersCopy = await playerDBService.getTopPerformers(39);
+        expect(expectedPlayersCopy).toEqual(undefined);
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            expect(e.message).toEqual("Round 39 is out of bounds, must be between 1 and 38");
+        } else {
+            throw e;
+        }
+    }
+});
 
 test("Get round rating for available player", async () => {
 

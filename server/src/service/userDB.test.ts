@@ -1,11 +1,21 @@
 import bcrypt from 'bcrypt';
 import { UserDBService } from "./userDB";
+import { PlayerDBService } from "./playerDB";
+import { TeamDBService } from "./teamDB";
+import { GameSessionService } from "./game_session";
+import { PointSystemService } from './pointsystem';
 
 
-test("if a user registers then a user should be created with the given username and password", async () => {
-
+    test("if a user registers then a user should be created with the given username and password", async () => {
     
     const userDBService = new UserDBService();
+    const playerService = new PlayerDBService();
+    const gameSessionService = new GameSessionService();
+    const pointSystemService = new PointSystemService();
+    const teamService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+    userDBService.setTeamService(teamService);
+    userDBService.setPlayerService(playerService);
+    
 
     const user = await userDBService.registerUser("testUser", "testPassword");
     console.log(user);
@@ -27,7 +37,18 @@ test("if a user registers then a user should be created with the given username 
 test("if a user registers with an already existing username then no user should be created", async () => {
 
     const userDBService = new UserDBService();
+    const playerService = new PlayerDBService();
+    const gameSessionService = new GameSessionService();
+    const pointSystemService = new PointSystemService();
+    const teamService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+    userDBService.setTeamService(teamService);
+    userDBService.setPlayerService(playerService);
+
+
+
     const expectedUser = await userDBService.findUser("testUser");
+
+    
 
     expect(expectedUser).toEqual({ id: 1, username: "testUser", password: expect.any(String), team: { players: [], balance: 100000000, points: 0 } });
 
@@ -41,8 +62,15 @@ test("if a user registers with an already existing username then no user should 
 }); 
 
 test("If a user logs in then the corresponding user object should be returned", async () => {
-
+  
     const userDBService = new UserDBService();
+    const playerService = new PlayerDBService();
+    const gameSessionService = new GameSessionService();
+    const pointSystemService = new PointSystemService();
+    const teamService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+    userDBService.setTeamService(teamService);
+    userDBService.setPlayerService(playerService);
+
     const user2 = await userDBService.registerUser("testUser2", "testPassword2");
     const expectedUser = await userDBService.findUser("testUser2");
     
@@ -52,8 +80,15 @@ test("If a user logs in then the corresponding user object should be returned", 
 
 
 test("if a user logs in with a non-existing username then no user should be returned", async () => {
-
+   
     const userDBService = new UserDBService();
+    const playerService = new PlayerDBService();
+    const gameSessionService = new GameSessionService();
+    const pointSystemService = new PointSystemService();
+    const teamService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+    userDBService.setTeamService(teamService);
+    userDBService.setPlayerService(playerService);
+
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const expectedUser = await userDBService.findUser("testUser3");
 
@@ -66,6 +101,13 @@ test("if a user logs in with a non-existing username then no user should be retu
 test("if a user logs in with a wrong password then no user should be returned", async () => {
 
     const userDBService = new UserDBService();
+    const playerService = new PlayerDBService();
+    const gameSessionService = new GameSessionService();
+    const pointSystemService = new PointSystemService();
+    const teamService = new TeamDBService(userDBService, playerService, pointSystemService, gameSessionService);
+    userDBService.setTeamService(teamService);
+    userDBService.setPlayerService(playerService);
+
     const expectedUser = await userDBService.findUser("testUser2");
     expect(expectedUser).not.toBeNull();
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});

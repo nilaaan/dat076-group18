@@ -8,13 +8,15 @@ import { Tabs } from '@skeletonlabs/skeleton-react';
 import { LayoutGrid, Rows2 } from 'lucide-react';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 import { useAuth } from '../contexts/authContext.ts';
+import toast from 'react-hot-toast';
 
 const PlayerView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
-    const [group, setGroup] = useState('grid');
     const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
     const { isAuthenticated } = useAuth();
+    // Tab group state for grid or list
+    const [group, setGroup] = useState('grid');
 
     useEffect(() => {
         const fetchPlayers = async () => {
@@ -25,37 +27,19 @@ const PlayerView = () => {
                     const teamPlayersData = await getTeamPlayers();
                     setTeamPlayers(teamPlayersData);
                 }
-            } catch {
-                //setError('Failed to fetch players');
-            } finally {
-                //setLoading(false);
+            } catch (error) {
+                console.error('Failed to fetch players', error)
+                toast.error('Failed to fetch players')
             }
         };
 
         fetchPlayers();
     }, [isAuthenticated]);
 
-    /*const handlePlayerClick = (player: Player | undefined) => {
-        setSelectedPlayer(player);
-    };*/
-
     //Closes the popup window
     const closePopup = () => {
         setSelectedPlayer(undefined); 
     };
-
-
-    /*function getPlayer(index: number): Player | undefined {
-        return players[index] || undefined;
-    }
-
-    function setPlayerAvailable(playerId: number, available: boolean) {
-        setPlayers((ps: Player[]) =>
-            ps.map((p) =>
-                p.id === playerId ? { ...p, available } : p
-            )
-        );
-    }*/
 
     const grid = (
         <div className="flex justify-center pb-20 overflow-hidden">
@@ -97,10 +81,10 @@ const PlayerView = () => {
         </div>
     );
 
-    const forwards = players.filter(player => player.position === "attacker");
-    const midfielders = players.filter(player => player.position === "midfielder");
-    const defenders = players.filter(player => player.position === "defender");
-    const goalkeepers = players.filter(player => player.position === "goalkeeper");
+    const forwards = players.filter(player => player.position === "Attacker");
+    const midfielders = players.filter(player => player.position === "Midfielder");
+    const defenders = players.filter(player => player.position === "Defender");
+    const goalkeepers = players.filter(player => player.position === "Goalkeeper");
 
     const isPlayerBought = (playerId: number) => {
         if (!isAuthenticated) {
@@ -221,7 +205,7 @@ const PlayerView = () => {
     );
 
     return (
-        <Tabs value={group} onValueChange={(e) => setGroup(e)}>
+        <Tabs value={group} onValueChange={(e: string) => setGroup(e)}>
             <Tabs.List justify="justify-center">
                 <Tabs.Control value="grid"><LayoutGrid /></Tabs.Control>
                 <Tabs.Control value="list"><Rows2 /></Tabs.Control>

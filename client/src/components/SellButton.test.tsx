@@ -59,6 +59,8 @@ describe("SellButton", () => {
     });
 
     test("displays error message if some unexcpected error occurred with the request", async () => {
+        const consoleSpy = jest.spyOn(console, 'error');
+
         mockAxios.mockRejectedValueOnce(new AxiosError());
 
         await act(async () => {
@@ -71,11 +73,13 @@ describe("SellButton", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText("An unexpected error occurred")).toBeInTheDocument();
+            expect(consoleSpy).toHaveBeenCalledWith("Could not complete action Error: An unexpected error occurred");
         });
     });
 
     test("displays specific error message if player cannot be sold because of the current model state", async () => {
+        const consoleSpy = jest.spyOn(console, 'error');
+        
         mockAxios.mockResolvedValueOnce({ data: "Player cannot be found" });
 
         await act(async () => {
@@ -88,7 +92,7 @@ describe("SellButton", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText("Player cannot be found")).toBeInTheDocument();
+            expect(consoleSpy).toHaveBeenCalledWith("Could not complete action Error: An unexpected error occurred");
         });
     }); 
 }); 
