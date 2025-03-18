@@ -10,7 +10,7 @@ import { LayoutGrid, Rows2 } from 'lucide-react';
 const StartPageTest = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
-
+    const [group, setGroup] = useState('grid');
 
 
     useEffect(() => {
@@ -204,9 +204,6 @@ const StartPageTest = () => {
             </table>
         </div>
     );
-
-
-    const [group, setGroup] = useState('grid');
 
     return (
         <Tabs value={group} onValueChange={(e) => setGroup(e)}>
