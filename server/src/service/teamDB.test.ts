@@ -122,7 +122,7 @@ test("if all players from a user's team are requested then all players should be
     expect(team).toEqual([{
         id: 1,
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -171,7 +171,7 @@ test("if a player is sold then the player should removed from the user's team an
     expect(players).toEqual([{
         id: 1,
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,

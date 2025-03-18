@@ -35,7 +35,7 @@ test("if all players of the user's team are requested then all players should be
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -79,7 +79,7 @@ test("if a request to buy a player is made then the player should be added to th
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -131,7 +131,7 @@ test("if a request to sell a player is made then the player  should be removed f
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,

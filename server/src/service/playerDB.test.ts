@@ -64,7 +64,7 @@ test("If a specific player is requested then it should be returned", async () =>
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -88,7 +88,7 @@ test("All players should be returned", async () => {
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -97,7 +97,7 @@ test("All players should be returned", async () => {
         {
             id: 2, 
             name: "Test player2",
-            position: "Forward",
+            position: "Attacker",
             number: 9,
             club: "Test Club",
             price: 10,
@@ -143,7 +143,7 @@ test("All top performers should be returned", async () => {
     const expectedPlayers = [{
         id: 2, 
         name: "Test player2",
-        position: "Forward",
+        position: "Attacker",
         number: 9,
         club: "Test Club",
         price: 10,

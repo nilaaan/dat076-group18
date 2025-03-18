@@ -10,7 +10,7 @@ test("if all players from the user's team are requested then all players should 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -98,7 +98,7 @@ test("if a player that is already in the user's team is bought, then the player 
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -166,7 +166,7 @@ test("if a player is sold then the player should be removed from the user's team
     {
         id: 1, 
         name: "Test player1",
-        position: "Forward",
+        position: "Attacker",
         number: 10,
         club: "Test Club",
         price: 10,
@@ -198,7 +198,7 @@ test("if a player that is not in the user's team is sold then the balance should
     {
         id: 2, 
         name: "Test player2",
-        position: "Forward",
+        position: "Attacker",
         number: 9,
         club: "Test Club",
         price: 10,

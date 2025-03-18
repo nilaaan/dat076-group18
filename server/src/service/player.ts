@@ -9,7 +9,7 @@ export class PlayerService implements IPlayerService {
         {
             id: 1, 
             name: "Test player1",
-            position: "Forward",
+            position: "Attacker",
             number: 10,
             club: "Test Club",
             price: 10,
@@ -18,7 +18,7 @@ export class PlayerService implements IPlayerService {
         {
             id: 2, 
             name: "Test player2",
-            position: "Forward",
+            position: "Attacker",
             number: 9,
             club: "Test Club",
             price: 10,
