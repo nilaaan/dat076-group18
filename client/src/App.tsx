@@ -45,11 +45,11 @@ function App() {
             </AppBar.ToolbarLead>
             <AppBar.ToolbarCenter classes="!grow-0">
               <div className="flex gap-4 h-full">
-                <NavLink to="/leaderboard">Leaderboard</NavLink>
                 <NavLink to="/team">Team</NavLink>
                 <NavLink to="/player">Explore Players</NavLink>
                 <NavLink to="/buy">Buy/Sell</NavLink>
                 <NavLink to="/matches">Matches</NavLink>
+                <NavLink to="/leaderboard">Leaderboard</NavLink>
               </div>
             </AppBar.ToolbarCenter>
             <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">

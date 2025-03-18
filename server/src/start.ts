@@ -40,11 +40,13 @@ app.use(cors({
 }));
 
 const gamesessionService = new GameSessionService();
-const userService = new UserDBService(gamesessionService);
+const userService = new UserDBService();
 const pointSystemService = new PointSystemService();
-const playerService = new PlayerDBService(gamesessionService);
+const playerService = new PlayerDBService();
 const teamService = new TeamDBService(userService, playerService, pointSystemService, gamesessionService);
 
+userService.setTeamService(teamService);
+userService.setPlayerService(playerService);
 gamesessionService.setTeamService(teamService);
 gamesessionService.setUserService(userService);
 

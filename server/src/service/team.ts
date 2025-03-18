@@ -5,6 +5,7 @@ import { AuthService } from './auth';
 import { User } from '../model/user.interface';
 import { IUserService } from './user.interface';
 import { ITeamService } from './team.interface';
+import { TeamModel } from '../db/team.db';
 
 
 export class TeamService implements ITeamService {
@@ -14,6 +15,15 @@ export class TeamService implements ITeamService {
     constructor(userService: IUserService, playerService: PlayerService) {
         this.userService = userService;
         this.playerService = playerService;
+    }
+
+    createTeam(user_id: number): Promise<TeamModel | undefined> {
+    // not used before creating teamDB and therefore has no implementation 
+        throw new Error('Method not implemented.');
+    }
+    getUserTeam(username: string): Promise<TeamModel | null> {
+    // not used before creating teamDB and therefore has no implementation 
+        throw new Error('Method not implemented.');
     }
 
     // returns the current balance of the user's team 

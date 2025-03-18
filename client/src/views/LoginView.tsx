@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
+import { updateGameState} from '../api/gamesessionApi';
 import { useAuth } from '../contexts/authContext';
 
 /**
@@ -25,6 +26,7 @@ const LoginView: React.FC = () => {
     try {
         if (!isAuthenticated) {
             await testLogin(tempUsername, password);
+            await updateGameState(tempUsername);
             sessionStorage.setItem('username', tempUsername);
             window.location.reload();
         }

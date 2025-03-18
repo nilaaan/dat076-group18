@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getLeaderboard, isGameSession } from "../api/gamesessionApi";
+import { getLeaderboard, isGameSession, getGamesessionUsernames, updateGameState } from "../api/gamesessionApi";
+import LeaderboardCard from '../components/LeaderboardCard';
 
 interface LeaderboardEntry {
     username: string;
@@ -20,7 +21,20 @@ const LeaderboardView: React.FC = () => {
                     throw new Error(`Error checking game session: ${gameSessionStatus}`);
                 }
                 setGameSessionActive(gameSessionStatus);
+                
                 if (gameSessionStatus) {
+                    // Update game state for all users except the current user sequentially
+                    /*const usernames = await getGamesessionUsernames();
+                    if (typeof usernames === 'string') {
+                        console.error('Error getting game session usernames:', usernames);
+                    } else if (usernames) {
+                        for (const uname of usernames) {
+                            if (uname !== currentUser) {
+                                await updateGameState(uname);
+                            }
+                        }
+                        console.log("Game session state updated for all users except the current user");
+                    }*/
                     const leaderboardData = await getLeaderboard();
                     if (typeof leaderboardData === 'string') {
                         throw new Error(`Error fetching leaderboard: ${leaderboardData}`);
@@ -46,7 +60,7 @@ const LeaderboardView: React.FC = () => {
         };
 
         checkGameSession();
-    }, []);
+    }, [currentUser]);
 
     if (loading) {
         return <div>Loading...</div>;

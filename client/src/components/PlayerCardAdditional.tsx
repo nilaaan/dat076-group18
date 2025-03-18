@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
 import { UserRound, Plus, Minus } from 'lucide-react';
-import { getPlayer } from '../api/playerApi.ts';
+import { getForm, getPlayer, getAvailability } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
-import { getAvailability, getForm } from '../api/playerApi.ts';
 import { isGameSession, getCurrentRound } from '../api/gamesessionApi.ts';
 import SellButton from './SellButton.tsx';
 import BuyButton from './BuyButton.tsx';

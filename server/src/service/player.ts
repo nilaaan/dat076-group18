@@ -4,6 +4,8 @@ import { IPlayerService } from './player.interface';
 
 
 export class PlayerService implements IPlayerService {
+
+
     /*private players: Player[] = [];
 
     constructor() {
@@ -87,25 +89,31 @@ export class PlayerService implements IPlayerService {
         return JSON.parse(JSON.stringify(this.players));
     }
 
+    getPlayerByIds(ids: number[]): Promise<Player[] | undefined> {
+        // not used before creating playerDB and therefore has no implementation
+        throw new Error('Method not implemented.');
+    }
+
+
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
         // not used before creating playerDB and therefore has no implementation 
-        return undefined;
+        throw new Error('Method not implemented.');
     }
 
 
     async getRoundAvailability(player_id: number, round: number): Promise<boolean | undefined> {
         // not used before creating playerDB and therefore has no implementation 
-        return undefined;
+        throw new Error('Method not implemented.');
     }
 
 
     async getRecentForm(player_id: number, round: number): Promise<number | null | undefined> {
         // not used before creating playerDB and therefore has no implementation 
-        return undefined;
+        throw new Error('Method not implemented.');
     }
 
     async getTopPerformers(round: number): Promise<Player[] | undefined> {
         // not used before creating playerDB and therefore has no implementation 
-        return undefined;
+        throw new Error('Method not implemented.');
     }
 }
