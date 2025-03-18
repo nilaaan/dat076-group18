@@ -46,11 +46,11 @@ function App() {
             </AppBar.ToolbarLead>
             <AppBar.ToolbarCenter classes="!grow-0">
               <div className="flex gap-4 h-full">
-                <NavLink to="/leaderboard">Leaderboard</NavLink>
                 <NavLink to="/team">Team</NavLink>
                 <NavLink to="/player">Explore Players</NavLink>
-                <NavLink to="/buy">Buy/Sell</NavLink>
+                 {/*<NavLink to="/buy">Buy/Sell</NavLink>*/}
                 <NavLink to="/matches">Matches</NavLink>
+                <NavLink to="/leaderboard">Leaderboard</NavLink>
               </div>
             </AppBar.ToolbarCenter>
             <AppBar.ToolbarTrail classes="flex items-center pl-20 pr-10">
@@ -71,7 +71,7 @@ function App() {
             <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
             <Route path="/player" element={<StartPageTest />}></Route>
             <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
-            <Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>
+            {/*<Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>}*/}
             <Route path="/login" element={<LoginView />}></Route>
             <Route path="/register" element={<RegisterView />}></Route>
             <Route path="/matches" element={<ProtectedComponent> <MatchesView /> </ProtectedComponent>}></Route>         

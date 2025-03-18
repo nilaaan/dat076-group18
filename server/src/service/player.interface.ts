@@ -9,6 +9,9 @@ export interface IPlayerService {
     // returns a deep copy of all existing players
     getPlayers() : Promise<Player[]>;
 
+    
+    getPlayerByIds(ids: number[]): Promise<Player[] | undefined>;
+
 
     getRoundRating(player_id: number, round: number): Promise<number | null | undefined>
 

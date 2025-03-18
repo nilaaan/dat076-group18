@@ -74,7 +74,7 @@ const TopPerformers: React.FC<TopPerformersProps> = ({ round }) => {
                     {
                         sortedPlayers.map((player, index) => (
                             <tr key={player.id}>
-                                <td className="!py-3">#{index + 1}</td>
+                                <td className="!py-3">{index + 1}</td>
                                 <td>{player.name}</td>
                                 <td>{player.club}</td>
                                 <td>{ratings[player.id] !== null ? ratings[player.id] : 'N/A'}</td>

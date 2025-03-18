@@ -7,6 +7,7 @@ const StartView = () => {
     <div
       className="relative h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${footballBG})` }} 
+      aria-label="Football background"
     >
       {/* Overlay for frosted glass effect */}
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>

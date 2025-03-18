@@ -8,38 +8,55 @@ import { PlayerModel } from "../db/player.db";
 import { get } from "http";
 import { Player } from "../model/player.interface";
 import { IGameSessionService } from "./game_session.interface";
+import { ITeamService } from "./team.interface";
+import { IPlayerService } from "./player.interface";
 
+// Handles the operations that have to do with the users
+// Handles the communication with the User database table
 export class UserDBService implements IUserService {
-    private gamesessionService; 
+      private teamService: ITeamService | null = null;
+      private playerService: IPlayerService | null = null;
 
-    constructor(gamesessionService: IGameSessionService) {
-        this.gamesessionService = gamesessionService;
+
+    setTeamService(teamService: ITeamService) {
+        this.teamService = teamService;
+    }
+    setPlayerService(playerService: IPlayerService) {
+        this.playerService = playerService; 
     }
 
-    async registerUser(username: string, password: string): Promise<User | null> {
 
-        const user = await this.getUser(username);          // later, when you have separated the db query methods (like getUser) to other classes, 
-        if (user) {                                         // just user this.findUser(username) instead 
+    // Registers a user with the given username and password 
+    // Returns the user if the registration was successful
+    // Returns null if the user already exists
+    async registerUser(username: string, password: string): Promise<User | null> {
+        
+        // check if the username is already taken 
+        const user = await this.getUser(username);          
+        if (user) {                                         
             console.error(`User ${username} already exists`);
             return null;
         }
 
+        // create password hash
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
+        // add the user to the User database table
         const newUser = await UserModel.create({
             username: username,
             password: hashedPassword
         });
 
-        const newTeam = await TeamModel.create({
-            user_id: newUser.id,
-            balance: 100000000,
-            points: 0,
-        });
+        // create a new team for the user and add it to the Team database table
+        const newTeam = await this.teamService?.createTeam(newUser.id);
+        if (!newTeam) {
+            console.error(`user id must be a positive integer`);
+            return null;
+        }
 
-        console.log(`Registered just now User with name ${username}`)
-        // Convert the instance to a plain object and return it
+        console.log(`Registered User with name ${username}`)
+
         return {
             id: newUser.id,
             username: newUser.username,
@@ -53,51 +70,44 @@ export class UserDBService implements IUserService {
     }
 
 
-    // returns the user with the given username if the user exists and the password is correct if specified
-    // returns null if the user does not exist or the password is incorrect
-
+    // Looks for the user with the given username and password 
+    // Returns the user with the given username if the user exists and the password is correct if specified
+    // Returns null if the user does not exist or the password is incorrect
     async findUser(username: string, password?: string): Promise<User | null> {
 
+        // check if user exists 
         const user = await this.getUser(username);
-
         if (!user) {
             console.error(`User ${username} does not exist`);
             return null;
         }
 
+        // check if the password is correct
         if (password && !await bcrypt.compare(password, user.password)) {
             console.error(`Wrong password`);
             return null;
         }
+        console.log(`User with name ${username} just logged in`) 
 
-        if (password) {     // means user just logged in 
-            const game_session_updated = await this.gamesessionService.updateState(username);
-            if (!game_session_updated) {
-                console.error(`Failed to update game session state for user ${username}`);
-                return null;
-            }
-        }
-
-        // Find the team for the user
-        const team = await this.getTeam(username);
-
+        // extract the user's team information
+        const team = await this.teamService?.getUserTeam(username);
         if (!team) {
             console.error(`Team for user ${username} does not exist`);
             return null;
         }
 
-        // Find the players associated with the user's team
-        const teamPlayers = await TeamPlayers.findAll({
-            where: { team_id: team.id },
-        });
+        const teamPlayers = await this.teamService?.getTeamPlayers(username)     
+        if (!teamPlayers) {
+            console.error(`Team players for user ${username} do not exist`);
+            return null;
+        }
 
-        // Extract the player IDs from the teamPlayers results
         const playerIds = teamPlayers.map(tp =>tp.player_id);
-
-        // Fetch the player details using the player IDs
-        const team_players = await PlayerModel.findAll({
-            where: { id: playerIds }
-        }); 
+        const team_players = await this.playerService?.getPlayerByIds(playerIds);
+        if (!team_players) {
+            console.error(`No players found with the given ids` + playerIds);
+            return null;
+        }
 
         let players: Player[] = [];
         
@@ -113,8 +123,7 @@ export class UserDBService implements IUserService {
             }));
         } 
 
-        console.log(`User with name ${username} logged in just now`) 
-
+        // add the team information to the user object and return the user 
         return {
             id: user.id,
             username: user.username,
@@ -127,28 +136,9 @@ export class UserDBService implements IUserService {
         } as User;
     }
 
-    // EXTRACT DB QUERIES TO A DB COMMUNICATOR OF SOME SORT
-    // returns the team row of the given user in the TeamModel database table 
-    // returns null if the user does not exist
-    async getTeam(username: string): Promise<TeamModel | null> {
-        const user = await this.getUser(username);
-
-        if (!user) {
-            console.error(`User ${username} does not exist`);
-            return null;
-        }
-
-        // Find the team for the user
-        const team = await TeamModel.findOne({
-            where: { user_id: user.id }
-        });
-
-        return team;
-    }
-
-
-    // returns the user row of the given user in the UserModel database table
-    // returns null if the user does not exist
+ 
+    // Returns the user row of the given user from the User database table
+    // Returns null if the user does not exist
     async getUser(username: string): Promise<UserModel | null> {
         const user = await UserModel.findOne({
             where: { username: username },
@@ -156,6 +146,26 @@ export class UserDBService implements IUserService {
 
         if (!user) {
             console.error(`User ${username} does not exist`);
+            return null;
+        }
+
+        return user;
+    }
+
+
+    // Returns the user row of the given user (by id) from the User database table
+    // Returns null if the user does not exist
+    async getUserById(id: number): Promise<UserModel | null> {
+        if (id < 0) {
+            console.error(`User id must be a positive integer`);
+            return null;
+        }
+        const user = await UserModel.findOne({
+            where: { id: id },
+        });
+
+        if (!user) {
+            console.error(`User with id ${id} does not exist`);
             return null;
         }
 

@@ -15,6 +15,8 @@ export interface IGameSessionService {
 
     getGameSessionId(username: string): Promise<number | undefined>
 
+    getGamesessionUsernames(username: string): Promise<string[] | undefined>
+
     getLeaderboard(username: string) : Promise<[string,  number][] | undefined>;
 
 }

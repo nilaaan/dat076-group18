@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Player } from '../Types.ts';
 import { UserRound, Plus, Minus } from 'lucide-react';
-import { getPlayer } from '../api/playerApi.ts';
+import { getForm, getPlayer, getAvailability } from '../api/playerApi.ts';
 import { getTeamPlayers } from '../api/teamPlayersApi';
-import { getAvailability, getForm } from '../api/playerApi.ts';
 import { isGameSession, getCurrentRound } from '../api/gamesessionApi.ts';
 import SellButton from './SellButton.tsx';
 import BuyButton from './BuyButton.tsx';
@@ -139,9 +138,8 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                     {player ? player.name : 'Buy player'}
                 </p>
                 <p>Position: {player.position}</p>
-                <p>Number: {player.number}</p>
                 <p>Club: {player.club}</p>
-                <p>Price: ${player.price}</p>
+                <p>Price: £{player.price}</p>
                 <div style={{ height: '2rem' }}></div> 
                 {gameSessionActive && (
                     <>

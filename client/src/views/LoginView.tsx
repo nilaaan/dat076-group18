@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
+import { updateGameState} from '../api/gamesessionApi';
 import { useAuth } from '../contexts/authContext';
 import { toast } from 'react-hot-toast';
 
@@ -24,11 +25,12 @@ const LoginView: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      if (!isAuthenticated) {
-        await testLogin(tempUsername, password);
-        sessionStorage.setItem('username', tempUsername);
-        window.location.reload();
-      }
+        if (!isAuthenticated) {
+            await testLogin(tempUsername, password);
+            await updateGameState(tempUsername);
+            sessionStorage.setItem('username', tempUsername);
+            window.location.reload();
+        }
     } catch (error) {
       toast.error("Error logging in");
       console.log("Error logging in:", error);

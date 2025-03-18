@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLeaderboard, isGameSession } from "../api/gamesessionApi";
+import { getLeaderboard, isGameSession, getGamesessionUsernames, updateGameState } from "../api/gamesessionApi";
 import { toast } from 'react-hot-toast';
 
 interface LeaderboardEntry {
@@ -12,6 +12,7 @@ const LeaderboardView: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [gameSessionActive, setGameSessionActive] = useState(false);
     const [currentUserIndex, setCurrentUserIndex] = useState<number>(-1);
+    const currentUsername = sessionStorage.getItem('username');
 
     useEffect(() => {
         const checkGameSession = async () => {
@@ -21,7 +22,20 @@ const LeaderboardView: React.FC = () => {
                     throw new Error(`Error checking game session: ${gameSessionStatus}`);
                 }
                 setGameSessionActive(gameSessionStatus);
+                
                 if (gameSessionStatus) {
+                    // Update game state for all users except the current user 
+                    const usernames = await getGamesessionUsernames();
+                    if (typeof usernames === 'string') {
+                        console.error('Error getting game session usernames:', usernames);
+                    } else if (usernames) {
+                        for (const uname of usernames) {
+                            if (uname !== currentUsername) {
+                                await updateGameState(uname);
+                            }
+                        }
+                        console.log("Game session state updated for all users except the current user");
+                    }
                     const leaderboardData = await getLeaderboard();
                     if (typeof leaderboardData === 'string') {
                         throw new Error(`Error fetching leaderboard: ${leaderboardData}`);
@@ -32,7 +46,6 @@ const LeaderboardView: React.FC = () => {
                         })).sort((a, b) => b.points - a.points);
                         setLeaderboard(formattedLeaderboard);
 
-                        const currentUsername = sessionStorage.getItem('username');
                         if (currentUsername) {
                             const currentUserIndex = formattedLeaderboard.findIndex(({ username }) => username === currentUsername);
                             setCurrentUserIndex(currentUserIndex);
@@ -71,7 +84,7 @@ const LeaderboardView: React.FC = () => {
                             className={index === currentUserIndex ? "preset-filled-primary-200-800 rounded-full" : "preset-filled-surface-200-800"}
                             key={index}
                         >
-                            <td className="!p-4">#{index + 1}</td>
+                            <td className="!p-4">{index + 1}</td>
                             <td className="!p-4">{entry.username}</td>
                             <td className="!p-4">{entry.points}</td>
                         </tr>

@@ -162,7 +162,6 @@ export function playerRouter(playerService: IPlayerService): Router {
         res: Response<Player[] | string >
     ) => {
         try {
-
             if (!req.params.round) {
                 res.status(400).send(`Missing round param`);
                 return;
@@ -184,8 +183,6 @@ export function playerRouter(playerService: IPlayerService): Router {
             res.status(500).send(e.message);
         }
     });
-
-
     
     return playerRouter;
 };

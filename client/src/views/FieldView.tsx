@@ -6,6 +6,7 @@ import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 import TeamPoints from '../components/TeamPoints.tsx';
 import { useAuth } from '../contexts/authContext.ts';
 
+
 const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);

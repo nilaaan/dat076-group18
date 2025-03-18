@@ -4,20 +4,20 @@ import { RatingModel } from '../db/rating.db';
 import { Player } from '../model/player.interface';  
 import { PlayerService } from './player';
 import { IPlayerService } from './player.interface';
-import { GameSessionService } from './game_session';
-import { IGameSessionService } from './game_session.interface';
 
+
+// Handles the operations that have to do with the players and their state 
+// Handles the communication with the Player and Rating database tables in the database
 export class PlayerDBService implements IPlayerService {
-    private gamesessionService;
 
-    constructor(gamesessionService : IGameSessionService) {
-        this.gamesessionService = gamesessionService;
-    }
-
-    // returns a copy of a specific player with the given id number as type Player
-    // returns undefined if there is no such player 
+    // Returns a copy of the player with the given id number as type Player
+    // Returns undefined if there is no such player 
     async getPlayer(player_id: number) : Promise<Player | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
 
+        // look in the player database table 
         const player = await PlayerModel.findOne({
             where: {id : player_id},
             attributes: { exclude: ['createdAt', 'updatedAt'] }
@@ -27,13 +27,13 @@ export class PlayerDBService implements IPlayerService {
             console.error(`Player not found: ${player_id}`);
             return undefined
         }
+
         return player.get({plain: true}) as Player;
     }
     
 
-    // returns a deep copy of all existing players as type Player
+    // Returns a deep copy of all existing players as type Player
     async getPlayers() : Promise<Player[]> {
-
         const players = await PlayerModel.findAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
@@ -41,9 +41,33 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    // returns the top performers (players) in an array
-    // return undefined if the ratings are not found
+    // Returns a deep copy of the players with the given ids as type Player
+    // Returns undefined if there are no players with the given ids
+    async getPlayerByIds(ids: number[]): Promise<Player[] | undefined> {
+        if (ids.length === 0) {
+            return [];
+        }
+        const players = await PlayerModel.findAll({
+            where: { id: ids },
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
+        });
+
+        if (players.length === 0) {
+            console.error(`No players found with the given ids: ${ids}`);
+            return undefined;
+        }
+        return players.map(player => player.get({ plain: true }) as Player);
+    }
+
+
+    // Returns the top 10 players with the highest rating from the given round
+    // Returns undefined if there the ratings could not be extracted
     async getTopPerformers(round: number): Promise<Player[] | undefined> {
+        if (round < 1 || round > 38) {
+            throw new Error(`Round ${round} is out of bounds, must be between 1 and 38`);
+        }
+
+        // get the top 10 highest ratings from the given round
         const topPerformers = await RatingModel.findAll({
             where: { round: round, rating: { [Op.ne]: null } },
             order: [['rating', 'DESC']],
@@ -54,7 +78,8 @@ export class PlayerDBService implements IPlayerService {
             console.error(`No ratings found for round: ${round}`);
             return undefined;
         }
-
+        
+        // get the players corresponding to the top 10 ratings
         const playerIds = topPerformers.map(rating_row => rating_row.player_id);
         const players = await PlayerModel.findAll({
             where: { id: playerIds },
@@ -65,21 +90,21 @@ export class PlayerDBService implements IPlayerService {
             console.error(`No players found with the given ids: ${playerIds}`);
             return undefined;
         }
-
+        
         const top_perfomers : Player[] = players.map(player => player.get({ plain: true }) as Player); 
 
         return top_perfomers;
     }
 
 
-    // returns the rating for the given player in the given round
-    // return undefined if the ratings are not found
+    // Returns the rating of the given player from the given round
+    // Returns undefined if the rating could not be extracted 
     async getRoundRating(player_id: number, round: number): Promise<number | null | undefined> {
-        if (round < 1) {
-            return null; 
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 38) {
-            console.error(`Round ${round} is out of bounds`);
+        if (round < 1 || round > 38) {
+            console.error(`Round ${round} is out of bounds, must be between 1 and 38`);
             return undefined;
         }
 
@@ -90,19 +115,24 @@ export class PlayerDBService implements IPlayerService {
             console.error(`Rating not found for player: ${player_id} in round: ${round}`);
             return undefined;
         }
-        return rating_row.rating;
-    }
-    
-
-    // returns the availability of the given player in the given round
-    // return undefined if the availability was not found
-    async getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> {
-        if (round < 1) {
-            return null; 
+        if (rating_row.rating === null) {
+            return null;
         }
-        if (round > 38) {
-            console.error(`Round ${round} is out of bounds`);
-            return undefined;
+        else {
+            return parseFloat(rating_row.rating.toFixed(1));
+        }
+    }
+        
+
+    // Returns true if the given player will play in the given round
+    // Returns false if the given player will not play in the given round
+    // Returns undefined if the availability could not be extracted
+    async getRoundAvailability(player_id: number, round: number): Promise<boolean | null | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
+        if (round < 1 || round > 38) {
+            throw new Error(`Round ${round} is out of bounds, must be between 1 and 38`);
         }
         const rating = await this.getRoundRating(player_id, round);
 
@@ -118,15 +148,15 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    // returns the recent form of the given player in the given round
-    // return undefined if the round is out of bounds
+    // Returns the recent form of the given player as the average rating of the last 4 played games
+    // Returns null if there are no available ratings in the season so far
+    // Returns undefined if the recent form could not be extracted
     async getRecentForm(player_id: number, round: number): Promise<number | null | undefined> {
-        if (round <= 1) {
-            return null;
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 39) {
-            console.error(`Round ${round} is out of bounds`);
-            return undefined;
+        if (round < 2 || round > 39) {
+            throw new Error(`Round ${round} is out of bounds, must be between 2 and 39`);
         }
 
         const recent_form = await this.calculateRecentForm(player_id, round);
@@ -134,8 +164,14 @@ export class PlayerDBService implements IPlayerService {
     }
 
 
-    // returns the average rating of the last 4 played games pf the given player as recent form
+    // Returns the average rating of the last 4 played games for the given player as recent form
+    // If the player has played less than 4 games in the season so far, the average of the available ratings is returned
+    // Returns null if there are no available ratings 
+    // Returns undefined if the recent form could not be calculated
     async calculateRecentForm(player_id: number, round: number): Promise <number | null | undefined> {
+        if (player_id < 0) {
+            throw new Error(`Player id must be a positive integer`);
+        }
         const ratings = await RatingModel.findAll({
             where: {
                 player_id: player_id,

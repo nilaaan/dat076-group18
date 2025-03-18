@@ -44,9 +44,18 @@ export const getLeaderboard = async(): Promise<[string, number][] | string> => {
 };
 
 
-export const updateGameState = async(): Promise<string> => {
+export const getGamesessionUsernames = async(): Promise<string[] | string> => {
+    const res = await axios.get<string[] | string>('http://localhost:8080/gamesession/usernames');
+    return res.data;
+}
+
+
+export const updateGameState = async(username?: string): Promise<string> => {
     try {
-        const res = await axios.patch<string>(`http://localhost:8080/gamesession/state`);
+        const url = username
+        ? `http://localhost:8080/gamesession/${username}/state`
+        : `http://localhost:8080/gamesession/state`;
+        const res = await axios.patch<string>(url);
         return res.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
