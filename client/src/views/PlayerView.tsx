@@ -7,20 +7,24 @@ import BuyButton from '../components/BuyButton.tsx';
 import { Tabs } from '@skeletonlabs/skeleton-react';
 import { LayoutGrid, Rows2 } from 'lucide-react';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
+import { useAuth } from '../contexts/authContext.ts';
 
 const PlayerView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
     const [group, setGroup] = useState('grid');
     const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
-         const fetchPlayers = async () => {
+        const fetchPlayers = async () => {
             try {
                 const playersData = await getPlayers();
                 setPlayers(playersData);
-                const teamPlayersData = await getTeamPlayers();
-                setTeamPlayers(teamPlayersData);
+                if (isAuthenticated) {
+                    const teamPlayersData = await getTeamPlayers();
+                    setTeamPlayers(teamPlayersData);
+                }
             } catch {
                 //setError('Failed to fetch players');
             } finally {
@@ -29,7 +33,7 @@ const PlayerView = () => {
         };
 
         fetchPlayers();
-    }, []);
+    }, [isAuthenticated]);
 
     /*const handlePlayerClick = (player: Player | undefined) => {
         setSelectedPlayer(player);
@@ -99,6 +103,9 @@ const PlayerView = () => {
     const goalkeepers = players.filter(player => player.position === "goalkeeper");
 
     const isPlayerBought = (playerId: number) => {
+        if (!isAuthenticated) {
+            return false;
+        }
         return teamPlayers.some(player => player.id === playerId);
     };
 
