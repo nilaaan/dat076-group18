@@ -138,9 +138,8 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
                     {player ? player.name : 'Buy player'}
                 </p>
                 <p>Position: {player.position}</p>
-                <p>Number: {player.number}</p>
                 <p>Club: {player.club}</p>
-                <p>Price: ${player.price}</p>
+                <p>Price: £{player.price}</p>
                 <div style={{ height: '2rem' }}></div> 
                 {gameSessionActive && (
                     <>

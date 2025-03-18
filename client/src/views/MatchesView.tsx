@@ -71,7 +71,7 @@ const MatchesView: React.FC = () => {
                     setIsGameSession(true);
                     await updateGameState();
                 } else {
-                    console.error('Could not start fantasy league:'); // impossible to get here since only possible boolean response value is true
+                    console.error('Could not start fantasy league:'); 
                 }
 
             } else {
@@ -94,7 +94,7 @@ const MatchesView: React.FC = () => {
                     </div>
                 ) : isGameSessionFinished ? (
                     <div className="preset-filled-surface-100-900 card p-6 flex flex-col items-center">
-                        <h1 className="h1">The season has ended!</h1>
+                        <h1 className="h1">The Season has Ended!</h1>
                         <Link to="/leaderboard">
                             <button className="btn preset-filled-primary-500 py-6 px-12">Final Ranking &gt;</button>
                         </Link>
@@ -111,7 +111,7 @@ const MatchesView: React.FC = () => {
                     <div className="preset-filled-surface-100-900 card p-6 flex flex-col items-center">
                         <h1 className="h1">Matches Starting at 8:45</h1>
                         <p>Round {userRound}</p>
-                        <Link to="/leaderboard">
+                        <Link to="/player">
                             <button className="btn preset-filled-success-600-400 py-6 px-12 mt-8">Build Your Team &gt;</button>
                         </Link>
                     </div>

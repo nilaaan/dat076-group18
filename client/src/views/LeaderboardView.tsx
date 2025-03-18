@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { getLeaderboard, isGameSession, getGamesessionUsernames, updateGameState } from "../api/gamesessionApi";
-import LeaderboardCard from '../components/LeaderboardCard';
 
 interface LeaderboardEntry {
     username: string;
@@ -12,6 +11,7 @@ const LeaderboardView: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [gameSessionActive, setGameSessionActive] = useState(false);
     const [currentUserIndex, setCurrentUserIndex] = useState<number>(-1);
+    const currentUsername = sessionStorage.getItem('username');
 
     useEffect(() => {
         const checkGameSession = async () => {
@@ -23,18 +23,18 @@ const LeaderboardView: React.FC = () => {
                 setGameSessionActive(gameSessionStatus);
                 
                 if (gameSessionStatus) {
-                    // Update game state for all users except the current user sequentially
-                    /*const usernames = await getGamesessionUsernames();
+                    // Update game state for all users except the current user 
+                    const usernames = await getGamesessionUsernames();
                     if (typeof usernames === 'string') {
                         console.error('Error getting game session usernames:', usernames);
                     } else if (usernames) {
                         for (const uname of usernames) {
-                            if (uname !== currentUser) {
+                            if (uname !== currentUsername) {
                                 await updateGameState(uname);
                             }
                         }
                         console.log("Game session state updated for all users except the current user");
-                    }*/
+                    }
                     const leaderboardData = await getLeaderboard();
                     if (typeof leaderboardData === 'string') {
                         throw new Error(`Error fetching leaderboard: ${leaderboardData}`);
@@ -45,7 +45,6 @@ const LeaderboardView: React.FC = () => {
                         })).sort((a, b) => b.points - a.points);
                         setLeaderboard(formattedLeaderboard);
 
-                        const currentUsername = sessionStorage.getItem('username');
                         if (currentUsername) {
                             const currentUserIndex = formattedLeaderboard.findIndex(({ username }) => username === currentUsername);
                             setCurrentUserIndex(currentUserIndex);
@@ -60,7 +59,7 @@ const LeaderboardView: React.FC = () => {
         };
 
         checkGameSession();
-    }, [currentUser]);
+    }, []);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -83,7 +82,7 @@ const LeaderboardView: React.FC = () => {
                             className={index === currentUserIndex ? "preset-filled-primary-200-800 rounded-full" : "preset-filled-surface-200-800"}
                             key={index}
                         >
-                            <td className="!p-4">#{index + 1}</td>
+                            <td className="!p-4">{index + 1}</td>
                             <td className="!p-4">{entry.username}</td>
                             <td className="!p-4">{entry.points}</td>
                         </tr>

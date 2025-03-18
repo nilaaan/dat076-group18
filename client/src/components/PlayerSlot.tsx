@@ -98,7 +98,7 @@ function PlayerSlot({ initialPlayer, onInfoClick }: PlayerSlotProps) {
             { player ? (
                 content
             ) : (
-                <a href="/buy">{content}</a>
+                <a href="/player">{content}</a>
             )}
         </div>
     );
