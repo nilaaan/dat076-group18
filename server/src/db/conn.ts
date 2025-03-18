@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "test") {
         logging: false,
     });
 } else { 
-    const conn_string = process.env.CONN_STRING;
+    const conn_string = process.env.CONNECTION_STRING;
     if(conn_string){
         conn = new Sequelize(conn_string);
     }
