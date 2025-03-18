@@ -6,22 +6,32 @@ import SellButton from '../components/SellButton.tsx';
 import BuyButton from '../components/BuyButton.tsx';
 import { Tabs } from '@skeletonlabs/skeleton-react';
 import { LayoutGrid, Rows2 } from 'lucide-react';
+import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 
 const StartPageTest = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
     const [group, setGroup] = useState('grid');
+    const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
 
 
     useEffect(() => {
-        getPlayers().then((data) => {
-            setPlayers(data);
-            //setLoading(false);
-        }).catch(() => {
-            //setLoading(false);
-        });
-    }, []);
+         const fetchPlayers = async () => {
+            try {
+                const playersData = await getPlayers();
+                setPlayers(playersData);
 
+                const teamPlayersData = await getTeamPlayers();
+                setTeamPlayers(teamPlayersData);
+            } catch {
+                //setError('Failed to fetch players');
+            } finally {
+                //setLoading(false);
+            }
+        };
+
+        fetchPlayers();
+    }, []);
 
     /*const handlePlayerClick = (player: Player | undefined) => {
         setSelectedPlayer(player);
@@ -91,11 +101,11 @@ const StartPageTest = () => {
     const goalkeepers = players.filter(player => player.position === "goalkeeper");
 
     const isPlayerBought = (playerId: number) => {
-        return players.some(player => player.id === playerId);
+        return teamPlayers.some(player => player.id === playerId);
     };
 
     const list = (
-        <div className="flex flex-col items-center pb-32">
+        <div className="flex flex-col items-center pb-80">
             <table className="table lg:w-3/4">
                 <thead className="preset-filled-surface-300-700 sticky top-0 !text-white">
                     <tr>
