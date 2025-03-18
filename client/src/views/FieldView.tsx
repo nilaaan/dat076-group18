@@ -11,10 +11,12 @@ const FieldView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
 
+    // The number of players in each position (visually: each row)
     const numDefenders = 3;
     const numMidfielders = 4;
     const numAttackers = 3;
 
+    // Fetch all players in the user's team when component mounts
     useEffect(() => {
         getTeamPlayers().then((data) => {
             setPlayers(data);
@@ -24,7 +26,7 @@ const FieldView = () => {
         });
     }, []);
 
-
+    // Set the clicked player to show in the popup
     const handlePlayerClick = (player: Player | undefined) => {
         setSelectedPlayer(player);
     };
@@ -52,17 +54,22 @@ const FieldView = () => {
         setPlayers(testPlayers);
     }, []);*/
 
+    // Get player by index, or undefined if not set
     function getPlayer(index: number): Player | undefined {
         return players[index] || undefined;
     }
 
     return (
         <div className="flex items-center pb-20 overflow-hidden flex-col">
+            {/*Header with user's name and their team's current points*/}
             <div className="pb-5 p-10 flex items-end justify-around w-full">
                 <h1 className="h1">{useAuth().username}'s team</h1>
                 <h3 className="h3"><TeamPoints /> Points</h3>
             </div>
+
+            {/*Field*/}
             <div className="relative w-full">
+                {/*Grass pattern*/}
                 <svg xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 1000" className="absolute">
                     <defs>
                         <pattern id="grassPattern" patternUnits="userSpaceOnUse" width="200" height="50">
