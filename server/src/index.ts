@@ -37,22 +37,35 @@ app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
 
+
+
 dotenv.config({ path: './src/.env' });
 
-if (!process.env.MOCK_PLAYERS) {
-  console.log("Could not find MOCK_PLAYERS in .env file");
-  process.exit();
+SyncAndInsertDB();
+
+async function SyncAndInsertDB() {
+    await initDB(); 
+
+    if (!process.env.MOCK_PLAYERS) {
+        console.log("Could not find MOCK_PLAYERS in .env file");
+        process.exit();
+    }
+    
+    const MOCK_PLAYERS = process.env.MOCK_PLAYERS;
+    
+    if (MOCK_PLAYERS === "true") {
+        fetchMockupPlayers();
+    } else {
+        fetchPlayersAndInsertToDB();
+    }
+      
 }
 
-const MOCK_PLAYERS = process.env.MOCK_PLAYERS;
 
-if (MOCK_PLAYERS === "true") {
-    fetchMockupPlayers();
-} else {
-    fetchPlayersAndInsertToDB();
-}
 
-initDB(); 
+
+// 'SELECT "id", "name", "position", "number", "club", "price", "image", "createdAt", "updatedAt" FROM "players" AS "player" WHERE "player"."id" = 1;',
+
 //deleteAllEntries(); 
 //fetchPlayersAndInsertToDB();
 

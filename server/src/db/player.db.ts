@@ -21,32 +21,42 @@ PlayerModel.init(
         },
         name: {
             type: DataTypes.STRING,         
-            allowNull: false,
-            unique: true
-        },
-        position: {
-            type: DataTypes.STRING,         // constraint must be in (goalkeeper, defender, midfielder, forward)
             allowNull: false
         },
+        position: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                // Must be either Goalkeeper, Defender, Midfielder or Forward
+                isIn: [[ 'Attacker', 'Midfielder', 'Defender', 'Goalkeeper' ]]
+            }
+        },
         number: {
-            type: DataTypes.INTEGER,        // constraint > 0
-            allowNull: false 
+            type: DataTypes.INTEGER,
+            allowNull: false, 
+            validate: {
+                min: 0, // Ensures number is >= 0
+            }
         },
         club: {
-            type: DataTypes.STRING,         // foreign key
+            type: DataTypes.STRING,         
             allowNull: false,
         },
         price: {
-            type: DataTypes.INTEGER,        // constraint >= 0
-            allowNull: false
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                min: 0, // Ensures price is >= 0
+            }
         },
         image: {
-            type: DataTypes.STRING,         // constraint must be a valid URL (if can with regex or smth)  
+            type: DataTypes.STRING,         
             allowNull: false,
             defaultValue: 'default_image.png'   // add some generic player image (??)
         }        
-
-    }, {
+    },
+    {
         sequelize: conn,
         modelName: 'player'
-});
+    }
+);

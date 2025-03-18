@@ -15,15 +15,19 @@ ClubModel.init(
         id: {
             type: DataTypes.INTEGER,        // constraint >= 0
             primaryKey: true,
+            validate: {
+                min: 0, // Ensures id is >= 0
+            }
         },
         name: {
             type: DataTypes.STRING,         
-            allowNull: false,
-            unique: true,
+            allowNull: false
         }
-    }, {
+    },
+    {
         sequelize: conn,
         modelName: 'club'
-});
+    }
+);
 
 //ClubModel.hasMany(PlayerModel, { sourceKey: "name", foreignKey: "club", as: "players" });

@@ -20,6 +20,6 @@ if (process.env.NODE_ENV === "test") {
 }
 
 export async function initDB() {
-    await conn.sync({ alter: true });
+    await conn.sync({ alter: true }).then(() => { console.log('SYNCEDSYNCEDSYNCED') });
 }; 
 

@@ -13,20 +13,26 @@ export class TeamPlayers extends Model<InferAttributes<TeamPlayers>, InferCreati
 TeamPlayers.init(
     {
         team_id: {
-            type: DataTypes.INTEGER,        // constraint >= 0
+            type: DataTypes.INTEGER,
             primaryKey: true,
-            /*references: {
+            references: {
                 model: TeamModel,
                 key: 'id'
-            }*/
+            },
+            validate: {
+                min: 0, // Ensures id is >= 0
+            },
         },
         player_id: {
             type: DataTypes.INTEGER,         
             primaryKey: true,
-            /*references: {
+            references: {
                 model: PlayerModel,
                 key: 'id'
-            }*/
+            },
+            validate: {
+                min: 0, // Ensures id is >= 0
+            },
         }
     }, {
         sequelize: conn,

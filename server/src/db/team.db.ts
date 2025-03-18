@@ -4,9 +4,9 @@ import { UserModel } from './user.db';
 
 export class TeamModel extends Model<InferAttributes<TeamModel>, InferCreationAttributes<TeamModel>> {
     declare id: CreationOptional<number>;
-    declare user_id: number; 
+    declare user_id: number;
     declare balance: number;
-    declare points: number; 
+    declare points: number;
 }
 
 
@@ -15,23 +15,32 @@ TeamModel.init(
         id: {
             type: DataTypes.INTEGER,        // constraint >= 0
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            validate: {
+                min: 0, // Ensures id is >= 0
+            },
         },
         user_id: {
-            type: DataTypes.INTEGER,         
+            type: DataTypes.INTEGER,
             allowNull: false,
-            /*references: {
+            references: {
                 model: UserModel,
                 key: 'id'
-            }*/
+            }
         },
         balance: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                min: 0, // Ensures balance is >= 0
+            },
         },
         points: {
             type: DataTypes.FLOAT,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                min: 0, // Ensures points is >= 0
+            },
         }
     }, {
         sequelize: conn,

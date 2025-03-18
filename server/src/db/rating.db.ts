@@ -13,16 +13,31 @@ export class RatingModel extends Model<InferAttributes<RatingModel>, InferCreati
 RatingModel.init(
     {
         player_id: {
-            type: DataTypes.INTEGER,        // constraint >= 0 and references id in playerModel
+            type: DataTypes.INTEGER,
             primaryKey: true,
+            validate: {
+                min: 0, // Ensures id is >= 0
+            },
+            references: {
+                model: PlayerModel, // References PlayerModel
+                key: 'id', // PlayerModel's primary key
+            },
         },
         round: {
-            type: DataTypes.INTEGER,       // constraint has to be in (1-38)
+            type: DataTypes.INTEGER,       
             primaryKey: true,
+            validate: {
+                min: 1, // Ensures 1 <= round <= 38 
+                max: 38
+            },
         },
         rating: {
-            type: DataTypes.FLOAT,       // constraint >= 0 
-            allowNull: true
+            type: DataTypes.FLOAT,
+            allowNull: true,
+            validate: {
+                min: 0, // Ensures rating is between 0 and 10
+                max: 10
+            },
         }
     }, {
         sequelize: conn,
