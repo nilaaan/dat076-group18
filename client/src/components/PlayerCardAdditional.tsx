@@ -69,18 +69,21 @@ function PlayerCardAdditional({ id, onClose, fieldCase }: PlayerCardAdditionalPr
     
                     if (gameSessionStatus) {
                         const round = await getCurrentRound();
+                        console.log("This is the round" + round);
                         if (typeof round === 'string') {
                             console.error('Error fetching current round:', currentRound);
                             return;
                         }
                         setCurrentRound(round);
 
-                        const recentFormRating = await getForm(id, round);
-                        if (typeof recentFormRating === 'string') {
-                            console.error('Error fetching recent form rating:', recentFormRating);
-                            return;
+                        if (round >= 2) {
+                            const recentFormRating = await getForm(id, round);
+                            if (typeof recentFormRating === 'string') {
+                                console.error('Error fetching recent form rating:', recentFormRating);
+                                return;
+                            }
+                            setRecentForm(recentFormRating);
                         }
-                        setRecentForm(recentFormRating);
 
                         if (round < 39) {
                             const availability = await getAvailability(id, round);

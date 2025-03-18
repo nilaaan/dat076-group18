@@ -3,6 +3,14 @@ import { GameSessionService } from "./game_session";
 import { UserDBService } from "./userDB"; 
 
 
+// startgamesession (use case)
+// isgamesession
+// isMatchInProgress (use case)
+// isfinished (use case)
+// getRound (use case)
+// updateState 
+
+
 test("isGame before startGame", async () => {
 
     const gameSessionService = new GameSessionService();

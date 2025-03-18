@@ -168,7 +168,7 @@ export class PlayerDBService implements IPlayerService {
     // If the player has played less than 4 games in the season so far, the average of the available ratings is returned
     // Returns null if there are no available ratings 
     // Returns undefined if the recent form could not be calculated
-    async calculateRecentForm(player_id: number, round: number): Promise <number | null | undefined> {
+    private async calculateRecentForm(player_id: number, round: number): Promise <number | null | undefined> {
         if (player_id < 0) {
             throw new Error(`Player id must be a positive integer`);
         }

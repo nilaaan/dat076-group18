@@ -6,6 +6,13 @@ import { PointSystemService } from "./pointsystem";
 import { TeamDBService } from "./teamDB";
 import { UserDBService } from "./userDB";
 
+
+// get players (use case)
+// get balance (use case)
+// get points (use case)
+// buy and sell (use case)
+// update team points
+
 export const addAllPlayers = async () => {
     const playerService = new PlayerService();
     const players = await playerService.getPlayers();

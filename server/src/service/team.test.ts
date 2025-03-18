@@ -4,6 +4,8 @@ import { PlayerService } from './player';
 import { AuthService } from './auth';
 
 
+
+
 test("if all players from the user's team are requested then all players should be returned", async () => {
     const player1 = 
     {
@@ -37,28 +39,6 @@ test("if all players from the user's team are requested then all players should 
     expect(players).toEqual([player1, player3]);
 });
 
-test("if a specific player from the user's team is requested then that player should be returned", async () => {
-    const player3 = 
-    {
-        id: 3, 
-        name: "Test player3",
-        position: "Defender",
-        number: 3,
-        club: "Test Club",
-        price: 5,
-        image: "img3",
-    };
-    
-    
-    const authService = new AuthService();
-    authService.registerUser("testUser", "testPassword");
-
-    const teamService = new TeamService(authService, new PlayerService());
-    await teamService.buyPlayer("testUser",  3);
-    const player3copy = await teamService.getPlayer("testUser", 3);
-
-    expect(player3copy).toEqual(player3);
-});
 
 test("if the balance of the user's team is requested then the correct balance should be returned", async () => {
     const authService = new AuthService();

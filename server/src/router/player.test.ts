@@ -3,6 +3,7 @@ import { app } from "../start";
 import { PlayerService } from "../service/player";
 import { PlayerModel } from "../db/player.db";
 import { addPlayers, addRatings } from "../service/addPlayers";
+import { RatingModel } from "../db/rating.db";
 
 
 const request = SuperTest.default(app);
@@ -17,10 +18,30 @@ export const addAllPlayers = async () => {
     }
 }
 
+export const addAllRatings = async () => {
+    const players = [1, 2, 3, 4, 5]; // Player IDs
+    const totalRounds = 38; // Number of rounds
+
+    for (const player_id of players) {
+        for (let round = 1; round <= totalRounds; round++) {
+            const randomRating = parseFloat((Math.random() * 9 + 1).toFixed(1)); // Random float between 1-10
+            await RatingModel.create({
+                player_id,
+                round,
+                rating: randomRating,
+            });
+        }
+    }
+
+    console.log("All ratings added successfully.");
+};
+
+
 
 test("if all players are requested then all players should be returned", async () => {
     
     await addAllPlayers();
+    await addAllRatings();
 
     const res = await request.get("/player");
     expect(res.statusCode).toEqual(200);
@@ -169,7 +190,7 @@ test("Availability of existing player for non-existing round should return 400",
 
 test("Form of existing player for existing round should return 200", async () => {
 
-    const res = await request.get("/player/1/form/1");
+    const res = await request.get("/player/1/form/3");
     console.log("res", res.body);
     expect(res.statusCode).toEqual(200);
 

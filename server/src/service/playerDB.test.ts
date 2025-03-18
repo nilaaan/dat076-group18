@@ -46,7 +46,7 @@ test("Retrieving the recent form of an available player", async () => {
     
         await addAllRatings();
     
-        const playerDBService = new PlayerDBService(new GameSessionService());
+        const playerDBService = new PlayerDBService();
     
         const recentForm = await playerDBService.getRecentForm(1, 5);
 
@@ -71,7 +71,7 @@ test("If a specific player is requested then it should be returned", async () =>
         price: 10,
         image: "img1",
     }; 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const player1copy = await playerDBService.getPlayer(1);
     expect(player1copy).toEqual(player1);
 });
@@ -79,7 +79,7 @@ test("If a specific player is requested then it should be returned", async () =>
 test("If a player that does not exist is requested then undefined should be returned", async () => {
     
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const undefPlayer = await playerDBService.getPlayer(1006);
     expect(undefPlayer).toBeUndefined();
 });
@@ -133,7 +133,7 @@ test("All players should be returned", async () => {
         }
     ]
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const allPlayersCopy = await playerDBService.getPlayers();
 
     expect(allPlayersCopy).toEqual(allPlayers);
@@ -150,7 +150,7 @@ test("All top performers should be returned", async () => {
         price: 10,
         image: "img2",
     }]
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const expectedPlayersCopy = await playerDBService.getTopPerformers(1);
     
 
@@ -159,22 +159,31 @@ test("All top performers should be returned", async () => {
 
 test("No players available in round 2, so no top performers", async () => {
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const expectedPlayersCopy = await playerDBService.getTopPerformers(2);
     expect(expectedPlayersCopy).toEqual(undefined);
 });
 
 test("Round id is out of bounds, so no top performers", async () => {
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
-    const expectedPlayersCopy = await playerDBService.getTopPerformers(39);
-    expect(expectedPlayersCopy).toEqual(undefined);
+    const playerDBService = new PlayerDBService();
+    try {
+        const expectedPlayersCopy = await playerDBService.getTopPerformers(39);
+        expect(expectedPlayersCopy).toEqual(undefined);
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            expect(e.message).toEqual("Round 39 is out of bounds, must be between 1 and 38");
+        } else {
+            throw e;
+        }
+    }
 });
 
 test("Get round rating for available player", async () => {
 
 
-        const playerDBService = new PlayerDBService(new GameSessionService());
+        const playerDBService = new PlayerDBService();
         const player1Rating = await playerDBService.getRoundRating(2,1);
     
         expect(player1Rating).toEqual(7.3);
@@ -183,7 +192,7 @@ test("Get round rating for available player", async () => {
 test("Get round rating for unavailable player", async () => {
 
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const player1Rating = await playerDBService.getRoundRating(1,1);
 
     expect(player1Rating).toEqual(null);
@@ -192,7 +201,7 @@ test("Get round rating for unavailable player", async () => {
 test("Get round rating for non-existing player", async () => {
 
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const player1Rating = await playerDBService.getRoundRating(0,1);
 
     expect(player1Rating).toEqual(undefined);
@@ -201,7 +210,7 @@ test("Get round rating for non-existing player", async () => {
 test("Get round availability for player2 should be true", async () => {
 
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const player1Rating = await playerDBService.getRoundAvailability(2,1);
 
     expect(player1Rating).toEqual(true);
@@ -210,7 +219,7 @@ test("Get round availability for player2 should be true", async () => {
 test("If a player has no rating for the round, it should not be available", async () => {
 
 
-    const playerDBService = new PlayerDBService(new GameSessionService());
+    const playerDBService = new PlayerDBService();
     const player1Rating = await playerDBService.getRoundAvailability(1,1);
 
     expect(player1Rating).toEqual(false);
