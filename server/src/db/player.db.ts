@@ -22,7 +22,6 @@ PlayerModel.init(
         name: {
             type: DataTypes.STRING,         
             allowNull: false,
-            unique: true
         },
         position: {
             type: DataTypes.STRING,         // constraint must be in (goalkeeper, defender, midfielder, forward)

@@ -162,7 +162,7 @@ test("if a player is bought with insufficient balance then the player should not
     expect(balance).toEqual(100000000);
 });
 
-test("if a player is sold then the player should be removed from the user's team, marked available, and the balance should be updated", async () => {
+test("if a player is sold then the player should be removed from the user's team and the balance should be updated", async () => {
     const player1 = 
     {
         id: 1, 

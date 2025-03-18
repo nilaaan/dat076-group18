@@ -384,6 +384,10 @@ export class GameSessionService implements IGameSessionService {
     // Returns the usernames of all users in the same game session that the given user belongs to
     async getGamesessionUsernames(username: string): Promise<string[] | undefined> {
         const isGameSession = await this.isGameSession(username);
+        if (isGameSession === undefined) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
         if (!isGameSession) {
             return [];  
         }
@@ -445,6 +449,10 @@ export class GameSessionService implements IGameSessionService {
         leaderboard.sort((a, b) => b[1] - a[1]);
 
         return leaderboard; 
+    }
+
+    get_round_time(): number {
+        return this.test_round_time;
     }
     
 }
