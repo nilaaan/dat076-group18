@@ -85,7 +85,7 @@ const StartPageTest = () => {
         </div>
     );
 
-    const forwards = players.filter(player => player.position === "forward");
+    const forwards = players.filter(player => player.position === "attacker");
     const midfielders = players.filter(player => player.position === "midfielder");
     const defenders = players.filter(player => player.position === "defender");
     const goalkeepers = players.filter(player => player.position === "goalkeeper");
@@ -95,11 +95,11 @@ const StartPageTest = () => {
     };
 
     const list = (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center pb-32">
             <table className="table lg:w-3/4">
                 <thead className="preset-filled-surface-300-700 sticky top-0 !text-white">
                     <tr>
-                        <th className="preset-filled-tertiary-200-800 !font-bold !p-4">Forwards</th>
+                        <th className="preset-filled-tertiary-200-800 !font-bold !p-4">Attackers</th>
                         <th className="!font-bold">#</th>
                         <th className="!font-bold">Club</th>
                         <th className="!font-bold">Price</th>
