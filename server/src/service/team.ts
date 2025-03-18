@@ -1,7 +1,5 @@
-import { Team } from '../model/team.interface';
 import { Player } from '../model/player.interface';
 import { PlayerService } from './player';
-import { AuthService } from './auth';
 import { User } from '../model/user.interface';
 import { IUserService } from './user.interface';
 import { ITeamService } from './team.interface';

@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import BuyView from './views/BuyView.tsx';
 import LoginView from './views/LoginView.tsx';
 import RegisterView from './views/RegisterView.tsx';
 import { AppBar } from '@skeletonlabs/skeleton-react';
 import FieldView from './views/FieldView.tsx';
-
+import PlayerView from './views/PlayerView.tsx';
 import './App.css'
 import { Github } from 'lucide-react';
 import BalanceView from './components/LoginOrBalance.tsx';
@@ -12,11 +11,11 @@ import ThemeToggle from './components/ThemeToggle.tsx';
 import ProtectedComponent from './components/ProtectedComponent.tsx';
 import LoginOrBalance from './components/LoginOrBalance.tsx';
 import { AuthProvider } from './components/AuthProvider.tsx';
-import StartPageTest from './views/PlayerView.tsx';
 import StartView from './views/StartPage.tsx';
 import MatchesView from './views/MatchesView.tsx';
 import LeaderboardView from './views/LeaderboardView.tsx';
 import { Toaster } from 'react-hot-toast';
+
 
 function NavLink({ to, children }: { to: string, children: React.ReactNode }) {
   const location = useLocation();
@@ -69,7 +68,7 @@ function App() {
             <Route path="/" element={<StartView />}></Route>
             <Route path="/leaderboard" element={<ProtectedComponent> <LeaderboardView /> </ProtectedComponent>}></Route>
             <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
-            <Route path="/player" element={<StartPageTest />}></Route>
+            <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
             {/*<Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>}*/}
             <Route path="/login" element={<LoginView />}></Route>

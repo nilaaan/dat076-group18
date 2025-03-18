@@ -1,14 +1,9 @@
-import { Team } from '../model/team.interface';
 import { Player } from '../model/player.interface';
 import { IPlayerService } from './player.interface';
-import { AuthService } from './auth';
-import { User } from '../model/user.interface';
 import { IUserService } from './user.interface';
 import { ITeamService } from './team.interface';
 import { TeamModel } from '../db/team.db';
 import { TeamPlayers } from '../db/teamPlayers.db';
-import { PlayerModel } from '../db/player.db';
-import { TEXT } from 'sequelize';
 import { IPointSystemService } from './pointsystem.interface';
 import { ITeamStateService } from './team_state.interface';
 import { IGameSessionService } from './game_session.interface';

@@ -8,19 +8,17 @@ import { Tabs } from '@skeletonlabs/skeleton-react';
 import { LayoutGrid, Rows2 } from 'lucide-react';
 import { getTeamPlayers } from '../api/teamPlayersApi.ts';
 
-const StartPageTest = () => {
+const PlayerView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
     const [group, setGroup] = useState('grid');
     const [teamPlayers, setTeamPlayers] = useState<Player[]>([]);
-
 
     useEffect(() => {
          const fetchPlayers = async () => {
             try {
                 const playersData = await getPlayers();
                 setPlayers(playersData);
-
                 const teamPlayersData = await getTeamPlayers();
                 setTeamPlayers(teamPlayersData);
             } catch {
@@ -37,6 +35,7 @@ const StartPageTest = () => {
         setSelectedPlayer(player);
     };*/
 
+    //Closes the popup window
     const closePopup = () => {
         setSelectedPlayer(undefined); 
     };
@@ -71,7 +70,6 @@ const StartPageTest = () => {
                                         <PlayerCardAdditional 
                                             key={players[playerIndex].id} // Unique key using player ID
                                             id={players[playerIndex].id} 
-                                            // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
                                             onClose={closePopup} 
                                             fieldCase={false}
                                         />
@@ -229,4 +227,4 @@ const StartPageTest = () => {
     )
 };
 
-export default StartPageTest;
+export default PlayerView;
