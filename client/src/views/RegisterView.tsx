@@ -26,28 +26,34 @@ const RegisterView = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-sm preset-filled-surface-200-800 shadow-lg rounded-xl p-6">
         <h2 className="text-center text-2xl font-semibold">Register</h2>
-        <div className="mt-4 space-y-4">
+        <form onSubmit={handleRegistration} className="mt-4 space-y-4">
+          {/* Email / Username */}
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+            required
           />
+
+          {/* Password */}
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+            required
           />
+
           <button
+            type="submit"
             className="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-            onClick={handleRegistration}
           >
             Register
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
