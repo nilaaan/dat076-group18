@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { testLogin } from '../api/tempAuthAPI';
 import { testLogout } from '../api/tempAuthAPI';
 import { updateGameState } from '../api/gamesessionApi';
@@ -17,7 +17,6 @@ import { toast } from 'react-hot-toast';
 
 const LoginView: React.FC = () => {
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const [tempUsername, setTempUsername] = useState<string>("");
   const { isAuthenticated, username } = useAuth();
 

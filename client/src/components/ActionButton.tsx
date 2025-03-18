@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Player } from '../Types';
+import toast from 'react-hot-toast';
  
 interface ActionButtonProps {
     playerId: number; 
@@ -11,22 +12,21 @@ interface ActionButtonProps {
 
 function ActionButton({playerId, onAction, buttonText, successText, completed}: ActionButtonProps) {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
     const handleClick = async () => {
         setLoading(true);
-        setError(null);
         if (!completed) {
             try {
                 const res = await onAction(playerId);
                 if (typeof res === 'string') {
-                    setError(res);
+                    throw new Error(res);
                 } else {
                     setSuccess(true);
                 }
-            } catch {
-                setError('An unexpected error occurred');
+            } catch (error) {
+                console.error('Could not complete action', error);
+                toast.error(`${error}`);
             } finally {
                 setLoading(false);
             }
@@ -36,7 +36,6 @@ function ActionButton({playerId, onAction, buttonText, successText, completed}: 
     return (
         <button onClick={handleClick} disabled={loading || success || completed} className="w-full h-full">
             {loading ? 'Loading...' : (success || completed) ? successText : buttonText}
-            {error && <p>{error}</p>}
         </button>
     );
 }
