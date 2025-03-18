@@ -1,4 +1,4 @@
-import { User } from "../model/user.interface";
+
 
 export interface IPointSystemService {
 

@@ -1,5 +1,5 @@
 import { PlayerService } from './player';
-import { Player } from '../model/player.interface';
+
 
 test("If all players are requested then all players should be returned", async () => {
     const player1 =   

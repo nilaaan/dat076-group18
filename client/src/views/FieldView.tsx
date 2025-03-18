@@ -35,25 +35,6 @@ const FieldView = () => {
         setSelectedPlayer(undefined); 
     };
     
-
-
-    /*useEffect(() => {
-        const testPlayers: Player[] = [];
-        for (let i = 0; i < 20; i++) {
-            testPlayers.push({
-                id: i,
-                name: `Name${i} Surname${i}`,
-                position: "Position",
-                number: i,
-                club: "Club",
-                price: 0,
-                available: true,
-                points: 0
-            });
-        }
-        setPlayers(testPlayers);
-    }, []);*/
-
     // Get player by index, or undefined if not set
     function getPlayer(index: number): Player | undefined {
         return players[index] || undefined;

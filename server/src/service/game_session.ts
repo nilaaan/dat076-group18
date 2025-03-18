@@ -1,14 +1,9 @@
-import { error } from 'console';
 import { Game_sessionModel } from '../db/game_session.db';
 import { User_games } from '../db/user_game.db';
 import { IGameSessionService } from './game_session.interface';
-import { ClubModel } from '../db/club.db';
-import { IPlayerService } from './player.interface';
-import { ITeamService } from './team.interface';
 import { ITeamStateService } from './team_state.interface';
 import { IUserService } from './user.interface';
 import { User } from '../model/user.interface';
-import { UserModel } from '../db/user.db';
 
 // Takes care of the game session logic
 // Handles the communication with the Game_session and User_games database tables
