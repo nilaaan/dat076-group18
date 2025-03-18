@@ -1,5 +1,4 @@
 import { Player } from '../model/player.interface';
-import { fetchAllLeaguePlayers } from './api'
 import { IPlayerService } from './player.interface';
 
 

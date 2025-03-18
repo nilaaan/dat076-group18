@@ -2,7 +2,6 @@ import { Op } from 'sequelize';
 import { PlayerModel } from '../db/player.db';
 import { RatingModel } from '../db/rating.db';
 import { Player } from '../model/player.interface';  
-import { PlayerService } from './player';
 import { IPlayerService } from './player.interface';
 
 

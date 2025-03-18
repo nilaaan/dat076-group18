@@ -1,5 +1,4 @@
 import { TeamService } from './team';
-import { Player } from '../model/player.interface';
 import { PlayerService } from './player';
 import { AuthService } from './auth';
 

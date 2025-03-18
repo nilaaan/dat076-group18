@@ -2,12 +2,7 @@ import { User } from "../model/user.interface";
 import bcrypt from "bcrypt";
 import { IUserService } from "./user.interface";
 import { UserModel } from "../db/user.db";
-import { TeamModel } from "../db/team.db";
-import { TeamPlayers } from "../db/teamPlayers.db";
-import { PlayerModel } from "../db/player.db";
-import { get } from "http";
 import { Player } from "../model/player.interface";
-import { IGameSessionService } from "./game_session.interface";
 import { ITeamService } from "./team.interface";
 import { IPlayerService } from "./player.interface";
 

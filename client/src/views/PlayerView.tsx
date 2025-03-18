@@ -3,11 +3,9 @@ import { Player } from '../Types.ts';
 import { getPlayers } from '../api/playerApi.ts';
 import PlayerCardAdditional from '../components/PlayerCardAdditional.tsx';
 
-const StartPageTest = () => {
+const PlayerView = () => {
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(undefined);
-
-
 
     useEffect(() => {
         getPlayers().then((data) => {
@@ -18,27 +16,10 @@ const StartPageTest = () => {
         });
     }, []);
 
-
-    /*const handlePlayerClick = (player: Player | undefined) => {
-        setSelectedPlayer(player);
-    };*/
-
+    //Closes the popup window
     const closePopup = () => {
         setSelectedPlayer(undefined); 
     };
-
-
-    /*function getPlayer(index: number): Player | undefined {
-        return players[index] || undefined;
-    }
-
-    function setPlayerAvailable(playerId: number, available: boolean) {
-        setPlayers((ps: Player[]) =>
-            ps.map((p) =>
-                p.id === playerId ? { ...p, available } : p
-            )
-        );
-    }*/
 
     return (
         <div className="flex justify-center pb-20 overflow-hidden">
@@ -57,7 +38,6 @@ const StartPageTest = () => {
                                         <PlayerCardAdditional 
                                             key={players[playerIndex].id} // Unique key using player ID
                                             id={players[playerIndex].id} 
-                                            // onInfoClick={() => handlePlayerClick(getPlayer(1 + index + rowIndex * 8))}
                                             onClose={closePopup} 
                                             fieldCase={false}
                                         />
@@ -82,4 +62,4 @@ const StartPageTest = () => {
     );
 };
 
-export default StartPageTest;
+export default PlayerView;
