@@ -12,7 +12,7 @@ test("if a user registers then a user should be created with the given username 
     const isPasswordValid = await bcrypt.compare("testPassword", user.password); 
 
     expect(isPasswordValid).toBe(true);
-    expect(user).toEqual({ username: "testUser", password: expect.any(String), team: { players: [], balance: 100000000 } });
+    expect(user).toEqual({ id: 1, username: "testUser", password: expect.any(String), team: { players: [], balance: 100000000, points: 0 } });
     expect(authService.users).toContain(user);
 });
 

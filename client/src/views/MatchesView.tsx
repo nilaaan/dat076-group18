@@ -114,7 +114,7 @@ const MatchesView: React.FC = () => {
                     <div className="preset-filled-surface-100-900 card p-6 flex flex-col items-center">
                         <h1 className="h1">Matches Starting at 8:45</h1>
                         <p>Round {userRound}</p>
-                        <Link to="/player">
+                        <Link to="/team">
                             <button className="btn preset-filled-success-600-400 py-6 px-12 mt-8">Build Your Team &gt;</button>
                         </Link>
                     </div>

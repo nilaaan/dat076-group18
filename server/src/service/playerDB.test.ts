@@ -163,6 +163,21 @@ test("No players available in round 2, so no top performers", async () => {
     expect(expectedPlayersCopy).toEqual(undefined);
 });
 
+test("Round id is out of bounds, so no top performers", async () => {
+
+    const playerDBService = new PlayerDBService();
+    try {
+        const expectedPlayersCopy = await playerDBService.getTopPerformers(39);
+        expect(expectedPlayersCopy).toEqual(undefined);
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            expect(e.message).toEqual("Round 39 is out of bounds, must be between 1 and 38");
+        } else {
+            throw e;
+        }
+    }
+});
 
 test("Get round rating for available player", async () => {
 

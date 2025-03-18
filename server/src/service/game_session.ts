@@ -11,7 +11,7 @@ export class GameSessionService implements IGameSessionService {
     private time_frame = 38 * 2 * 24;    // in hours for real version (each round is 2 days, and a given round's matches are played at 20.45 on the second day)
     private test_timeframe = 10 * 38    // in minutes for testing (each round is 10 minutes: the round matches are played at 8-10 minutes)
 
-    private test_round_time = 1;   // in minutes (one round's time duration)
+    private test_round_time = 10;   // in minutes (one round's time duration)
 
     private teamService: ITeamStateService | null = null;
     private userService: IUserService | null = null;
@@ -163,7 +163,7 @@ export class GameSessionService implements IGameSessionService {
     // Returns true if it is the case
     // Returns false otherwise
     // Returns undefined if the user does not have a gamesession
-    async isAfterMatches(username: string): Promise<boolean | undefined> {
+    private async isAfterMatches(username: string): Promise<boolean | undefined> {
         const user_game_round = await this.getRound(username);
         const current_round = await this.getCurrentRound(username);
 
@@ -203,7 +203,7 @@ export class GameSessionService implements IGameSessionService {
     
     // Returns the current round of the game session with the given id
     // Returns undefined if the game session with the given id does not exist
-    async getGamesessionRound(game_id: number): Promise<number | undefined> {
+    private async getGamesessionRound(game_id: number): Promise<number | undefined> {
         if (game_id < 0) {
             console.error(`Game id must be a positive integer`);
             return undefined;
@@ -220,7 +220,7 @@ export class GameSessionService implements IGameSessionService {
     // Sets the current round of the game session with the given id to the given round
     // Returns true if the current round was successfully updated
     // Returns undefined if the game session with the given id does not exist
-    async setGamesessionRound(game_id: number, round: number): Promise<boolean | undefined> {
+    private async setGamesessionRound(game_id: number, round: number): Promise<boolean | undefined> {
         if (game_id < 0) {
             console.error(`Game id must be a positive integer`);
             return undefined;
@@ -242,7 +242,7 @@ export class GameSessionService implements IGameSessionService {
     // Sets the current round of the game session that the given user belongs to to the given round
     // Returns true if the current round was successfully updated
     // Returns undefined if the game session does not exist
-    async updateGamesessionRound(username: string, round: number): Promise<boolean | undefined> {
+    private async updateGamesessionRound(username: string, round: number): Promise<boolean | undefined> {
         const game_session_id = await this.getGameSessionId(username);
         if (!game_session_id) {
             console.error(`User ${username} does not have a game session`);
@@ -264,7 +264,7 @@ export class GameSessionService implements IGameSessionService {
 
     // Returns the current round that the game session of the given user should be on to based on its start date
     // Returns undefined if the user does not have a game session
-    async getCurrentRound(username: string): Promise<number | undefined> {
+    private async getCurrentRound(username: string): Promise<number | undefined> {
         const start_date = await this.getUserGameStartDate(username);
         if (!start_date) {
             console.error(`User ${username} does not have a game session`);
@@ -282,7 +282,7 @@ export class GameSessionService implements IGameSessionService {
     }
 
     // Returns a user_games row for the given user from the user_games database table
-    async getUserGame(username: string): Promise<User_games | null | undefined> {
+    private async getUserGame(username: string): Promise<User_games | null | undefined> {
         const user_id = await this.getUserId(username);
         if (!user_id) {
             console.error(`User ${username} does not exist`);
@@ -310,7 +310,7 @@ export class GameSessionService implements IGameSessionService {
     }
 
     // Returns the start date of the game session that the given user belongs to
-    async getUserGameStartDate(username: string) {
+    private async getUserGameStartDate(username: string) {
         const user_game = await this.getUserGame(username);
         if (!user_game) {
             console.error(`User ${username} does not have a game session`);
@@ -328,7 +328,7 @@ export class GameSessionService implements IGameSessionService {
 
 
     // Increments the user's current round in the game session by one
-    async incrementUserRound(username: string): Promise<void> {
+    private async incrementUserRound(username: string): Promise<void> {
         const user_game = await this.getUserGame(username);
         if (!user_game) {
             console.error(`User ${username} does not have a game session`);
@@ -345,7 +345,7 @@ export class GameSessionService implements IGameSessionService {
 
 
     // Returns the time difference between the current date and the given start date in minutes 
-    getTimeDifferenceFromStart(start_date: Date) {  // will probably change to hours when implementing real version
+    private getTimeDifferenceFromStart(start_date: Date) {  // will probably change to hours when implementing real version
         const current_date = new Date();
         const difference_in_ms = current_date.getTime() - start_date.getTime();
         const difference_in_min = difference_in_ms / (1000 * 60);
@@ -354,7 +354,7 @@ export class GameSessionService implements IGameSessionService {
 
 
     // Returns the user id of the given username
-    async getUserId(username: string) : Promise<number | undefined> {
+    private async getUserId(username: string) : Promise<number | undefined> {
         const user = await this.userService?.getUser(username);                  
         if (!user) {
             console.error(`User ${username} does not exist`);
@@ -379,6 +379,10 @@ export class GameSessionService implements IGameSessionService {
     // Returns the usernames of all users in the same game session that the given user belongs to
     async getGamesessionUsernames(username: string): Promise<string[] | undefined> {
         const isGameSession = await this.isGameSession(username);
+        if (isGameSession === undefined) {
+            console.error(`User ${username} does not exist`);
+            return undefined;
+        }
         if (!isGameSession) {
             return [];  
         }
@@ -440,6 +444,10 @@ export class GameSessionService implements IGameSessionService {
         leaderboard.sort((a, b) => b[1] - a[1]);
 
         return leaderboard; 
+    }
+
+    get_round_time(): number {
+        return this.test_round_time;
     }
     
 }

@@ -15,11 +15,13 @@ test("if a user registers then that user should be registered and the user objec
     expect(isPasswordValid).toBe(true);
 
     expect(res.body).toEqual({
+        id: 1,
         username: "testUser",
         password: expect.any(String),
         team: {
             players: [],
-            balance: 100000000
+            balance: 100000000,
+            points: 0
         }
     })
 }); 
@@ -44,6 +46,7 @@ test("if a user logs in then the user should log in and the corresponding user o
     const res = await request.post("/user/login").send({username: "testUser", password: "testPassword"});
     expect(res.statusCode).toEqual(200);
     expect(res.text).toEqual("Logged in as testUser");
+    await request.post("/user/logout");
 }); 
    
 
@@ -66,7 +69,9 @@ test("if a user tries to log in with a non-existing username or password then an
 
 
 test("if a user logs out then the user should log out", async () => {
-    const res = await request.post("/user/logout");
+    const res = await request.post("/user/login").send({username: "testUser", password: "testPassword"});
     expect(res.statusCode).toEqual(200);
+    const res2 = await request.post("/user/logout");
+    expect(res2.statusCode).toEqual(200);
 });
 
