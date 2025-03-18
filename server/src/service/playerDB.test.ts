@@ -42,7 +42,7 @@ export const addAllPlayers = async () => {
 };
 
 test("Retrieving the recent form of an available player", async () => {
-    
+        await addAllPlayers();
         await addAllRatings();
     
         const playerDBService = new PlayerDBService();
@@ -57,8 +57,6 @@ test("Retrieving the recent form of an available player", async () => {
 
 
 test("If a specific player is requested then it should be returned", async () => {
-
-    await addAllPlayers();
 
     const player1 = 
     {

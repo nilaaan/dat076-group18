@@ -127,9 +127,6 @@ test("If a player that does not exist is requested then an error should be retur
 
 
 test("top performers should be returned", async () => {
-    await addPlayers();
-    await addRatings();
-
     const res = await request.get("/player/performance/1");
     expect(res.statusCode).toEqual(200);
     console.log(res.body);
