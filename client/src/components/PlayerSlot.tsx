@@ -7,9 +7,10 @@ import { getRating } from '../api/playerApi.ts';
 interface PlayerSlotProps {
     initialPlayer?: Player;
     onInfoClick: () => void;
+    'data-testid'?: string;
 }
 
-function PlayerSlot({ initialPlayer, onInfoClick }: PlayerSlotProps) {
+function PlayerSlot({ initialPlayer, onInfoClick, 'data-testid': dataTestId }: PlayerSlotProps) {
     // State for the player data
     const [player, setPlayer] = useState<Player | undefined>();
     // State for player's last match rating
@@ -108,6 +109,7 @@ function PlayerSlot({ initialPlayer, onInfoClick }: PlayerSlotProps) {
     return (
         <div
             className="card card-hover preset-filled-surface-200-800 cursor-pointer w-[20%] sm:w-[15%] md:w-[10%] border-2 border-surface-400-600 flex flex-col opacity-80"
+            data-testid={dataTestId}
         >
             {player ? 
             (
