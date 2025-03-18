@@ -205,7 +205,7 @@ const PlayerView = () => {
     );
 
     return (
-        <Tabs value={group} onValueChange={(e) => setGroup(e)}>
+        <Tabs value={group} onValueChange={(e: string) => setGroup(e)}>
             <Tabs.List justify="justify-center">
                 <Tabs.Control value="grid"><LayoutGrid /></Tabs.Control>
                 <Tabs.Control value="list"><Rows2 /></Tabs.Control>

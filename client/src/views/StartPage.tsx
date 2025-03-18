@@ -13,9 +13,9 @@ const StartView = () => {
 
       <div className="relative z-20 flex flex-col justify-center items-center h-full text-white text-center p-6">
         <div className="mb-12">
-          <h1 className="text-5xl font-semibold mb-6 tracking-wider">Fantasy Football mannen</h1>
+          <h1 className="text-5xl font-semibold mb-6 tracking-wider">Fantasy Football</h1>
           <p className="text-lg sm:text-xl md:text-2xl font-light max-w-lg mx-auto leading-relaxed">
-            Gör kaos
+            Become José Mourinho!
           </p>
         </div>
 

@@ -2,6 +2,7 @@ import { Player } from "../model/player.interface";
 import { formatPlayer } from "./formatPlayer";
 import dotenv from "dotenv";
 import { PlayerModel } from "../db/player.db";
+import { RatingModel } from "../db/rating.db";
 
 dotenv.config({ path: './src/.env' });
 
@@ -240,6 +241,22 @@ export async function fetchMockupPlayers() {
       image: "img14",
     },
   ];
+  
+  const getRandomFloat = (min: number, max: number) => (Math.random() * (max - min) + min).toFixed(1);
+  const getRandomRating = () => (Math.random() < 0.2 ? null : parseFloat(getRandomFloat(1, 10))); // 20% chance of null
 
-  insertPlayersIntoDB(allPlayers);
+  await insertPlayersIntoDB(allPlayers);
+
+  for (const player of allPlayers) {
+    for (let i = 1; i <= 38; i++) {
+      if (await RatingModel.findOne({ where: { player_id: player.id, round: i }})) {
+        continue;
+      }
+      RatingModel.create({
+        player_id: player.id,
+        round: i,
+        rating: getRandomRating(),
+      })
+    }
+  }
 }

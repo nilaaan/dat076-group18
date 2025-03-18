@@ -70,7 +70,6 @@ function App() {
             <Route path="/team" element={<ProtectedComponent><FieldView /> </ProtectedComponent>}></Route>
             <Route path="/player" element={<PlayerView />}></Route>
             <Route path="/balance" element={<ProtectedComponent> <BalanceView /> </ProtectedComponent>}></Route>
-            {/*<Route path="/buy" element={<ProtectedComponent> <BuyView /> </ProtectedComponent>}></Route>}*/}
             <Route path="/login" element={<LoginView />}></Route>
             <Route path="/register" element={<RegisterView />}></Route>
             <Route path="/matches" element={<ProtectedComponent> <MatchesView /> </ProtectedComponent>}></Route>         
