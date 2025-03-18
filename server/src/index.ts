@@ -39,7 +39,7 @@ app.listen(PORT, () => {
 
 dotenv.config({ path: './src/.env' });
 
-if (!process.env.API_KEY) {
+if (!process.env.MOCK_PLAYERS) {
   console.log("Could not find MOCK_PLAYERS in .env file");
   process.exit();
 }

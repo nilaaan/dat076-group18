@@ -160,7 +160,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 6,
-      name: "Test player4",
+      name: "Test player6",
       position: "Defender",
       number: 35,
       club: "Test Club",
@@ -169,7 +169,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 7,
-      name: "Test player4",
+      name: "Test player7",
       position: "Defender",
       number: 52,
       club: "Test Club",
@@ -178,7 +178,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 8,
-      name: "Test player4",
+      name: "Test player8",
       position: "Defender",
       number: 15,
       club: "Test Club",
@@ -187,7 +187,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 9,
-      name: "Test player4",
+      name: "Test player9",
       position: "Defender",
       number: 25,
       club: "Test Club",
@@ -196,7 +196,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 10,
-      name: "Test player4",
+      name: "Test player10",
       position: "Defender",
       number: 45,
       club: "Test Club",
@@ -205,7 +205,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 11,
-      name: "Test player4",
+      name: "Test player11",
       position: "Defender",
       number: 24,
       club: "Test Club",
@@ -214,7 +214,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 12,
-      name: "Test player4",
+      name: "Test player12",
       position: "Defender",
       number: 22,
       club: "Test Club",
@@ -223,7 +223,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 13,
-      name: "Test player4",
+      name: "Test player13",
       position: "Defender",
       number: 11,
       club: "Test Club",
@@ -232,7 +232,7 @@ export async function fetchMockupPlayers() {
     },
     {
       id: 14,
-      name: "Test player4",
+      name: "Test player14",
       position: "Defender",
       number: 75,
       club: "Test Club",
