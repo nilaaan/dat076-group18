@@ -5,7 +5,6 @@ import { AuthService } from './auth';
 import { User } from '../model/user.interface';
 import { IUserService } from './user.interface';
 import { ITeamService } from './team.interface';
-import { UserModel } from '../db/user.db';
 import { TeamModel } from '../db/team.db';
 import { TeamPlayers } from '../db/teamPlayers.db';
 import { PlayerModel } from '../db/player.db';
@@ -14,7 +13,8 @@ import { IPointSystemService } from './pointsystem.interface';
 import { ITeamStateService } from './team_state.interface';
 import { IGameSessionService } from './game_session.interface';
 
-
+// Handles the operations that have to do with the users' teams and their state 
+// Handles the communication with the Team and TeamPlayers database tables
 export class TeamDBService implements ITeamService, ITeamStateService {
     private userService;
     private playerService;
@@ -26,6 +26,21 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         this.playerService = playerService;
         this.pointSystemService = pointSystemService;
         this.gamesessionService = gamesessionService;
+    }
+
+    // Creates a new team for the user with the given username in the Team database table
+    async createTeam(user_id: number): Promise<TeamModel | undefined> {
+        if (user_id < 0) {
+            console.error(`Invalid user id: ${user_id}, id must be a positive integer`);
+            return undefined; 
+        }
+        
+        const newTeam = await TeamModel.create({
+            user_id: user_id,
+            balance: 100000000,
+            points: 0,
+        });
+        return newTeam;
     }
 
     // Returns the current balance of the user's team 
@@ -104,7 +119,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         }
 
         // check if the player is already in the user's team
-        const isPlayerInTeam = user.team.players.find((player) => Number(player.id) === player_id);     // need to convert to int because database returns attribute as string, fix it 
+        const isPlayerInTeam = user.team.players.find((player) => Number(player.id) === player_id);    
 
         if (isPlayerInTeam) {
             console.error(`Player already in team: ${player_id}`);
@@ -193,10 +208,8 @@ export class TeamDBService implements ITeamService, ITeamStateService {
 
     // Returns the user's team row from the team database table
     // Returns null if the user does not exist
-    async getUserTeam(username: string): Promise<TeamModel | null> {
-        const user = await UserModel.findOne({
-            where: { username: username }
-        });
+    async getUserTeam(username: string): Promise<TeamModel | null> {        
+        const user = await this.userService.getUser(username);//
         if (!user) {
             console.error(`User ${username} does not exist`);
             return null;
@@ -207,6 +220,22 @@ export class TeamDBService implements ITeamService, ITeamStateService {
         });
 
         return team;
+    }
+
+    // Returns all players from the user's team from the TeamPlayers database table
+    // Returns undefined if the user does not exist
+    async getTeamPlayers(username: string): Promise<TeamPlayers[] | undefined> {
+        const team = await this.getUserTeam(username);
+        if (!team) {
+            console.error(`Team for user ${username} does not exist`);
+            return undefined;
+        }
+
+        const teamPlayers = await TeamPlayers.findAll({
+            where: { team_id: team.id }
+        });
+
+        return teamPlayers;
     }
 
 
@@ -248,7 +277,7 @@ export class TeamDBService implements ITeamService, ITeamStateService {
                 roundPoints += playerPoints;
             }
         }
-
+        
         // update the  team points in the team database table
         const updatedPoints = Number(team.points) + roundPoints;
         const teamPoints = parseFloat(updatedPoints.toFixed(2));

@@ -67,11 +67,6 @@ export function authRouter(userService: IUserService): Router {
                 res.status(401).send("Invalid username or password");
                 return;
             }
-            const is_game_session_updated = await userService.updateGamesessionState(username);
-            if (!is_game_session_updated) {
-                res.status(404).send("Failed to update game session state");
-                return;
-            }
 
             req.session.user = { username };
             res.status(200).send(`Logged in as ${username}`);

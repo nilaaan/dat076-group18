@@ -4,15 +4,11 @@ import { RatingModel } from '../db/rating.db';
 import { Player } from '../model/player.interface';  
 import { PlayerService } from './player';
 import { IPlayerService } from './player.interface';
-import { GameSessionService } from './game_session';
-import { IGameSessionService } from './game_session.interface';
 
+
+// Handles the operations that have to do with the players and their state 
+// Handles the communication with the Player and Rating database tables in the database
 export class PlayerDBService implements IPlayerService {
-    private gamesessionService;
-
-    constructor(gamesessionService : IGameSessionService) {
-        this.gamesessionService = gamesessionService;
-    }
 
     // Returns a copy of the player with the given id number as type Player
     // Returns undefined if there is no such player 
@@ -41,6 +37,25 @@ export class PlayerDBService implements IPlayerService {
         const players = await PlayerModel.findAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
+        return players.map(player => player.get({ plain: true }) as Player);
+    }
+
+
+    // Returns a deep copy of the players with the given ids as type Player
+    // Returns undefined if there are no players with the given ids
+    async getPlayerByIds(ids: number[]): Promise<Player[] | undefined> {
+        if (ids.length === 0) {
+            return [];
+        }
+        const players = await PlayerModel.findAll({
+            where: { id: ids },
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
+        });
+
+        if (players.length === 0) {
+            console.error(`No players found with the given ids: ${ids}`);
+            return undefined;
+        }
         return players.map(player => player.get({ plain: true }) as Player);
     }
 
@@ -88,7 +103,7 @@ export class PlayerDBService implements IPlayerService {
         if (player_id < 0) {
             throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 1 || round > 38) {
+        if (round < 1 || round > 38) {
             console.error(`Round ${round} is out of bounds, must be between 1 and 38`);
             return undefined;
         }
@@ -140,7 +155,7 @@ export class PlayerDBService implements IPlayerService {
         if (player_id < 0) {
             throw new Error(`Player id must be a positive integer`);
         }
-        if (round > 2 || round > 39) {
+        if (round < 2 || round > 39) {
             throw new Error(`Round ${round} is out of bounds, must be between 2 and 39`);
         }
 
