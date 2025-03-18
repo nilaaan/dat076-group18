@@ -97,10 +97,10 @@ const PlayerView = () => {
         </div>
     );
 
-    const forwards = players.filter(player => player.position === "attacker");
-    const midfielders = players.filter(player => player.position === "midfielder");
-    const defenders = players.filter(player => player.position === "defender");
-    const goalkeepers = players.filter(player => player.position === "goalkeeper");
+    const forwards = players.filter(player => player.position === "Attacker");
+    const midfielders = players.filter(player => player.position === "Midfielder");
+    const defenders = players.filter(player => player.position === "Defender");
+    const goalkeepers = players.filter(player => player.position === "Goalkeeper");
 
     const isPlayerBought = (playerId: number) => {
         if (!isAuthenticated) {
